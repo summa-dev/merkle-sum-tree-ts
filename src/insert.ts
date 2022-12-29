@@ -1,6 +1,7 @@
 import checkParameter from './checkParameter';
 import { HashFunction, Node } from './types';
 
+// => Modify it : should support Node2 type, children should be Node2[]. Hash should be performed with sum too!
 export default function insert(
   leaf: Node,
   depth: number,
@@ -18,7 +19,10 @@ export default function insert(
   let node = leaf;
   let index = nodes[0].length;
 
+  console.log("Adding leaf to the tree", leaf)
+
   for (let level = 0; level < depth; level += 1) {
+
     const position = index % arity;
     const levelStartIndex = index - position;
     const levelEndIndex = levelStartIndex + arity;
@@ -30,6 +34,7 @@ export default function insert(
       if (i < nodes[level].length) {
         children.push(nodes[level][i]);
       } else {
+        // Case where the level is not full and we need to use empty Nodes
         children.push(zeroes[level]);
       }
     }

@@ -31,6 +31,10 @@ export default class IncrementalMerkleTree {
    * @param zeroValue Zero values for zeroes.
    * @param arity The number of children for each node.
    */
+
+  // => Modify it : zeroValue should have also a zero sum. Hashing of further level should involve the sum too. Take care about how to handle the zeroValue node!
+  // => Modify it : should support Node2 type. Create Node2 type inside the function itself. ZeroValue should not be taken as paramenter. But executed inside the constructuror.
+  // => Modify it : remove arity from constructor
   constructor(hash: HashFunction, depth: number, zeroValue: Node, arity = 2) {
     checkParameter(hash, 'hash', 'function');
     checkParameter(depth, 'depth', 'number');
@@ -52,10 +56,11 @@ export default class IncrementalMerkleTree {
       this._zeroes.push(zeroValue);
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
+      // Fill a binary array with the zero value and get the hash, which will be the zero value for the next level in the tree.
       zeroValue = hash(Array(this._arity).fill(zeroValue));
     }
 
-    // The default root is the last zero value.
+    // The zero root is the last zero value.
     this._root = zeroValue;
 
     // Freeze the array objects. It prevents unintentional changes.
@@ -67,6 +72,8 @@ export default class IncrementalMerkleTree {
    * Returns the root hash of the tree.
    * @returns Root hash.
    */
+
+  // => Modify it : should support Node2 type
   public get root(): Node {
     return this._root;
   }
@@ -83,14 +90,16 @@ export default class IncrementalMerkleTree {
    * Returns the leaves of the tree.
    * @returns List of leaves.
    */
-  public get leaves(): Node[] {
-    return this._nodes[0].slice();
-  }
+  // // => Modify it : should support Node2 type
+  // public get leaves(): Node[] {
+  //   return this._nodes[0].slice();
+  // }
 
   /**
    * Returns the zeroes nodes of the tree.
    * @returns List of zeroes.
    */
+  // => Modify it : should support Node2 type
   public get zeroes(): Node[] {
     return this._zeroes;
   }
@@ -108,62 +117,65 @@ export default class IncrementalMerkleTree {
    * @param leaf Tree leaf.
    * @returns Index of the leaf.
    */
-  public indexOf(leaf: Node): number {
-    return _indexOf(leaf, this._nodes);
-  }
+  // // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing. 
+  // public indexOf(leaf: Node): number {
+  //   return _indexOf(leaf, this._nodes);
+  // }
 
   /**
    * Inserts a new leaf in the tree.
    * @param leaf New leaf.
    */
-  public insert(leaf: Node) {
-    this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  }
+  // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
+  // public insert(leaf: Node) {
+  //   this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  // }
 
   /**
    * Deletes a leaf from the tree. It does not remove the leaf from
    * the data structure. It set the leaf to be deleted to a zero value.
    * @param index Index of the leaf to be deleted.
    */
-  public delete(index: number) {
-    this._root = _update(index, this.zeroes[0], this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  }
+  // public delete(index: number) {
+  //   this._root = _update(index, this.zeroes[0], this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  // }
 
   /**
    * Updates a leaf in the tree.
    * @param index Index of the leaf to be updated.
    * @param newLeaf New leaf value.
    */
-  public update(index: number, newLeaf: Node) {
-    this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  }
+  // // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing. Replace it to newLeaf
+  // public update(index: number, newLeaf: Node) {
+  //   this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  // }
 
   /**
    * Creates a proof of membership.
    * @param index Index of the proof's leaf.
    * @returns Proof object.
    */
-  public createProof(index: number): MerkleProof {
-    return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
-  }
+  // public createProof(index: number): MerkleProof {
+  //   return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
+  // }
 
  /**
    * Creates a proof of membership in a format that can be used as input for circom circuits.
    * @param index Index of the proof's leaf.
    * @returns Proof object in circom format.
    */
-  public createCircomProof(index: number): MerkleProof {    
-      const merkleProof = this.createProof(index)
-      merkleProof.siblings = merkleProof.siblings.map((s) => s[0])
-      return merkleProof
-  }
+  // public createCircomProof(index: number): MerkleProof {    
+  //     const merkleProof = this.createProof(index)
+  //     merkleProof.siblings = merkleProof.siblings.map((s) => s[0])
+  //     return merkleProof
+  // }
 
   /**
    * Verifies a proof and return true or false.
    * @param proof Proof to be verified.
    * @returns True or false.
    */
-  public verifyProof(proof: MerkleProof): boolean {
-    return _verifyProof(proof, this._hash);
-  }
+  // public verifyProof(proof: MerkleProof): boolean {
+  //   return _verifyProof(proof, this._hash);
+  // }
 }

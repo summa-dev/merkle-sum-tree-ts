@@ -8,3 +8,8 @@ export type MerkleProof = {
   siblings: any[];
   pathIndices: number[];
 };
+
+export type Node2 = {
+  value: BigInt;
+  sum: BigInt;
+};

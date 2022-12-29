@@ -147,6 +147,17 @@ export default class IncrementalMerkleTree {
     return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
   }
 
+ /**
+   * Creates a proof of membership in a format that can be used as input for circom circuits.
+   * @param index Index of the proof's leaf.
+   * @returns Proof object in circom format.
+   */
+  public createCircomProof(index: number): MerkleProof {    
+      const merkleProof = this.createProof(index)
+      merkleProof.siblings = merkleProof.siblings.map((s) => s[0])
+      return merkleProof
+  }
+
   /**
    * Verifies a proof and return true or false.
    * @param proof Proof to be verified.

@@ -6,7 +6,7 @@ describe("Incremental Merkle Tree", () => {
     const depth = 16
     const numberOfLeaves = 9
 
-    for (const arity of [2, 5]) {
+    for (const arity of [2]) {
         describe(`Intremental Merkle Tree (arity = ${arity})`, () => {
             let tree: IncrementalMerkleTree
             let oldTree: IncrementalQuinTree
@@ -123,10 +123,18 @@ describe("Incremental Merkle Tree", () => {
 
                 for (let i = 0; i < numberOfLeaves; i += 1) {
                     const proof = tree.createProof(i)
-
                     expect(tree.verifyProof(proof)).toBeTruthy()
                 }
             })
         })
     }
 })
+
+// https://github.com/GoogleChromeLabs/jsbi/issues/30 
+function toJSONObject(proof : any) {
+        return JSON.parse(JSON.stringify(proof, (key, value) =>
+            typeof value === 'bigint'
+                ? value.toString()
+                : value // return everything else unchanged
+        ));
+    }

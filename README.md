@@ -89,3 +89,4 @@ Run Prettier to check formatting rules and to fix them:
 - [ ] Add support for sum
 - [ ] Modify hashing for both leaf and middle nodes
 - [ ] Create circom proof, contains both sibling hashes and sibling sums
+- [ ] Remove arity

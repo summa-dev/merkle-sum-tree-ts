@@ -19,10 +19,9 @@ export default function insert(
   let node = leaf;
   let index = nodes[0].length;
 
-  console.log("Adding leaf to the tree", leaf)
+  console.log('Adding leaf to the tree', leaf);
 
   for (let level = 0; level < depth; level += 1) {
-
     const position = index % arity;
     const levelStartIndex = index - position;
     const levelEndIndex = levelStartIndex + arity;

@@ -24,21 +24,23 @@ export default class IncrementalMerkleTree {
   private readonly _arity: number;
 
   /**
-   * Initializes the tree with the hash function, the depth, the zero value to use for zeroes
-   * and the arity (i.e. the number of children for each node).
+   * Initializes the tree with the hash function, the depth.
    * @param hash Hash function.
    * @param depth Tree depth.
-   * @param zeroValue Zero values for zeroes.
-   * @param arity The number of children for each node.
    */
 
-  // => Modify it : zeroValue should have also a zero sum. Hashing of further level should involve the sum too. Take care about how to handle the zeroValue node!
-  // => Modify it : should support Node2 type. Create Node2 type inside the function itself. ZeroValue should not be taken as paramenter. But executed inside the constructuror.
-  // => Modify it : remove arity from constructor
-  constructor(hash: HashFunction, depth: number, zeroValue: Node, arity = 2) {
+  // => Modify it : zeroValue should have also a zero sum. Hashing of further level should involve the sum too. Take care about how to handle the zeroValue node! > DONE!
+  // => Modify it : should support Node type. Create Node type inside the function itself. ZeroValue should not be taken as paramenter. But executed inside the constructuror. > DONE!
+  // => Modify it : remove arity from constructor > DONE!
+  // => Modify it : rename zeroValue to zeroNode > DONE!
+  constructor(hash: HashFunction, depth: number) {
+    // Init zeroNode
+    let zeroNode: Node = { value: BigInt(0), sum: BigInt(0) };
+    const arity = 2;
+
     checkParameter(hash, 'hash', 'function');
     checkParameter(depth, 'depth', 'number');
-    checkParameter(zeroValue, 'zeroValue', 'number', 'string', 'bigint');
+    checkParameter(zeroNode, 'zeroNode', 'object');
     checkParameter(arity, 'arity', 'number');
 
     if (depth < 1 || depth > IncrementalMerkleTree.maxDepth) {
@@ -53,15 +55,23 @@ export default class IncrementalMerkleTree {
     this._arity = arity;
 
     for (let i = 0; i < depth; i += 1) {
-      this._zeroes.push(zeroValue);
+      this._zeroes.push(zeroNode);
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
       // Fill a binary array with the zero value and get the hash, which will be the zero value for the next level in the tree.
-      zeroValue = hash(Array(this._arity).fill(zeroValue));
+
+      // Create next zeroValue by following the hashing rule of the merkle sum tree
+      let hashPreImage = [];
+      for (let j = 0; j < arity; j += 1) {
+        hashPreImage.push(zeroNode.value);
+        hashPreImage.push(zeroNode.sum);
+      }
+
+      zeroNode = { value: hash(hashPreImage), sum: BigInt(0) };
     }
 
     // The zero root is the last zero value.
-    this._root = zeroValue;
+    this._root = zeroNode;
 
     // Freeze the array objects. It prevents unintentional changes.
     Object.freeze(this._zeroes);
@@ -73,7 +83,7 @@ export default class IncrementalMerkleTree {
    * @returns Root hash.
    */
 
-  // => Modify it : should support Node2 type
+  // => Modify it : should support Node type
   public get root(): Node {
     return this._root;
   }
@@ -90,7 +100,7 @@ export default class IncrementalMerkleTree {
    * Returns the leaves of the tree.
    * @returns List of leaves.
    */
-  // // => Modify it : should support Node2 type
+  // // => Modify it : should support Node type
   // public get leaves(): Node[] {
   //   return this._nodes[0].slice();
   // }
@@ -99,7 +109,7 @@ export default class IncrementalMerkleTree {
    * Returns the zeroes nodes of the tree.
    * @returns List of zeroes.
    */
-  // => Modify it : should support Node2 type
+  // => Modify it : should support Node type
   public get zeroes(): Node[] {
     return this._zeroes;
   }
@@ -117,7 +127,7 @@ export default class IncrementalMerkleTree {
    * @param leaf Tree leaf.
    * @returns Index of the leaf.
    */
-  // // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing. 
+  // // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
   // public indexOf(leaf: Node): number {
   //   return _indexOf(leaf, this._nodes);
   // }
@@ -159,12 +169,12 @@ export default class IncrementalMerkleTree {
   //   return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
   // }
 
- /**
+  /**
    * Creates a proof of membership in a format that can be used as input for circom circuits.
    * @param index Index of the proof's leaf.
    * @returns Proof object in circom format.
    */
-  // public createCircomProof(index: number): MerkleProof {    
+  // public createCircomProof(index: number): MerkleProof {
   //     const merkleProof = this.createProof(index)
   //     merkleProof.siblings = merkleProof.siblings.map((s) => s[0])
   //     return merkleProof

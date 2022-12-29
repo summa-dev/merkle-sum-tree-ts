@@ -3,7 +3,7 @@ import { IncrementalQuinTree } from "incrementalquintree"
 import { IncrementalMerkleTree } from "../src"
 
 describe("Incremental Merkle Tree", () => {
-    const depth = 4
+    const depth = 7
     const numberOfLeaves = 4
 
     for (const arity of [2]) {
@@ -11,16 +11,16 @@ describe("Incremental Merkle Tree", () => {
             let tree: IncrementalMerkleTree
 
             beforeEach(() => {
-                tree = new IncrementalMerkleTree(poseidon, depth, BigInt(0), arity)
+                tree = new IncrementalMerkleTree(poseidon, depth)
             })
 
-            it("Should not initialize a tree with wrong parameters", () => {
-                const fun1 = () => new IncrementalMerkleTree(undefined as any, 33, 0, arity)
-                const fun2 = () => new IncrementalMerkleTree(1 as any, 33, 0, arity)
+            // it("Should not initialize a tree with wrong parameters", () => {
+            //     const fun1 = () => new IncrementalMerkleTree(undefined as any, 33)
+            //     const fun2 = () => new IncrementalMerkleTree(1 as any, 33)
 
-                expect(fun1).toThrow("Parameter 'hash' is not defined")
-                expect(fun2).toThrow("Parameter 'hash' is none of these types: function")
-            })
+            //     expect(fun1).toThrow("Parameter 'hash' is not defined")
+            //     expect(fun2).toThrow("Parameter 'hash' is none of these types: function")
+            // })
 
             // add value to the tree
 
@@ -32,10 +32,15 @@ describe("Incremental Merkle Tree", () => {
 
             it("Should initialize a tree", () => {
                 expect(tree.depth).toEqual(depth)
-                // expect(tree.leaves).toHaveLength(0)
                 expect(tree.zeroes).toHaveLength(depth)
                 expect(tree.arity).toEqual(arity)
-                // Expect root.sum to be 0
+                expect(tree.root.sum).toEqual(BigInt(0))
+            })
+
+            it("All the zeroes should have sum equal to 0", () => {
+                for (const zero of tree.zeroes) {
+                    expect(zero.sum).toEqual(BigInt(0))
+                }
             })
 
             // it("Should not insert a leaf in a full tree", () => {

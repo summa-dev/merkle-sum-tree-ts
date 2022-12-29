@@ -122,7 +122,8 @@ export default class IncrementalMerkleTree {
 
   /**
    * Inserts a new leaf in the tree.
-   * @param leaf New leaf.
+   * @param value Value of the leaf to be added to the tree.
+   * @param sum sum of the leaf to be added to the tree.
    */
  // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
   public insert(value: bigint, sum: bigint) {

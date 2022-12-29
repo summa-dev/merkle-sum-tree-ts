@@ -21,22 +21,22 @@ The **Root Node** represents the committed state of the Tree and contains the su
 
 ## APIs
 
-\# **new IncrementalMerkleTree**(hash: _HashFunction_, depth: _number_, zero: _Node_, arity: _number_): _IncrementalMerkleTree_
+\# **new IncrementalMerkleTree**(hash: _HashFunction_, depth: _number_): _IncrementalMerkleTree_
 
 ```typescript
 import { IncrementalMerkleTree } from "@zk-kit/incremental-merkle-tree"
 import { poseidon } from "circomlibjs" // v0.0.8
 
-const tree = new IncrementalMerkleTree(poseidon, 16, BigInt(0), 2) // Binary tree.
+const tree = new IncrementalMerkleTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
 ```
 
-\# **insert**(leaf: _Node_)
+\# **insert**(value: _number_, sum: _number_)
 
 ```typescript
-tree.insert(BigInt(1))
+tree.insert(BigInt(1), BigInt(25))
 ```
 
-\# **update**(index: _number_, newLeaf: _Node_)
+<!-- \# **update**(index: _number_, newLeaf: _Node_)
 
 ```typescript
 tree.update(0, BigInt(2))
@@ -73,7 +73,7 @@ const proof = tree.createCircomProof(1)
 
 ```typescript
 console.log(tree.verifyProof(proof)) // true
-```
+``` -->
 
 ## Code Quality and Formatting
 
@@ -92,8 +92,9 @@ Run Prettier to check formatting rules and to fix them:
 
 ## To do 
 
-- [ ] Add new node type, should support both hash and sum
-- [ ] Add support for sum
-- [ ] Modify hashing for both leaf and middle nodes
+- [x] Add new node type, should support both hash and sum
+- [x] Add support for sum
+- [x] Modify hashing for both leaf and middle nodes
 - [ ] Create circom proof, contains both sibling hashes and sibling sums
-- [ ] Remove arity
+- [x] Remove arity
+- [ ] Modify create tree api to support new package name

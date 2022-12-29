@@ -1,10 +1,10 @@
-export type Node = any
+export type Node = any;
 
-export type HashFunction = (values: Node[]) => Node
+export type HashFunction = (values: Node[]) => Node;
 
 export type MerkleProof = {
-    root: any
-    leaf: any
-    siblings: any[]
-    pathIndices: number[]
-}
+  root: any;
+  leaf: any;
+  siblings: any[];
+  pathIndices: number[];
+};

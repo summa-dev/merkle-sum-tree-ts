@@ -1,4 +1,4 @@
-import IncrementalMerkleTree from "./incremental-merkle-tree"
+import IncrementalMerkleTree from './incremental-merkle-tree';
 
-export { IncrementalMerkleTree }
-export * from "./types"
+export { IncrementalMerkleTree };
+export * from './types';

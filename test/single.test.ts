@@ -106,6 +106,8 @@ describe("Incremental Merkle Tree", () => {
                     sum += BigInt(i + 1)
                     // The root should store the correct sum
                     expect(tree.root.sum).toEqual(sum)
+                    // IndexOf should return the correct index
+                    expect(tree.indexOf(BigInt(i), BigInt(i+1))).toEqual(i)
                 }
             })
 
@@ -147,14 +149,14 @@ describe("Incremental Merkle Tree", () => {
             //     }
             // })
 
-            // it("Should return the index of a leaf", () => {
-            //     tree.insert(BigInt(1))
-            //     tree.insert(BigInt(2))
+            it("Should return the index of a leaf", () => {
+                tree.insert(BigInt(1), BigInt(1))
+                tree.insert(BigInt(2), BigInt(2))
 
-            //     const index = tree.indexOf(BigInt(2))
+                const index = tree.indexOf(BigInt(2), BigInt(2))
 
-            //     expect(index).toBe(1)
-            // })
+                expect(index).toBe(1)
+            })
 
             // it("Should not create any proof if the leaf does not exist", () => {
             //     tree.insert(BigInt(1))

@@ -112,13 +112,17 @@ export default class IncrementalMerkleTree {
 
   /**
    * Returns the index of a leaf. If the leaf does not exist it returns -1.
-   * @param leaf Tree leaf.
+   * @param entryValue value of the entry of the queried leaf.
+   * @param entrySum sum of the entry of the queried leaf.
    * @returns Index of the leaf.
    */
-  // // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
-  // public indexOf(leaf: Node): number {
-  //   return _indexOf(leaf, this._nodes);
-  // }
+  public indexOf(entryValue: bigint, entrySum: bigint): number {
+
+    const hashPreImage = [entryValue, entrySum];
+    const leaf: Node = { hash: this._hash(hashPreImage), sum: entrySum };
+
+    return _indexOf(leaf, this._nodes);
+  }
 
   /**
    * Inserts a new leaf in the tree.

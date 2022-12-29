@@ -29,14 +29,16 @@ export default class IncrementalMerkleTree {
    * @param depth Tree depth.
    */
   constructor(hash: HashFunction, depth: number) {
-    // Init zeroNode
-    let zeroNode: Node = { value: BigInt(0), sum: BigInt(0) };
-    const arity = 2;
 
     checkParameter(hash, 'hash', 'function');
     checkParameter(depth, 'depth', 'number');
+
+    // Init zeroNode
+    let zeroNode: Node = { hash: hash([BigInt(0), BigInt(0)]), sum: BigInt(0) };
+    const arity = 2;
+
     checkParameter(zeroNode, 'zeroNode', 'object');
-    checkParameter(zeroNode.value, 'value', 'bigint');
+    checkParameter(zeroNode.hash, 'hash', 'bigint');
     checkParameter(zeroNode.sum, 'sum', 'bigint');
     checkParameter(arity, 'arity', 'number');
 
@@ -56,9 +58,9 @@ export default class IncrementalMerkleTree {
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
       // Create next zeroValue by following the hashing rule of the merkle sum tree
-      let hashPreImage = [zeroNode.value, BigInt(0), zeroNode.value, BigInt(0)];
+      let hashPreImage = [zeroNode.hash, BigInt(0), zeroNode.hash, BigInt(0)];
 
-      zeroNode = { value: hash(hashPreImage), sum: BigInt(0) };
+      zeroNode = { hash: hash(hashPreImage), sum: BigInt(0) };
     }
 
 
@@ -122,12 +124,14 @@ export default class IncrementalMerkleTree {
 
   /**
    * Inserts a new leaf in the tree.
-   * @param value Value of the leaf to be added to the tree.
-   * @param sum sum of the leaf to be added to the tree.
+   * @param entryValue value of the entry to be added to the tree.
+   * @param entrySum sum of the entry to be added to the tree.
    */
- // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
-  public insert(value: bigint, sum: bigint) {
-    const leaf : Node = {value: value, sum: sum };
+  public insert(entryValue: bigint, entrySum: bigint) {
+
+    const hashPreImage = [entryValue, entrySum];
+
+    const leaf : Node = {hash: this._hash(hashPreImage), sum: entrySum};
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 

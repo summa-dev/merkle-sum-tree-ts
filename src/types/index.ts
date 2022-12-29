@@ -1,5 +1,5 @@
 export type Node = {
-  value: bigint;
+  hash: bigint;
   sum: bigint;
 };
 

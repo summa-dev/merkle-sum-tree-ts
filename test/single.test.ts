@@ -67,7 +67,7 @@ describe("Incremental Merkle Tree", () => {
                     tree.insert(BigInt(i), BigInt(i + 1))
                     expect(tree.leaves).toHaveLength(i + 1)
                     // The leaves should be initiated with the correct value and the correct sum
-                    expect(tree.leaves[i].value).toEqual(BigInt(i))
+                    expect(tree.leaves[i].hash).toEqual(poseidon([BigInt(i), BigInt(i + 1)]))
                     expect(tree.leaves[i].sum).toEqual(BigInt(i + 1))
                     sum += BigInt(i + 1)
                     // The root should store the correct sum

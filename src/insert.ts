@@ -12,7 +12,7 @@ export default function insert(
 ): Node {
 
   checkParameter(leaf, 'leaf', 'object');
-  checkParameter(leaf.value, 'value', 'bigint');
+  checkParameter(leaf.hash, 'hash', 'bigint');
   checkParameter(leaf.sum, 'sum', 'bigint');
 
   if (nodes[0].length >= arity ** depth) {
@@ -33,18 +33,18 @@ export default function insert(
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i < nodes[level].length) {
-        children.push(nodes[level][i].value);
+        children.push(nodes[level][i].hash);
         children.push(nodes[level][i].sum);
         sum += nodes[level][i].sum;
       } else {
         // Case where the level is not full and we need to use empty Nodes
-        children.push(zeroes[level].value);
+        children.push(zeroes[level].hash);
         children.push(zeroes[level].sum);
         // sum += zeroes[level].sum which is always 0
       }
     }
 
-    node = {value: hash(children), sum: sum };
+    node = {hash: hash(children), sum: sum };
     index = Math.floor(index / arity);
   }
 

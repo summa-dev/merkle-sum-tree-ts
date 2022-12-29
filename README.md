@@ -4,9 +4,12 @@
 
 ## What is a Merkle Sum Tree?
 
-A Merkle Sum Tree is a binary Merkle Tree where each **Leaf Node** contains a hash and a numeric value. Each **Middle Node** contains a hash which is the hash of the concatenation of the hashes of its children and the numeric values of its children and a numeric value which is the sum of the numeric values of its children. 
+A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
-The **Root Node** represents the committed state of the Tree and contains the sum of all the entries' values.
+- Each entry of a Merkle Sum Tree is a pair of a value and a sum. 
+- Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
+- Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
+- The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
 
 <div align="center">
 <img src="./imgs/mst.png" width="600" align="center" />
@@ -30,7 +33,7 @@ import { poseidon } from "circomlibjs" // v0.0.8
 const tree = new IncrementalMerkleTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
 ```
 
-\# **insert**(value: _number_, sum: _number_)
+\# **insert**(entryValue: _number_, entrySum: _number_)
 
 ```typescript
 tree.insert(BigInt(1), BigInt(25))

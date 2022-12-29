@@ -1,10 +1,9 @@
 import { poseidon } from "circomlibjs"
-import { IncrementalQuinTree } from "incrementalquintree"
 import { IncrementalMerkleTree } from "../src"
 
 describe("Incremental Merkle Tree", () => {
-    const depth = 7
-    const numberOfLeaves = 4
+    const depth = 10
+    const numberOfLeaves = 18
 
     for (const arity of [2]) {
         describe(`Intremental Merkle Tree (arity = ${arity})`, () => {
@@ -14,21 +13,20 @@ describe("Incremental Merkle Tree", () => {
                 tree = new IncrementalMerkleTree(poseidon, depth)
             })
 
-            // it("Should not initialize a tree with wrong parameters", () => {
-            //     const fun1 = () => new IncrementalMerkleTree(undefined as any, 33)
-            //     const fun2 = () => new IncrementalMerkleTree(1 as any, 33)
+            it("Should not initialize a tree with wrong parameters", () => {
+                const fun1 = () => new IncrementalMerkleTree(undefined as any, 33)
+                const fun2 = () => new IncrementalMerkleTree(1 as any, 33)
 
-            //     expect(fun1).toThrow("Parameter 'hash' is not defined")
-            //     expect(fun2).toThrow("Parameter 'hash' is none of these types: function")
-            // })
+                expect(fun1).toThrow("Parameter 'hash' is not defined")
+                expect(fun2).toThrow("Parameter 'hash' is none of these types: function")
+            })
 
-            // add value to the tree
 
-            // it("Should not initialize a tree with depth > 32", () => {
-            //     const fun = () => new IncrementalMerkleTree(poseidon, 33, BigInt(0), arity)
+            it("Should not initialize a tree with depth > 32", () => {
+                const fun = () => new IncrementalMerkleTree(poseidon, 33)
 
-            //     expect(fun).toThrow("The tree depth must be between 1 and 32")
-            // })
+                expect(fun).toThrow("The tree depth must be between 1 and 32")
+            })
 
             it("Should initialize a tree", () => {
                 expect(tree.depth).toEqual(depth)
@@ -47,17 +45,19 @@ describe("Incremental Merkle Tree", () => {
                 expect(tree.leaves).toHaveLength(0)
             })
 
-            // it("Should not insert a leaf in a full tree", () => {
-            //     const fullTree = new IncrementalMerkleTree(poseidon, 1, BigInt(0), 3)
+            it("Should not insert a leaf in a full tree", () => {
+                const fullTree = new IncrementalMerkleTree(poseidon, 1)
 
-            //     fullTree.insert(BigInt(0))
-            //     fullTree.insert(BigInt(1))
-            //     fullTree.insert(BigInt(2))
+                fullTree.insert(BigInt(0), BigInt(50))
+                fullTree.insert(BigInt(1), BigInt(30))
 
-            //     const fun = () => fullTree.insert(BigInt(4))
+                expect(fullTree.root.sum).toEqual(BigInt(80))
 
-            //     expect(fun).toThrow("The tree is full")
-            // })
+                expect(() => {
+                    fullTree.insert(BigInt(2), BigInt(70))
+                }).toThrow("The tree is full") // Or .toThrow('expectedErrorMessage')
+                
+            })
 
             it(`Should insert ${numberOfLeaves} leaves`, () => {
 

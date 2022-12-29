@@ -22,7 +22,5 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "circomlibjs": "^0.0.8",
-    "incrementalquintree": "^1.0.9"
-  }
+    "circomlibjs": "^0.0.8"  }
 }

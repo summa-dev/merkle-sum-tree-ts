@@ -28,11 +28,6 @@ export default class IncrementalMerkleTree {
    * @param hash Hash function.
    * @param depth Tree depth.
    */
-
-  // => Modify it : zeroValue should have also a zero sum. Hashing of further level should involve the sum too. Take care about how to handle the zeroValue node! > DONE!
-  // => Modify it : should support Node type. Create Node type inside the function itself. ZeroValue should not be taken as paramenter. But executed inside the constructuror. > DONE!
-  // => Modify it : remove arity from constructor > DONE!
-  // => Modify it : rename zeroValue to zeroNode > DONE!
   constructor(hash: HashFunction, depth: number) {
     // Init zeroNode
     let zeroNode: Node = { value: BigInt(0), sum: BigInt(0) };
@@ -41,6 +36,8 @@ export default class IncrementalMerkleTree {
     checkParameter(hash, 'hash', 'function');
     checkParameter(depth, 'depth', 'number');
     checkParameter(zeroNode, 'zeroNode', 'object');
+    checkParameter(zeroNode.value, 'value', 'bigint');
+    checkParameter(zeroNode.sum, 'sum', 'bigint');
     checkParameter(arity, 'arity', 'number');
 
     if (depth < 1 || depth > IncrementalMerkleTree.maxDepth) {
@@ -77,8 +74,6 @@ export default class IncrementalMerkleTree {
    * Returns the root hash of the tree.
    * @returns Root hash.
    */
-
-  // => Modify it : should support Node type > DONE!
   public get root(): Node {
     return this._root;
   }
@@ -95,7 +90,6 @@ export default class IncrementalMerkleTree {
    * Returns the leaves of the tree.
    * @returns List of leaves.
    */
-  // => Modify it : should support Node type
   public get leaves(): Node[] {
     return this._nodes[0].slice();
   }
@@ -104,7 +98,6 @@ export default class IncrementalMerkleTree {
    * Returns the zeroes nodes of the tree.
    * @returns List of zeroes.
    */
-  // => Modify it : should support Node type > DONE!
   public get zeroes(): Node[] {
     return this._zeroes;
   }
@@ -131,10 +124,11 @@ export default class IncrementalMerkleTree {
    * Inserts a new leaf in the tree.
    * @param leaf New leaf.
    */
-  // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
-  // public insert(leaf: Node) {
-  //   this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  // }
+ // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing.
+  public insert(value: bigint, sum: bigint) {
+    const leaf : Node = {value: value, sum: sum };
+    this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  }
 
   /**
    * Deletes a leaf from the tree. It does not remove the leaf from

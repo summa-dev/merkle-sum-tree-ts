@@ -59,12 +59,21 @@ describe("Incremental Merkle Tree", () => {
             //     expect(fun).toThrow("The tree is full")
             // })
 
-            // it(`Should insert ${numberOfLeaves} leaves`, () => {
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i * 2 + 1))
-            //         expect(tree.leaves).toHaveLength(i + 1)
-            //     }
-            // })
+            it(`Should insert ${numberOfLeaves} leaves`, () => {
+
+                let sum = BigInt(0)
+
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                    expect(tree.leaves).toHaveLength(i + 1)
+                    // The leaves should be initiated with the correct value and the correct sum
+                    expect(tree.leaves[i].value).toEqual(BigInt(i))
+                    expect(tree.leaves[i].sum).toEqual(BigInt(i + 1))
+                    sum += BigInt(i + 1)
+                    // The root should store the correct sum
+                    expect(tree.root.sum).toEqual(sum)
+                }
+            })
 
             // it("Should not delete a leaf that does not exist", () => {
             //     const fun = () => tree.delete(0)

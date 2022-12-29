@@ -62,6 +62,13 @@ const index = tree.indexOf(BigInt(2))
 const proof = tree.createProof(1)
 ```
 
+\# **createCircomProof**(index: _number_): _Proof_
+
+```typescript
+const proof = tree.createCircomProof(1)
+```
+
+
 \# **verifyProof**(proof: _Proof_): _boolean_
 
 ```typescript

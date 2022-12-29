@@ -43,6 +43,10 @@ describe("Incremental Merkle Tree", () => {
                 }
             })
 
+            it("should initiate a empty array of leaf nodes", () => {
+                expect(tree.leaves).toHaveLength(0)
+            })
+
             // it("Should not insert a leaf in a full tree", () => {
             //     const fullTree = new IncrementalMerkleTree(poseidon, 1, BigInt(0), 3)
 

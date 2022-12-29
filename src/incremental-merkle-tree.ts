@@ -59,14 +59,11 @@ export default class IncrementalMerkleTree {
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
       // Create next zeroValue by following the hashing rule of the merkle sum tree
-      let hashPreImage = [];
-      for (let j = 0; j < arity; j += 1) {
-        hashPreImage.push(zeroNode.value);
-        hashPreImage.push(zeroNode.sum);
-      }
+      let hashPreImage = [zeroNode.value, BigInt(0), zeroNode.value, BigInt(0)];
 
       zeroNode = { value: hash(hashPreImage), sum: BigInt(0) };
     }
+
 
     // The zero root is the last zero value.
     this._root = zeroNode;
@@ -98,10 +95,10 @@ export default class IncrementalMerkleTree {
    * Returns the leaves of the tree.
    * @returns List of leaves.
    */
-  // // => Modify it : should support Node type
-  // public get leaves(): Node[] {
-  //   return this._nodes[0].slice();
-  // }
+  // => Modify it : should support Node type
+  public get leaves(): Node[] {
+    return this._nodes[0].slice();
+  }
 
   /**
    * Returns the zeroes nodes of the tree.

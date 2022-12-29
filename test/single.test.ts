@@ -28,6 +28,12 @@ describe("Incremental Merkle Tree", () => {
                 expect(fun).toThrow("The tree depth must be between 1 and 32")
             })
 
+            it("Should not allow to add an entry with negative sum", () => {
+                const fun = () => tree.insert(BigInt(0), BigInt(-1))
+
+                expect(fun).toThrow("entrySum cant be negative")
+            })
+
             it("Should initialize a tree", () => {
                 expect(tree.depth).toEqual(depth)
                 expect(tree.zeroes).toHaveLength(depth)
@@ -39,6 +45,34 @@ describe("Incremental Merkle Tree", () => {
                 for (const zero of tree.zeroes) {
                     expect(zero.sum).toEqual(BigInt(0))
                 }
+            })
+
+            it("Should generate the same hash using the native poseidon hash", () => {
+
+                tree.insert(BigInt(20), BigInt(1))
+                const hash = poseidon([BigInt(20), BigInt(1)])
+
+                expect(hash).toEqual(tree.leaves[0].hash)
+                expect(tree.root.sum).toEqual(BigInt(1))
+            })
+
+            it("Should generate different root hashes when changing the entry order", () => {
+
+                const entry1Value = BigInt(1)
+                const entry1Sum = BigInt(78)
+                const entry2Value = BigInt(2)
+                const entry2Sum = BigInt(90)
+
+                let tree1 = new IncrementalMerkleTree(poseidon, depth)
+                let tree2 = new IncrementalMerkleTree(poseidon, depth)
+
+                tree1.insert(entry1Value, entry1Sum)
+                tree1.insert(entry2Value, entry2Sum)
+
+                tree2.insert(entry2Value, entry2Sum)
+                tree2.insert(entry1Value, entry1Sum)
+
+                expect(tree1.root.hash).not.toEqual(tree2.root.hash)
             })
 
             it("should initiate a empty array of leaf nodes", () => {

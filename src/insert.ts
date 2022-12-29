@@ -10,7 +10,6 @@ export default function insert(
   zeroes: Node[],
   hash: HashFunction,
 ): Node {
-
   checkParameter(leaf, 'leaf', 'object');
   checkParameter(leaf.hash, 'hash', 'bigint');
   checkParameter(leaf.sum, 'sum', 'bigint');
@@ -28,14 +27,14 @@ export default function insert(
     const levelEndIndex = levelStartIndex + arity;
 
     const children = [];
-    let sum : bigint = BigInt(0);
+    let computedSum: bigint = BigInt(0);
     nodes[level][index] = node;
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i < nodes[level].length) {
         children.push(nodes[level][i].hash);
         children.push(nodes[level][i].sum);
-        sum += nodes[level][i].sum;
+        computedSum += nodes[level][i].sum;
       } else {
         // Case where the level is not full and we need to use empty Nodes
         children.push(zeroes[level].hash);
@@ -44,7 +43,7 @@ export default function insert(
       }
     }
 
-    node = {hash: hash(children), sum: sum };
+    node = { hash: hash(children), sum: computedSum };
     index = Math.floor(index / arity);
   }
 

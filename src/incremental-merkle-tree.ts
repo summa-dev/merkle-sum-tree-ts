@@ -29,7 +29,6 @@ export default class IncrementalMerkleTree {
    * @param depth Tree depth.
    */
   constructor(hash: HashFunction, depth: number) {
-
     checkParameter(hash, 'hash', 'function');
     checkParameter(depth, 'depth', 'number');
 
@@ -58,11 +57,10 @@ export default class IncrementalMerkleTree {
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
       // Create next zeroValue by following the hashing rule of the merkle sum tree
-      let hashPreImage = [zeroNode.hash, BigInt(0), zeroNode.hash, BigInt(0)];
+      const hashPreImage = [zeroNode.hash, BigInt(0), zeroNode.hash, BigInt(0)];
 
       zeroNode = { hash: hash(hashPreImage), sum: BigInt(0) };
     }
-
 
     // The zero root is the last zero value.
     this._root = zeroNode;
@@ -128,10 +126,13 @@ export default class IncrementalMerkleTree {
    * @param entrySum sum of the entry to be added to the tree.
    */
   public insert(entryValue: bigint, entrySum: bigint) {
+    if (entrySum <= BigInt(0)) {
+      throw new Error('entrySum cant be negative');
+    }
 
     const hashPreImage = [entryValue, entrySum];
 
-    const leaf : Node = {hash: this._hash(hashPreImage), sum: entrySum};
+    const leaf: Node = { hash: this._hash(hashPreImage), sum: entrySum };
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 

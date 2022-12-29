@@ -2,8 +2,6 @@
 
 **This package is a fork of [ZK-KIT](https://github.com/privacy-scaling-explorations/zk-kit)**
 
-> WIP...
-
 ## What is a Merkle Sum Tree?
 
 A Merkle Sum Tree is a binary Merkle Tree where each **Leaf Node** contains a hash and a numeric value. Each **Middle Node** contains a hash which is the hash of the concatenation of the hashes of its children and the numeric values of its children and a numeric value which is the sum of the numeric values of its children. 
@@ -80,9 +78,7 @@ Run Prettier to check formatting rules and to fix them:
 
 ```npm run format```
 
-## Testing
-
-Run tests:
+## Testing
 
 ```npm run test```
 

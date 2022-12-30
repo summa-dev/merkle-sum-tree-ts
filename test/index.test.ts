@@ -1,5 +1,5 @@
 import { poseidon } from "circomlibjs"
-import { IncrementalMerkleTree, MerkleProof } from "../src"
+import { IncrementalMerkleSumTree, MerkleProof } from "../src"
 
 describe("Incremental Merkle Tree", () => {
     const depth = 10
@@ -7,15 +7,15 @@ describe("Incremental Merkle Tree", () => {
 
     for (const arity of [2]) {
         describe(`Intremental Merkle Tree (arity = ${arity})`, () => {
-            let tree: IncrementalMerkleTree
+            let tree: IncrementalMerkleSumTree
 
             beforeEach(() => {
-                tree = new IncrementalMerkleTree(poseidon, depth)
+                tree = new IncrementalMerkleSumTree(poseidon, depth)
             })
 
             it("Should not initialize a tree with wrong parameters", () => {
-                const fun1 = () => new IncrementalMerkleTree(undefined as any, 33)
-                const fun2 = () => new IncrementalMerkleTree(1 as any, 33)
+                const fun1 = () => new IncrementalMerkleSumTree(undefined as any, 33)
+                const fun2 = () => new IncrementalMerkleSumTree(1 as any, 33)
 
                 expect(fun1).toThrow("Parameter 'hash' is not defined")
                 expect(fun2).toThrow("Parameter 'hash' is none of these types: function")
@@ -23,7 +23,7 @@ describe("Incremental Merkle Tree", () => {
 
 
             it("Should not initialize a tree with depth > 32", () => {
-                const fun = () => new IncrementalMerkleTree(poseidon, 33)
+                const fun = () => new IncrementalMerkleSumTree(poseidon, 33)
 
                 expect(fun).toThrow("The tree depth must be between 1 and 32")
             })
@@ -74,8 +74,8 @@ describe("Incremental Merkle Tree", () => {
                 const entry2Value = BigInt(2)
                 const entry2Sum = BigInt(90)
 
-                let tree1 = new IncrementalMerkleTree(poseidon, depth)
-                let tree2 = new IncrementalMerkleTree(poseidon, depth)
+                let tree1 = new IncrementalMerkleSumTree(poseidon, depth)
+                let tree2 = new IncrementalMerkleSumTree(poseidon, depth)
 
                 tree1.insert(entry1Value, entry1Sum)
                 tree1.insert(entry2Value, entry2Sum)
@@ -91,7 +91,7 @@ describe("Incremental Merkle Tree", () => {
             })
 
             it("Should not insert a leaf in a full tree", () => {
-                const fullTree = new IncrementalMerkleTree(poseidon, 1)
+                const fullTree = new IncrementalMerkleSumTree(poseidon, 1)
 
                 fullTree.insert(BigInt(0), BigInt(50))
                 fullTree.insert(BigInt(1), BigInt(30))

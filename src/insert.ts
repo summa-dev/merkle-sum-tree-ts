@@ -2,7 +2,6 @@ import checkParameter from './checkParameter';
 import { createMiddleNode } from './createNode';
 import { HashFunction, Node } from './types';
 
-// => Modify it : should support Node2 type, children should be Node2[]. Hash should be performed with sum too!
 export default function insert(
   leaf: Node,
   depth: number,

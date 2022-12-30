@@ -39,10 +39,10 @@ const tree = new IncrementalMerkleTree(poseidon, 16) // Binary tree with 16 leve
 tree.insert(BigInt(1), BigInt(25))
 ```
 
-<!-- \# **update**(index: _number_, newLeaf: _Node_)
+\# **update**(index: _number_, newEntryValue: _number_, newEntrySum: _number_)
 
 ```typescript
-tree.update(0, BigInt(2))
+tree.update(0, BigInt(2), BigInt(50))
 ```
 
 \# **delete**(index: _number_)
@@ -51,12 +51,10 @@ tree.update(0, BigInt(2))
 tree.delete(0)
 ```
 
-\# **indexOf**(leaf: _Node_): _number_
+\# **indexOf**(entryValue: _number_, entrySum: _number_): _number_
 
 ```typescript
-tree.insert(BigInt(2))
-
-const index = tree.indexOf(BigInt(2))
+const index = tree.indexOf(BigInt(2), BigInt(50))
 ```
 
 \# **createProof**(index: _number_): _Proof_
@@ -65,18 +63,11 @@ const index = tree.indexOf(BigInt(2))
 const proof = tree.createProof(1)
 ```
 
-\# **createCircomProof**(index: _number_): _Proof_
-
-```typescript
-const proof = tree.createCircomProof(1)
-```
-
-
 \# **verifyProof**(proof: _Proof_): _boolean_
 
 ```typescript
 console.log(tree.verifyProof(proof)) // true
-``` -->
+```
 
 ## Code Quality and Formatting
 
@@ -100,5 +91,5 @@ Run Prettier to check formatting rules and to fix them:
 - [x] Modify hashing for both leaf and middle nodes
 - [x] Create circom proof, contains both sibling hashes and sibling sums
 - [x] Remove arity
-- [ ] Modify create tree api to support new package name
+- [x] Modify create tree api to support new package name
 - [x] Create leaf from entry function (hidden)

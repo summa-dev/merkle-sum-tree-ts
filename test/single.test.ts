@@ -143,27 +143,27 @@ describe("Incremental Merkle Tree", () => {
 
 
 
-            // it("Should not delete a leaf that does not exist", () => {
-            //     const fun = () => tree.delete(0)
+            it("Should not delete a leaf that does not exist", () => {
+                const fun = () => tree.delete(0)
 
-            //     expect(fun).toThrow("The leaf does not exist in this tree")
-            // })
+                expect(fun).toThrow("The leaf does not exist in this tree")
+            })
 
-            // it(`Should delete ${numberOfLeaves} leaves`, () => {
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(1))
-            //         oldTree.insert(BigInt(1))
-            //     }
+            it(`Should delete ${numberOfLeaves} leaves`, () => {
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
 
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.delete(i)
-            //         oldTree.update(i, BigInt(0))
+                    // expect the leaf to exist
+                    expect(tree.indexOf(BigInt(i), BigInt(i+1))).toEqual(i)
 
-            //         const { root } = oldTree.genMerklePath(0)
+                    // delete the leaf
+                    tree.delete(i)
 
-            //         expect(tree.root).toEqual(root)
-            //     }
-            // })
+                    // expect the leaf to not exist
+                    expect(tree.indexOf(BigInt(i), BigInt(i+1))).toEqual(-1)
+                }
+
+            })
 
             it(`Should update ${numberOfLeaves} leaves`, () => {
 

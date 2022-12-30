@@ -1,5 +1,5 @@
 import checkParameter from './checkParameter';
-import { createLeafNodeFromEntry, createMiddleNode} from './createNode';
+import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
 import _createProof from './createProof';
 import _indexOf from './indexOf';
 import _insert from './insert';
@@ -156,13 +156,12 @@ export default class IncrementalMerkleTree {
     return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
   }
 
-
   /**
    * Verifies a proof and return true or false.
    * @param proof Proof to be verified.
    * @returns True or false.
    */
-  public verifyProof(proof: MerkleProof) : boolean {
+  public verifyProof(proof: MerkleProof): boolean {
     return _verifyProof(proof, this._hash);
   }
 }

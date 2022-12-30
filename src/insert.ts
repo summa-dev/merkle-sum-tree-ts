@@ -28,7 +28,6 @@ export default function insert(
     const levelEndIndex = levelStartIndex + arity;
 
     const children = [];
-    let computedSum: bigint = BigInt(0);
     nodes[level][index] = node;
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {

@@ -11,6 +11,6 @@ export type MerkleProof = {
   leafHash: bigint;
   leafSum: bigint;
   siblingsHashes: bigint[];
-  siblingsSums : bigint[];
+  siblingsSums: bigint[];
   pathIndices: number[];
 };

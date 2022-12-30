@@ -25,7 +25,7 @@ export default function createProof(
     const levelStartIndex = index - position;
     const levelEndIndex = levelStartIndex + arity;
 
-    pathIndices[level] = position;;
+    pathIndices[level] = position;
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i !== index) {
@@ -42,5 +42,13 @@ export default function createProof(
     index = Math.floor(index / arity);
   }
 
-  return {rootHash: root.hash, rootSum : root.sum, leafHash: nodes[0][leafIndex].hash, leafSum: nodes[0][leafIndex].sum, pathIndices, siblingsHashes, siblingsSums};
+  return {
+    rootHash: root.hash,
+    rootSum: root.sum,
+    leafHash: nodes[0][leafIndex].hash,
+    leafSum: nodes[0][leafIndex].sum,
+    pathIndices,
+    siblingsHashes,
+    siblingsSums,
+  };
 }

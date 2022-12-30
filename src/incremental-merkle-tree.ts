@@ -1,4 +1,5 @@
 import checkParameter from './checkParameter';
+import { createLeafNode, createMiddleNode } from './createNode';
 import _createProof from './createProof';
 import _indexOf from './indexOf';
 import _insert from './insert';
@@ -33,12 +34,9 @@ export default class IncrementalMerkleTree {
     checkParameter(depth, 'depth', 'number');
 
     // Init zeroNode
-    let zeroNode: Node = { hash: hash([BigInt(0), BigInt(0)]), sum: BigInt(0) };
+    let zeroNode: Node = createLeafNode(BigInt(0), BigInt(0), hash);
     const arity = 2;
 
-    checkParameter(zeroNode, 'zeroNode', 'object');
-    checkParameter(zeroNode.hash, 'hash', 'bigint');
-    checkParameter(zeroNode.sum, 'sum', 'bigint');
     checkParameter(arity, 'arity', 'number');
 
     if (depth < 1 || depth > IncrementalMerkleTree.maxDepth) {
@@ -57,9 +55,7 @@ export default class IncrementalMerkleTree {
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
       // Create next zeroValue by following the hashing rule of the merkle sum tree
-      const hashPreImage = [zeroNode.hash, BigInt(0), zeroNode.hash, BigInt(0)];
-
-      zeroNode = { hash: hash(hashPreImage), sum: BigInt(0) };
+      zeroNode = createMiddleNode(zeroNode, zeroNode, hash);
     }
 
     // The zero root is the last zero value.
@@ -117,10 +113,7 @@ export default class IncrementalMerkleTree {
    * @returns Index of the leaf.
    */
   public indexOf(entryValue: bigint, entrySum: bigint): number {
-
-    const hashPreImage = [entryValue, entrySum];
-    const leaf: Node = { hash: this._hash(hashPreImage), sum: entrySum };
-
+    const leaf: Node = createLeafNode(entryValue, entrySum, this._hash);
     return _indexOf(leaf, this._nodes);
   }
 
@@ -130,13 +123,7 @@ export default class IncrementalMerkleTree {
    * @param entrySum sum of the entry to be added to the tree.
    */
   public insert(entryValue: bigint, entrySum: bigint) {
-    if (entrySum <= BigInt(0)) {
-      throw new Error('entrySum cant be negative');
-    }
-
-    const hashPreImage = [entryValue, entrySum];
-
-    const leaf: Node = { hash: this._hash(hashPreImage), sum: entrySum };
+    const leaf: Node = createLeafNode(entryValue, entrySum, this._hash);
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
@@ -152,12 +139,13 @@ export default class IncrementalMerkleTree {
   /**
    * Updates a leaf in the tree.
    * @param index Index of the leaf to be updated.
-   * @param newLeaf New leaf value.
+   * @param newEntryValue New value of the entry to be updated.
+   * @param newEntrySum New sum of the entry to be updated.
    */
-  // // => Modify it : create a new Entry Type which is the value to be added in the tree before hashing. Replace it to newLeaf
-  // public update(index: number, newLeaf: Node) {
-  //   this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  // }
+  public update(index: number, newEntryValue: bigint, newEntrySum: bigint) {
+    const newLeaf: Node = createLeafNode(newEntryValue, newEntrySum, this._hash);
+    this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  }
 
   /**
    * Creates a proof of membership.

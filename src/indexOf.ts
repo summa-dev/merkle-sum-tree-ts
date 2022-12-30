@@ -6,5 +6,5 @@ export default function indexOf(leaf: Node, nodes: Node[][]): number {
   checkParameter(leaf.hash, 'hash', 'bigint');
   checkParameter(leaf.sum, 'sum', 'bigint');
 
-  return nodes[0].map(x => x.hash).indexOf(leaf.hash);
+  return nodes[0].map((x) => x.hash).indexOf(leaf.hash);
 }

@@ -87,9 +87,9 @@ describe("Incremental Merkle Tree", () => {
 
                 expect(fullTree.root.sum).toEqual(BigInt(80))
 
-                expect(() => {
-                    fullTree.insert(BigInt(2), BigInt(70))
-                }).toThrow("The tree is full") // Or .toThrow('expectedErrorMessage')
+                const fun = () => fullTree.insert(BigInt(2), BigInt(70))
+
+                expect(fun).toThrow("The tree is full")
                 
             })
 
@@ -110,6 +110,22 @@ describe("Incremental Merkle Tree", () => {
                     expect(tree.indexOf(BigInt(i), BigInt(i+1))).toEqual(i)
                 }
             })
+
+            it("Should not update a leaf that does not exist", () => {
+                const fun = () => tree.update(0, BigInt(0), BigInt(55))
+                expect(fun).toThrow("The leaf does not exist in this tree")
+            })
+
+
+            it("Should not update a leaf with a negative sum", () => {
+                const fun = () => tree.update(0, BigInt(0), BigInt(-1))
+                expect(fun).toThrow("entrySum cant be negative")
+            })
+
+
+
+
+            // Test : You cannot update with a negative sum 
 
             // it("Should not delete a leaf that does not exist", () => {
             //     const fun = () => tree.delete(0)
@@ -133,21 +149,35 @@ describe("Incremental Merkle Tree", () => {
             //     }
             // })
 
-            // it(`Should update ${numberOfLeaves} leaves`, () => {
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(1))
-            //         oldTree.insert(BigInt(1))
-            //     }
+            it(`Should update ${numberOfLeaves} leaves`, () => {
 
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.update(i, BigInt(0))
-            //         oldTree.update(i, BigInt(0))
+                let computedSum = BigInt(0)
 
-            //         const { root } = oldTree.genMerklePath(0)
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                    computedSum += BigInt(i + 1)
+                }
 
-            //         expect(tree.root).toEqual(root)
-            //     }
-            // })
+                // The root should store the correct sum
+                expect(tree.root.sum).toEqual(computedSum)
+
+                // zero the sum
+                computedSum = BigInt(0)
+
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+
+                    tree.update(i, BigInt(i), BigInt(i + 2))
+
+                    // The leaves should be updated with the correct value and the correct sum
+                    expect(tree.leaves[i].hash).toEqual(poseidon([BigInt(i), BigInt(i + 2)]))
+                    expect(tree.leaves[i].sum).toEqual(BigInt(i + 2))
+
+                    computedSum += BigInt(i + 2)
+                }
+
+                // The root should store the correct sum
+                expect(tree.root.sum).toEqual(computedSum)
+            })
 
             it("Should return the index of a leaf", () => {
                 tree.insert(BigInt(1), BigInt(1))

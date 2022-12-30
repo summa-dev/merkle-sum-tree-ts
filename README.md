@@ -101,3 +101,4 @@ Run Prettier to check formatting rules and to fix them:
 - [ ] Create circom proof, contains both sibling hashes and sibling sums
 - [x] Remove arity
 - [ ] Modify create tree api to support new package name
+- [ ] Create leaf from entry function (hidden)

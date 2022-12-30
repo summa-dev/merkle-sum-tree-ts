@@ -18,8 +18,6 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
 ## Install 
 
-> Yet to be published!!
-
 ```npm install ts-merkle-sum-tree``` 
 
 ## APIs

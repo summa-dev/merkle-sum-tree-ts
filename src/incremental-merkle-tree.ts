@@ -152,9 +152,9 @@ export default class IncrementalMerkleTree {
    * @param index Index of the proof's leaf.
    * @returns Proof object.
    */
-  // public createProof(index: number): MerkleProof {
-  //   return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
-  // }
+  public createProof(index: number): MerkleProof {
+    return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
+  }
 
   /**
    * Creates a proof of membership in a format that can be used as input for circom circuits.

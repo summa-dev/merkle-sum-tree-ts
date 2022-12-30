@@ -15,7 +15,8 @@ export default function createProof(
     throw new Error('The leaf does not exist in this tree');
   }
 
-  const siblings: Node[][] = [];
+  const siblingsHashes: bigint[] = [];
+  const siblingsSums: bigint[] = [];
   const pathIndices: number[] = [];
   const leafIndex = index;
 
@@ -24,15 +25,16 @@ export default function createProof(
     const levelStartIndex = index - position;
     const levelEndIndex = levelStartIndex + arity;
 
-    pathIndices[level] = position;
-    siblings[level] = [];
+    pathIndices[level] = position;;
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i !== index) {
         if (i < nodes[level].length) {
-          siblings[level].push(nodes[level][i]);
+          siblingsHashes[level] = nodes[level][i].hash;
+          siblingsSums[level] = nodes[level][i].sum;
         } else {
-          siblings[level].push(zeroes[level]);
+          siblingsHashes[level] = zeroes[level].hash;
+          siblingsSums[level] = zeroes[level].sum;
         }
       }
     }
@@ -40,5 +42,5 @@ export default function createProof(
     index = Math.floor(index / arity);
   }
 
-  return { root, leaf: nodes[0][leafIndex], pathIndices, siblings };
+  return {rootHash: root.hash, rootSum : root.sum, leafHash: nodes[0][leafIndex].hash, leafSum: nodes[0][leafIndex].sum, pathIndices, siblingsHashes, siblingsSums};
 }

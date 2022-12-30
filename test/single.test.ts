@@ -1,5 +1,5 @@
 import { poseidon } from "circomlibjs"
-import { IncrementalMerkleTree } from "../src"
+import { IncrementalMerkleTree, MerkleProof } from "../src"
 
 describe("Incremental Merkle Tree", () => {
     const depth = 10
@@ -122,10 +122,27 @@ describe("Incremental Merkle Tree", () => {
                 expect(fun).toThrow("entrySum cant be negative")
             })
 
+            it("Should create valid proofs for each inserted entry", () => {
+
+                let computedSum = BigInt(0)
 
 
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                    const proof : MerkleProof = tree.createProof(i)
+                    expect(proof.siblingsHashes).toHaveLength(depth)
+                    expect(proof.leafHash).toEqual(tree.leaves[i].hash)
+                    expect(proof.leafSum).toEqual(tree.leaves[i].sum)
+                    expect(proof.rootHash).toEqual(tree.root.hash)
+                    expect(proof.rootSum).toEqual(tree.root.sum)
 
-            // Test : You cannot update with a negative sum 
+                    computedSum += BigInt(i + 1)
+                    // last proof should have the correct sum
+                    expect(proof.rootSum).toEqual(computedSum)
+                }
+            })
+
+
 
             // it("Should not delete a leaf that does not exist", () => {
             //     const fun = () => tree.delete(0)

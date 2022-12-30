@@ -1,4 +1,5 @@
 import checkParameter from './checkParameter';
+import { createMiddleNode } from './createNode';
 import { HashFunction, Node } from './types';
 
 // => Modify it : should support Node2 type, children should be Node2[]. Hash should be performed with sum too!
@@ -32,18 +33,15 @@ export default function insert(
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i < nodes[level].length) {
-        children.push(nodes[level][i].hash);
-        children.push(nodes[level][i].sum);
-        computedSum += nodes[level][i].sum;
+        children.push(nodes[level][i]);
       } else {
         // Case where the level is not full and we need to use empty Nodes
-        children.push(zeroes[level].hash);
-        children.push(zeroes[level].sum);
-        // sum += zeroes[level].sum which is always 0
+        children.push(zeroes[level]);
       }
     }
 
-    node = { hash: hash(children), sum: computedSum };
+    node = createMiddleNode(children[0], children[1], hash);
+
     index = Math.floor(index / arity);
   }
 

@@ -82,14 +82,3 @@ Run Prettier to check formatting rules and to fix them:
 ## Testing
 
 ```npm run test```
-
-
-## To do 
-
-- [x] Add new node type, should support both hash and sum
-- [x] Add support for sum
-- [x] Modify hashing for both leaf and middle nodes
-- [x] Create circom proof, contains both sibling hashes and sibling sums
-- [x] Remove arity
-- [x] Modify create tree api to support new package name
-- [x] Create leaf from entry function (hidden)

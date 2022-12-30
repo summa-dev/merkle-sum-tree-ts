@@ -1,17 +1,12 @@
 {
   "name": "ts-merkle-sum-tree",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest --config jestconfig.json",
-    "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json"
+  "version": "0.0.1",
+  "description": "APIs to create efficient merkle sum tree and to generate and verify proofs of membership",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "directories": {
+    "test": "test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.2.4",
     "jest": "^29.3.1",
@@ -24,5 +19,21 @@
   "dependencies": {
     "big-integer": "^1.6.51",
     "circomlibjs": "^0.0.8"
-  }
+  },
+  "scripts": {
+    "test": "jest --config jestconfig.json",
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pan-y-tomate/ts-merkle-sum-tree.git"
+  },
+  "author": "Enrico Bottazzi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pan-y-tomate/ts-merkle-sum-tree/issues"
+  },
+  "homepage": "https://github.com/pan-y-tomate/ts-merkle-sum-tree#readme"
 }

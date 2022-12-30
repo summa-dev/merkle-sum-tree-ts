@@ -11,10 +11,10 @@ import _verifyProof from './verifyProof';
  * A Merkle tree is a tree in which every leaf node is labelled with the cryptographic hash of a
  * data block, and every non-leaf node is labelled with the cryptographic hash of the labels of its child nodes.
  * It allows efficient and secure verification of the contents of large data structures.
- * The IncrementalMerkleTree class is a TypeScript implementation of Incremental Merkle tree and it
+ * The IncrementalMerkleSumTree class is a TypeScript implementation of Incremental Merkle Sum tree and it
  * provides all the functions to create efficient trees and to generate and verify proofs of membership.
  */
-export default class IncrementalMerkleTree {
+export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
 
   private _root: Node;
@@ -39,7 +39,7 @@ export default class IncrementalMerkleTree {
 
     checkParameter(arity, 'arity', 'number');
 
-    if (depth < 1 || depth > IncrementalMerkleTree.maxDepth) {
+    if (depth < 1 || depth > IncrementalMerkleSumTree.maxDepth) {
       throw new Error('The tree depth must be between 1 and 32');
     }
 

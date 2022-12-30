@@ -24,13 +24,13 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
 ## APIs
 
-\# **new IncrementalMerkleTree**(hash: _HashFunction_, depth: _number_): _IncrementalMerkleTree_
+\# **new IncrementalMerkleSumTree**(hash: _HashFunction_, depth: _number_): _IncrementalMerkleSumTree_
 
 ```typescript
-import { IncrementalMerkleTree } from "@zk-kit/incremental-merkle-tree"
+import { IncrementalMerkleSumTree } from "@zk-kit/incremental-merkle-tree"
 import { poseidon } from "circomlibjs" // v0.0.8
 
-const tree = new IncrementalMerkleTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
+const tree = new IncrementalMerkleSumTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
 ```
 
 \# **insert**(entryValue: _number_, entrySum: _number_)
@@ -82,3 +82,4 @@ Run Prettier to check formatting rules and to fix them:
 ## Testing
 
 ```npm run test```
+

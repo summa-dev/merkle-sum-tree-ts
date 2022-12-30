@@ -14,7 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IncrementalMerkleTree = void 0;
+exports.IncrementalMerkleSumTree = void 0;
 var incremental_merkle_tree_1 = require("./incremental-merkle-tree");
-exports.IncrementalMerkleTree = incremental_merkle_tree_1.default;
+exports.IncrementalMerkleSumTree = incremental_merkle_tree_1.default;
 __exportStar(require("./types"), exports);

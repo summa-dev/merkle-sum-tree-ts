@@ -29,9 +29,20 @@ describe("Incremental Merkle Tree", () => {
             })
 
             it("Should not allow to add an entry with negative sum", () => {
-                const fun = () => tree.insert(BigInt(0), BigInt(-1))
 
+                // Add entries
+                tree.insert(BigInt(0), BigInt(5))
+                tree.insert(BigInt(1), BigInt(7))
+
+                // Check the sum 
+                expect(tree.root.sum).toEqual(BigInt(12))
+
+                // Add an entry with negative sum, should throw an error
+                const fun = () => tree.insert(BigInt(0), BigInt(-1))
                 expect(fun).toThrow("entrySum cant be negative")
+
+                // Expect the sum to be the same
+                expect(tree.root.sum).toEqual(BigInt(12))
             })
 
             it("Should initialize a tree", () => {
@@ -135,9 +146,6 @@ describe("Incremental Merkle Tree", () => {
                     expect(proof.rootHash).toEqual(tree.root.hash)
                     expect(proof.rootSum).toEqual(tree.root.sum)
 
-                    console.log(proof)
-
-
                     computedSum += BigInt(i + 1)
                     // last proof should have the correct sum
                     expect(proof.rootSum).toEqual(computedSum)
@@ -219,7 +227,7 @@ describe("Incremental Merkle Tree", () => {
                 expect(fun).toThrow("The leaf does not exist in this tree")
             })
 
-            it("Should create a valid proof for each entry", () => {
+            it("Should verify a valid proof for each entry", () => {
                 for (let i = 0; i < numberOfLeaves; i += 1) {
                     tree.insert(BigInt(i), BigInt(i + 1))
                 }
@@ -228,6 +236,70 @@ describe("Incremental Merkle Tree", () => {
                     const proof = tree.createProof(i)
                     expect(tree.verifyProof(proof)).toBeTruthy()
                 }
+            })
+            
+            it("Shouldn't verify an invalid proof with a wrong leaf sum", () => {
+
+                // Gen tree
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                }
+
+                const proof = tree.createProof(0)
+
+                // add invalid leaf sum
+                proof.leafSum = BigInt(0)
+
+                expect(tree.verifyProof(proof)).toBeFalsy()
+
+            })
+
+            it("Shouldn't verify an invalid proof with a wrong leaf hash", () => {
+
+                // Gen tree
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                }
+
+                const proof = tree.createProof(0)
+
+                // add invalid leaf hash
+                proof.leafHash = BigInt(7)
+
+                expect(tree.verifyProof(proof)).toBeFalsy()
+
+            })
+
+            it("Shouldn't verify a proof against a wrong root hash", () => {
+
+                // Gen tree
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                }
+
+                const proof = tree.createProof(0)
+
+                // add invalid leaf hash
+                proof.rootHash = BigInt(7)
+
+                expect(tree.verifyProof(proof)).toBeFalsy()
+
+            })
+
+            it("Shouldn't verify a proof against a wrong root sum", () => {
+
+                // Gen tree
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                }
+
+                const proof = tree.createProof(0)
+
+                // add invalid leaf hash
+                proof.rootSum = BigInt(12)
+
+                expect(tree.verifyProof(proof)).toBeFalsy()
+
             })
         })
     }

@@ -25,7 +25,7 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 \# **new IncrementalMerkleSumTree**(hash: _HashFunction_, depth: _number_): _IncrementalMerkleSumTree_
 
 ```typescript
-import { IncrementalMerkleSumTree } from "@zk-kit/incremental-merkle-tree"
+import { IncrementalMerkleSumTree } from "ts-merkle-sum-tree"
 import { poseidon } from "circomlibjs" // v0.0.8
 
 const tree = new IncrementalMerkleSumTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
@@ -52,13 +52,13 @@ tree.delete(0)
 \# **indexOf**(entryValue: _number_, entrySum: _number_): _number_
 
 ```typescript
-const index = tree.indexOf(BigInt(2), BigInt(50))
+const index = tree.indexOf(BigInt(2), BigInt(50)) // 0
 ```
 
 \# **createProof**(index: _number_): _Proof_
 
 ```typescript
-const proof = tree.createProof(1)
+const proof = tree.createProof(0)
 ```
 
 \# **verifyProof**(proof: _Proof_): _boolean_

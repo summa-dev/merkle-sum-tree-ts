@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var checkParameter_1 = require("./checkParameter");
 function createProof(index, depth, arity, nodes, zeroes, root) {
-    (0, checkParameter_1.default)(index, "index", "number");
+    (0, checkParameter_1.default)(index, 'index', 'number');
     if (index < 0 || index >= nodes[0].length) {
-        throw new Error("The leaf does not exist in this tree");
+        throw new Error('The leaf does not exist in this tree');
     }
-    var siblings = [];
+    var siblingsHashes = [];
+    var siblingsSums = [];
     var pathIndices = [];
     var leafIndex = index;
     for (var level = 0; level < depth; level += 1) {
@@ -14,19 +15,28 @@ function createProof(index, depth, arity, nodes, zeroes, root) {
         var levelStartIndex = index - position;
         var levelEndIndex = levelStartIndex + arity;
         pathIndices[level] = position;
-        siblings[level] = [];
         for (var i = levelStartIndex; i < levelEndIndex; i += 1) {
             if (i !== index) {
                 if (i < nodes[level].length) {
-                    siblings[level].push(nodes[level][i]);
+                    siblingsHashes[level] = nodes[level][i].hash;
+                    siblingsSums[level] = nodes[level][i].sum;
                 }
                 else {
-                    siblings[level].push(zeroes[level]);
+                    siblingsHashes[level] = zeroes[level].hash;
+                    siblingsSums[level] = zeroes[level].sum;
                 }
             }
         }
         index = Math.floor(index / arity);
     }
-    return { root: root, leaf: nodes[0][leafIndex], pathIndices: pathIndices, siblings: siblings };
+    return {
+        rootHash: root.hash,
+        rootSum: root.sum,
+        leafHash: nodes[0][leafIndex].hash,
+        leafSum: nodes[0][leafIndex].sum,
+        pathIndices: pathIndices,
+        siblingsHashes: siblingsHashes,
+        siblingsSums: siblingsSums,
+    };
 }
 exports.default = createProof;

@@ -9,7 +9,7 @@ function checkParameter(value, name) {
         throw new TypeError("Parameter '".concat(name, "' is not defined"));
     }
     if (!types.includes(typeof value)) {
-        throw new TypeError("Parameter '".concat(name, "' is none of these types: ").concat(types.join(", ")));
+        throw new TypeError("Parameter '".concat(name, "' is none of these types: ").concat(types.join(', ')));
     }
 }
 exports.default = checkParameter;

@@ -1,8 +1,14 @@
-export type Node = any;
-export type HashFunction = (values: Node[]) => Node;
+export type Node = {
+    hash: bigint;
+    sum: bigint;
+};
+export type HashFunction = (values: bigint[]) => bigint;
 export type MerkleProof = {
-    root: any;
-    leaf: any;
-    siblings: any[];
+    rootHash: bigint;
+    rootSum: bigint;
+    leafHash: bigint;
+    leafSum: bigint;
+    siblingsHashes: bigint[];
+    siblingsSums: bigint[];
     pathIndices: number[];
 };

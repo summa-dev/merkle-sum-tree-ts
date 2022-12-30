@@ -126,7 +126,6 @@ describe("Incremental Merkle Tree", () => {
 
                 let computedSum = BigInt(0)
 
-
                 for (let i = 0; i < numberOfLeaves; i += 1) {
                     tree.insert(BigInt(i), BigInt(i + 1))
                     const proof : MerkleProof = tree.createProof(i)
@@ -213,16 +212,16 @@ describe("Incremental Merkle Tree", () => {
             //     expect(fun).toThrow("The leaf does not exist in this tree")
             // })
 
-            // it("Should create a valid proof", () => {
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i + 1))
-            //     }
+            it("Should create a valid proof for each entry", () => {
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    tree.insert(BigInt(i), BigInt(i + 1))
+                }
 
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         const proof = tree.createProof(i)
-            //         expect(tree.verifyProof(proof)).toBeTruthy()
-            //     }
-            // })
+                for (let i = 0; i < numberOfLeaves; i += 1) {
+                    const proof = tree.createProof(i)
+                    expect(tree.verifyProof(proof)).toBeTruthy()
+                }
+            })
         })
     }
 })

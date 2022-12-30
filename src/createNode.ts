@@ -1,7 +1,7 @@
 import checkParameter from './checkParameter';
 import { HashFunction, Node } from './types';
 
-export function createLeafNode(entryValue: bigint, entrySum: bigint, hash: HashFunction): Node {
+export function createLeafNodeFromEntry(entryValue: bigint, entrySum: bigint, hash: HashFunction): Node {
   if (entrySum < BigInt(0)) {
     throw new Error('entrySum cant be negative');
   }

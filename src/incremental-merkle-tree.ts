@@ -1,5 +1,5 @@
 import checkParameter from './checkParameter';
-import { createLeafNode, createMiddleNode } from './createNode';
+import { createLeafNodeFromEntry, createMiddleNode} from './createNode';
 import _createProof from './createProof';
 import _indexOf from './indexOf';
 import _insert from './insert';
@@ -34,7 +34,7 @@ export default class IncrementalMerkleTree {
     checkParameter(depth, 'depth', 'number');
 
     // Init zeroNode
-    let zeroNode: Node = createLeafNode(BigInt(0), BigInt(0), hash);
+    let zeroNode: Node = createLeafNodeFromEntry(BigInt(0), BigInt(0), hash);
     const arity = 2;
 
     checkParameter(arity, 'arity', 'number');
@@ -113,7 +113,7 @@ export default class IncrementalMerkleTree {
    * @returns Index of the leaf.
    */
   public indexOf(entryValue: bigint, entrySum: bigint): number {
-    const leaf: Node = createLeafNode(entryValue, entrySum, this._hash);
+    const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
     return _indexOf(leaf, this._nodes);
   }
 
@@ -123,7 +123,7 @@ export default class IncrementalMerkleTree {
    * @param entrySum sum of the entry to be added to the tree.
    */
   public insert(entryValue: bigint, entrySum: bigint) {
-    const leaf: Node = createLeafNode(entryValue, entrySum, this._hash);
+    const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
@@ -143,7 +143,7 @@ export default class IncrementalMerkleTree {
    * @param newEntrySum New sum of the entry to be updated.
    */
   public update(index: number, newEntryValue: bigint, newEntrySum: bigint) {
-    const newLeaf: Node = createLeafNode(newEntryValue, newEntrySum, this._hash);
+    const newLeaf: Node = createLeafNodeFromEntry(newEntryValue, newEntrySum, this._hash);
     this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
@@ -172,7 +172,7 @@ export default class IncrementalMerkleTree {
    * @param proof Proof to be verified.
    * @returns True or false.
    */
-  // public verifyProof(proof: MerkleProof): boolean {
-  //   return _verifyProof(proof, this._hash);
-  // }
+  public verifyProof(proof: MerkleProof) {
+    return _verifyProof(proof, this._hash);
+  }
 }

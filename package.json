@@ -2,7 +2,8 @@
   "name": "ts-merkle-sum-tree",
   "version": "0.0.1",
   "description": "APIs to create efficient merkle sum tree and to generate and verify proofs of membership",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "directories": {
     "test": "test"
   },

@@ -4,9 +4,12 @@
 
 ## What is a Merkle Sum Tree?
 
-A Merkle Sum Tree is a binary Merkle Tree where each **Leaf Node** contains a hash and a numeric value. Each **Middle Node** contains a hash which is the hash of the concatenation of the hashes of its children and the numeric values of its children and a numeric value which is the sum of the numeric values of its children. 
+A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
-The **Root Node** represents the committed state of the Tree and contains the sum of all the entries' values.
+- Each entry of a Merkle Sum Tree is a pair of a value and a sum. 
+- Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
+- Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
+- The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
 
 <div align="center">
 <img src="./imgs/mst.png" width="600" align="center" />
@@ -21,25 +24,25 @@ The **Root Node** represents the committed state of the Tree and contains the su
 
 ## APIs
 
-\# **new IncrementalMerkleTree**(hash: _HashFunction_, depth: _number_, zero: _Node_, arity: _number_): _IncrementalMerkleTree_
+\# **new IncrementalMerkleTree**(hash: _HashFunction_, depth: _number_): _IncrementalMerkleTree_
 
 ```typescript
 import { IncrementalMerkleTree } from "@zk-kit/incremental-merkle-tree"
 import { poseidon } from "circomlibjs" // v0.0.8
 
-const tree = new IncrementalMerkleTree(poseidon, 16, BigInt(0), 2) // Binary tree.
+const tree = new IncrementalMerkleTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
 ```
 
-\# **insert**(leaf: _Node_)
+\# **insert**(entryValue: _number_, entrySum: _number_)
 
 ```typescript
-tree.insert(BigInt(1))
+tree.insert(BigInt(1), BigInt(25))
 ```
 
-\# **update**(index: _number_, newLeaf: _Node_)
+\# **update**(index: _number_, newEntryValue: _number_, newEntrySum: _number_)
 
 ```typescript
-tree.update(0, BigInt(2))
+tree.update(0, BigInt(2), BigInt(50))
 ```
 
 \# **delete**(index: _number_)
@@ -48,12 +51,10 @@ tree.update(0, BigInt(2))
 tree.delete(0)
 ```
 
-\# **indexOf**(leaf: _Node_): _number_
+\# **indexOf**(entryValue: _number_, entrySum: _number_): _number_
 
 ```typescript
-tree.insert(BigInt(2))
-
-const index = tree.indexOf(BigInt(2))
+const index = tree.indexOf(BigInt(2), BigInt(50))
 ```
 
 \# **createProof**(index: _number_): _Proof_
@@ -61,13 +62,6 @@ const index = tree.indexOf(BigInt(2))
 ```typescript
 const proof = tree.createProof(1)
 ```
-
-\# **createCircomProof**(index: _number_): _Proof_
-
-```typescript
-const proof = tree.createCircomProof(1)
-```
-
 
 \# **verifyProof**(proof: _Proof_): _boolean_
 
@@ -88,12 +82,3 @@ Run Prettier to check formatting rules and to fix them:
 ## Testing
 
 ```npm run test```
-
-
-## To do 
-
-- [ ] Add new node type, should support both hash and sum
-- [ ] Add support for sum
-- [ ] Modify hashing for both leaf and middle nodes
-- [ ] Create circom proof, contains both sibling hashes and sibling sums
-- [ ] Remove arity

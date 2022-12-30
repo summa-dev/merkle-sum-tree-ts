@@ -1,4 +1,5 @@
 import checkParameter from './checkParameter';
+import { createMiddleNode } from './createNode';
 import { HashFunction, Node } from './types';
 
 export default function insert(
@@ -9,7 +10,9 @@ export default function insert(
   zeroes: Node[],
   hash: HashFunction,
 ): Node {
-  checkParameter(leaf, 'leaf', 'number', 'string', 'bigint');
+  checkParameter(leaf, 'leaf', 'object');
+  checkParameter(leaf.hash, 'hash', 'bigint');
+  checkParameter(leaf.sum, 'sum', 'bigint');
 
   if (nodes[0].length >= arity ** depth) {
     throw new Error('The tree is full');
@@ -30,11 +33,13 @@ export default function insert(
       if (i < nodes[level].length) {
         children.push(nodes[level][i]);
       } else {
+        // Case where the level is not full and we need to use empty Nodes
         children.push(zeroes[level]);
       }
     }
 
-    node = hash(children);
+    node = createMiddleNode(children[0], children[1], hash);
+
     index = Math.floor(index / arity);
   }
 

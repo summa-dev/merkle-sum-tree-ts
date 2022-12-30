@@ -1,4 +1,5 @@
 import checkParameter from './checkParameter';
+import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
 import _createProof from './createProof';
 import _indexOf from './indexOf';
 import _insert from './insert';
@@ -24,17 +25,18 @@ export default class IncrementalMerkleTree {
   private readonly _arity: number;
 
   /**
-   * Initializes the tree with the hash function, the depth, the zero value to use for zeroes
-   * and the arity (i.e. the number of children for each node).
+   * Initializes the tree with the hash function, the depth.
    * @param hash Hash function.
    * @param depth Tree depth.
-   * @param zeroValue Zero values for zeroes.
-   * @param arity The number of children for each node.
    */
-  constructor(hash: HashFunction, depth: number, zeroValue: Node, arity = 2) {
+  constructor(hash: HashFunction, depth: number) {
     checkParameter(hash, 'hash', 'function');
     checkParameter(depth, 'depth', 'number');
-    checkParameter(zeroValue, 'zeroValue', 'number', 'string', 'bigint');
+
+    // Init zeroNode
+    let zeroNode: Node = createLeafNodeFromEntry(BigInt(0), BigInt(0), hash);
+    const arity = 2;
+
     checkParameter(arity, 'arity', 'number');
 
     if (depth < 1 || depth > IncrementalMerkleTree.maxDepth) {
@@ -49,14 +51,15 @@ export default class IncrementalMerkleTree {
     this._arity = arity;
 
     for (let i = 0; i < depth; i += 1) {
-      this._zeroes.push(zeroValue);
+      this._zeroes.push(zeroNode);
       this._nodes[i] = [];
       // There must be a zero value for each tree level (except the root).
-      zeroValue = hash(Array(this._arity).fill(zeroValue));
+      // Create next zeroValue by following the hashing rule of the merkle sum tree
+      zeroNode = createMiddleNode(zeroNode, zeroNode, hash);
     }
 
-    // The default root is the last zero value.
-    this._root = zeroValue;
+    // The zero root is the last zero value.
+    this._root = zeroNode;
 
     // Freeze the array objects. It prevents unintentional changes.
     Object.freeze(this._zeroes);
@@ -105,18 +108,22 @@ export default class IncrementalMerkleTree {
 
   /**
    * Returns the index of a leaf. If the leaf does not exist it returns -1.
-   * @param leaf Tree leaf.
+   * @param entryValue value of the entry of the queried leaf.
+   * @param entrySum sum of the entry of the queried leaf.
    * @returns Index of the leaf.
    */
-  public indexOf(leaf: Node): number {
+  public indexOf(entryValue: bigint, entrySum: bigint): number {
+    const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
     return _indexOf(leaf, this._nodes);
   }
 
   /**
    * Inserts a new leaf in the tree.
-   * @param leaf New leaf.
+   * @param entryValue value of the entry to be added to the tree.
+   * @param entrySum sum of the entry to be added to the tree.
    */
-  public insert(leaf: Node) {
+  public insert(entryValue: bigint, entrySum: bigint) {
+    const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
@@ -132,9 +139,11 @@ export default class IncrementalMerkleTree {
   /**
    * Updates a leaf in the tree.
    * @param index Index of the leaf to be updated.
-   * @param newLeaf New leaf value.
+   * @param newEntryValue New value of the entry to be updated.
+   * @param newEntrySum New sum of the entry to be updated.
    */
-  public update(index: number, newLeaf: Node) {
+  public update(index: number, newEntryValue: bigint, newEntrySum: bigint) {
+    const newLeaf: Node = createLeafNodeFromEntry(newEntryValue, newEntrySum, this._hash);
     this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
@@ -145,17 +154,6 @@ export default class IncrementalMerkleTree {
    */
   public createProof(index: number): MerkleProof {
     return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
-  }
-
- /**
-   * Creates a proof of membership in a format that can be used as input for circom circuits.
-   * @param index Index of the proof's leaf.
-   * @returns Proof object in circom format.
-   */
-  public createCircomProof(index: number): MerkleProof {    
-      const merkleProof = this.createProof(index)
-      merkleProof.siblings = merkleProof.siblings.map((s) => s[0])
-      return merkleProof
   }
 
   /**

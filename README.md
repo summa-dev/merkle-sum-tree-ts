@@ -98,7 +98,7 @@ Run Prettier to check formatting rules and to fix them:
 - [x] Add new node type, should support both hash and sum
 - [x] Add support for sum
 - [x] Modify hashing for both leaf and middle nodes
-- [ ] Create circom proof, contains both sibling hashes and sibling sums
+- [x] Create circom proof, contains both sibling hashes and sibling sums
 - [x] Remove arity
 - [ ] Modify create tree api to support new package name
-- [ ] Create leaf from entry function (hidden)
+- [x] Create leaf from entry function (hidden)

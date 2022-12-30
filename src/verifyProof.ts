@@ -3,7 +3,7 @@ import {createMiddleNode} from './createNode';
 import checkParameter from './checkParameter';
 import { HashFunction, MerkleProof } from './types';
 
-export default function verifyProof(proof: MerkleProof, hash: HashFunction) {
+export default function verifyProof(proof: MerkleProof, hash: HashFunction) : boolean {
   checkParameter(proof, 'proof', 'object');
   checkParameter(proof.rootHash, 'proof.rootHash', 'bigint');
   checkParameter(proof.rootSum, 'proof.rootSum', 'bigint');

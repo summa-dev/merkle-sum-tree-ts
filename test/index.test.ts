@@ -58,13 +58,34 @@ describe("Incremental Merkle Tree", () => {
                 }
             })
 
-            it("Should generate the same hash using the native poseidon hash", () => {
+            it("Should generate the same leaf hash using the native poseidon hash", () => {
 
                 tree.insert(BigInt(20), BigInt(1))
                 const hash = poseidon([BigInt(20), BigInt(1)])
 
                 expect(hash).toEqual(tree.leaves[0].hash)
                 expect(tree.root.sum).toEqual(BigInt(1))
+            })
+
+
+            it("Should generate the root leaf hash using the native poseidon hash", () => {
+
+                const oneLevelTree = new IncrementalMerkleSumTree(poseidon, 1)
+
+                oneLevelTree.insert(BigInt(20), BigInt(50))
+                oneLevelTree.insert(BigInt(30), BigInt(65))
+
+                const leaf1Hash = poseidon([BigInt(20), BigInt(50)])
+                const leaf2Hash = poseidon([BigInt(30), BigInt(65)])
+
+                expect(leaf1Hash).toEqual(oneLevelTree.leaves[0].hash)
+                expect(leaf2Hash).toEqual(oneLevelTree.leaves[1].hash)
+                expect(BigInt(50)).toEqual(oneLevelTree.leaves[0].sum)
+                expect(BigInt(65)).toEqual(oneLevelTree.leaves[1].sum)
+
+                const rootHash = poseidon([leaf1Hash, BigInt(50), leaf2Hash, BigInt(65)])
+
+                expect(rootHash).toEqual(oneLevelTree.root.hash)
             })
 
             it("Should generate different root hashes when changing the entry order", () => {

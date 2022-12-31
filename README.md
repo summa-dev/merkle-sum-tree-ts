@@ -49,6 +49,12 @@ tree.update(0, BigInt(2), BigInt(50))
 tree.delete(0)
 ```
 
+\# **getTreeSum** 
+
+```typescript
+tree.root.sum 
+```
+
 \# **indexOf**(entryValue: _number_, entrySum: _number_): _number_
 
 ```typescript

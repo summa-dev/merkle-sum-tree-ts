@@ -1,11 +1,13 @@
 import checkParameter from './checkParameter';
 import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
 import _createProof from './createProof';
+import _createProofWithTargetSum from './createProofWithTargetSum';
 import _indexOf from './indexOf';
 import _insert from './insert';
-import { HashFunction, MerkleProof, Node } from './types';
+import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum} from './types';
 import _update from './update';
 import _verifyProof from './verifyProof';
+import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
 
 /**
  * A Merkle tree is a tree in which every leaf node is labelled with the cryptographic hash of a
@@ -148,20 +150,42 @@ export default class IncrementalMerkleSumTree {
   }
 
   /**
-   * Creates a proof of membership.
+   * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root and the computed sum of the tree.
    * @param index Index of the proof's leaf.
-   * @returns Proof object.
+   * @returns MerkleProof object.
    */
   public createProof(index: number): MerkleProof {
     return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
   }
 
+
+  /**
+   * Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
+   * @param index Index of the proof's leaf.
+   * @param targetSum value which the tree sum should be less or equal than.
+   * @returns Proof object.
+   */
+    public createProofWithTargetSum(index: number, targetSum : bigint): MerkleProofWithTargetSum {
+      return _createProofWithTargetSum(index, targetSum, this.depth, this.arity, this._nodes, this.zeroes, this.root);
+    }
+
   /**
    * Verifies a proof and return true or false.
+   * It verifies that the computed sum inside the tree is equal to the sum of the leaf and the sum of the siblings.
    * @param proof Proof to be verified.
    * @returns True or false.
    */
   public verifyProof(proof: MerkleProof): boolean {
     return _verifyProof(proof, this._hash);
   }
+
+    /**
+   * Verifies a proof and return true or false.
+   * To be verified the computed sum inside the tree should be less or equal than the target sum.
+   * @param proof Proof to be verified.
+   * @returns True or false.
+   */
+    public verifyProofWithTargetSum(proof: MerkleProofWithTargetSum): boolean {
+      return _verifyProofWithTargetSum(proof, this._hash);
+    }
 }

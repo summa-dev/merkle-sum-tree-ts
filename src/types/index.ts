@@ -14,3 +14,14 @@ export type MerkleProof = {
   siblingsSums: bigint[];
   pathIndices: number[];
 };
+
+export type MerkleProofWithTargetSum = {
+  rootHash: bigint;
+  targetSum: bigint;
+  leafHash: bigint;
+  leafSum: bigint;
+  siblingsHashes: bigint[];
+  siblingsSums: bigint[];
+  pathIndices: number[];
+};
+

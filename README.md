@@ -31,13 +31,13 @@ import { poseidon } from "circomlibjs" // v0.0.8
 const tree = new IncrementalMerkleSumTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
 ```
 
-\# **insert**(entryValue: _number_, entrySum: _number_)
+\# **insert**(entryValue: _bigint_, entrySum: _bigint_)
 
 ```typescript
 tree.insert(BigInt(1), BigInt(25))
 ```
 
-\# **update**(index: _number_, newEntryValue: _number_, newEntrySum: _number_)
+\# **update**(index: _number_, newEntryValue: _bigint_, newEntrySum: _bigint_)
 
 ```typescript
 tree.update(0, BigInt(2), BigInt(50))
@@ -55,24 +55,36 @@ tree.delete(0)
 tree.root.sum 
 ```
 
-\# **indexOf**(entryValue: _number_, entrySum: _number_): _number_
+\# **indexOf**(entryValue: _bigint_, entrySum: _bigint_): _number_
 
 ```typescript
 const index = tree.indexOf(BigInt(2), BigInt(50)) // 0
 ```
 
-\# **createProof**(index: _number_): _Proof_
+\# **createProof**(index: _number_): _MerkleProof_
 
 ```typescript
 const proof = tree.createProof(0)
 ```
 
-\# **verifyProof**(proof: _Proof_): _boolean_
+\# **createProofWithTargetSum**(index: _number_, targetSum: _bigint_): _MerkleProofWithTargetSum_
+
+```typescript
+const proofWithTargetSum = tree.createProof(0, BigInt(75))
+```
+
+\# **verifyProof**(proof: _MerkleProof_): _boolean_
 
 ```typescript
 console.log(tree.verifyProof(proof)) // true
 ```
 
+\# **verifyWithTargetSum**(proof: _MerkleProofWithTargetSum_): _boolean_
+
+```typescript
+// This will verify that the leaf is in the tree and that the target sum is greater or equal to the tree sum.
+console.log(tree.verifyProof(proofWithTargetSum)) // true
+```
 ## Code Quality and Formatting
 
 Run ESLint to analyze the code and catch bugs:

@@ -6,7 +6,7 @@ describe("Incremental Merkle Tree", () => {
     const numberOfLeaves = 18
 
     for (const arity of [2]) {
-        describe(`Intremental Merkle Tree (arity = ${arity})`, () => {
+        describe(`Incremental Merkle Tree (arity = ${arity})`, () => {
             let tree: IncrementalMerkleSumTree
 
             beforeEach(() => {
@@ -237,6 +237,17 @@ describe("Incremental Merkle Tree", () => {
                 expect(index).toBe(1)
             })
 
+            it("Should create a valid proof with target sum", () => {
+
+                tree.insert(BigInt(1), BigInt(1))
+                tree.insert(BigInt(2), BigInt(2))   
+
+                const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(60))
+
+                expect(proofWithTargetSum.targetSum).toEqual(BigInt(60))
+
+            })
+
             it("Should not create any proof if the leaf does not exist", () => {
 
                 // Add a single leaf to the tree
@@ -320,6 +331,51 @@ describe("Incremental Merkle Tree", () => {
                 proof.rootSum = BigInt(12)
 
                 expect(tree.verifyProof(proof)).toBeFalsy()
+
+            })
+
+            it("Should verify a proof with target sum when target sum > tree sum", () => {
+
+                tree.insert(BigInt(1), BigInt(1))
+                tree.insert(BigInt(2), BigInt(2))
+                tree.insert(BigInt(2), BigInt(5))   
+
+                // tree sum is 8
+                // target sum is 60
+
+                const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(60))
+
+                expect(tree.verifyProofWithTargetSum(proofWithTargetSum)).toBeTruthy()
+
+            })
+
+            it("Should verify a proof with target sum when target sum = tree sum", () => {
+
+                tree.insert(BigInt(1), BigInt(1))
+                tree.insert(BigInt(2), BigInt(2))
+                tree.insert(BigInt(2), BigInt(5))   
+
+                // tree sum is 8
+                // target sum is 8
+
+                const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(8))
+
+                expect(tree.verifyProofWithTargetSum(proofWithTargetSum)).toBeTruthy()
+
+            })
+
+
+            it("Shouldn't verify a proof with target sum when target sum < tree sum", () => {
+
+                tree.insert(BigInt(1), BigInt(1))
+                tree.insert(BigInt(2), BigInt(2))
+                tree.insert(BigInt(2), BigInt(5))   
+
+                // tree sum is 8
+                // target sum is 7
+                const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(7))
+
+                expect(tree.verifyProofWithTargetSum(proofWithTargetSum)).toBeFalsy()
 
             })
         })

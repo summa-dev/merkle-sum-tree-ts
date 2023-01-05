@@ -170,11 +170,11 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
         return (0, verifyProof_1.default)(proof, this._hash);
     };
     /**
-   * Verifies a proofWithTargetSum and return true or false.
-   * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
-   * @param proof Proof to be verified.
-   * @returns True or false.
-   */
+     * Verifies a proofWithTargetSum and return true or false.
+     * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
+     * @param proof Proof to be verified.
+     * @returns True or false.
+     */
     IncrementalMerkleSumTree.prototype.verifyProofWithTargetSum = function (merkleProofWithTargetSum) {
         return (0, verifyProofWithTargetSum_1.default)(merkleProofWithTargetSum, this._hash);
     };

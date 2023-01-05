@@ -15,7 +15,10 @@ function verifyProof(merkleProofWithTargetSum, hash) {
     var node = { hash: merkleProofWithTargetSum.leafHash, sum: merkleProofWithTargetSum.leafSum };
     var sum = merkleProofWithTargetSum.leafSum;
     for (var i = 0; i < merkleProofWithTargetSum.siblingsHashes.length; i += 1) {
-        var siblingNode = { hash: merkleProofWithTargetSum.siblingsHashes[i], sum: merkleProofWithTargetSum.siblingsSums[i] };
+        var siblingNode = {
+            hash: merkleProofWithTargetSum.siblingsHashes[i],
+            sum: merkleProofWithTargetSum.siblingsSums[i],
+        };
         if (merkleProofWithTargetSum.pathIndices[i] === 0) {
             node = (0, createNode_1.createMiddleNode)(node, siblingNode, hash);
         }
@@ -24,6 +27,8 @@ function verifyProof(merkleProofWithTargetSum, hash) {
         }
         sum += siblingNode.sum;
     }
-    return merkleProofWithTargetSum.rootHash === node.hash && sum === node.sum && merkleProofWithTargetSum.targetSum >= node.sum;
+    return (merkleProofWithTargetSum.rootHash === node.hash &&
+        sum === node.sum &&
+        merkleProofWithTargetSum.targetSum >= node.sum);
 }
 exports.default = verifyProof;

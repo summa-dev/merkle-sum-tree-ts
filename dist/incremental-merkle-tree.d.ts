@@ -92,10 +92,10 @@ export default class IncrementalMerkleSumTree {
      */
     verifyProof(proof: MerkleProof): boolean;
     /**
-   * Verifies a proofWithTargetSum and return true or false.
-   * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
-   * @param proof Proof to be verified.
-   * @returns True or false.
-   */
+     * Verifies a proofWithTargetSum and return true or false.
+     * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
+     * @param proof Proof to be verified.
+     * @returns True or false.
+     */
     verifyProofWithTargetSum(merkleProofWithTargetSum: MerkleProofWithTargetSum): boolean;
 }

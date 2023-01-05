@@ -7,7 +7,6 @@ export type HashFunction = (values: bigint[]) => bigint;
 
 export type MerkleProof = {
   rootHash: bigint;
-  rootSum: bigint;
   leafHash: bigint;
   leafSum: bigint;
   siblingsHashes: bigint[];
@@ -24,4 +23,3 @@ export type MerkleProofWithTargetSum = {
   siblingsSums: bigint[];
   pathIndices: number[];
 };
-

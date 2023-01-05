@@ -156,8 +156,6 @@ describe("Incremental Merkle Tree", () => {
 
             it("Should create valid proofs for each inserted entry", () => {
 
-                let computedSum = BigInt(0)
-
                 for (let i = 0; i < numberOfLeaves; i += 1) {
                     tree.insert(BigInt(i), BigInt(i + 1))
                     const proof : MerkleProof = tree.createProof(i)
@@ -165,11 +163,6 @@ describe("Incremental Merkle Tree", () => {
                     expect(proof.leafHash).toEqual(tree.leaves[i].hash)
                     expect(proof.leafSum).toEqual(tree.leaves[i].sum)
                     expect(proof.rootHash).toEqual(tree.root.hash)
-                    expect(proof.rootSum).toEqual(tree.root.sum)
-
-                    computedSum += BigInt(i + 1)
-                    // last proof should have the correct sum
-                    expect(proof.rootSum).toEqual(computedSum)
 
                 }
             })
@@ -313,22 +306,6 @@ describe("Incremental Merkle Tree", () => {
 
                 // add invalid leaf hash
                 proof.rootHash = BigInt(7)
-
-                expect(tree.verifyProof(proof)).toBeFalsy()
-
-            })
-
-            it("Shouldn't verify a proof against a wrong root sum", () => {
-
-                // Gen tree
-                for (let i = 0; i < numberOfLeaves; i += 1) {
-                    tree.insert(BigInt(i), BigInt(i + 1))
-                }
-
-                const proof = tree.createProof(0)
-
-                // add invalid leaf hash
-                proof.rootSum = BigInt(12)
 
                 expect(tree.verifyProof(proof)).toBeFalsy()
 

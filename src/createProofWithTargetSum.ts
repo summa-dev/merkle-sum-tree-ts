@@ -3,7 +3,7 @@ import { MerkleProofWithTargetSum, Node } from './types';
 
 export default function createProofWithTargetSum(
   index: number,
-  targetSum : bigint,
+  targetSum: bigint,
   depth: number,
   arity: number,
   nodes: Node[][],
@@ -45,7 +45,7 @@ export default function createProofWithTargetSum(
 
   return {
     rootHash: root.hash,
-    targetSum: targetSum,
+    targetSum,
     leafHash: nodes[0][leafIndex].hash,
     leafSum: nodes[0][leafIndex].sum,
     pathIndices,

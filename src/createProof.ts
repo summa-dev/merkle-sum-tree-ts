@@ -44,7 +44,6 @@ export default function createProof(
 
   return {
     rootHash: root.hash,
-    rootSum: root.sum,
     leafHash: nodes[0][leafIndex].hash,
     leafSum: nodes[0][leafIndex].sum,
     pathIndices,

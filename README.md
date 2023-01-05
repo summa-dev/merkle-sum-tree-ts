@@ -40,12 +40,14 @@ tree.insert(BigInt(1), BigInt(25))
 \# **update**(index: _number_, newEntryValue: _bigint_, newEntrySum: _bigint_)
 
 ```typescript
+// 0 is the index of the leaf to be updated
 tree.update(0, BigInt(2), BigInt(50))
 ```
 
 \# **delete**(index: _number_)
 
 ```typescript
+// 0 is the index of the leaf to be deleted
 tree.delete(0)
 ```
 
@@ -63,27 +65,36 @@ const index = tree.indexOf(BigInt(2), BigInt(50)) // 0
 
 \# **createProof**(index: _number_): _MerkleProof_
 
+Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
+
 ```typescript
 const proof = tree.createProof(0)
 ```
 
 \# **createProofWithTargetSum**(index: _number_, targetSum: _bigint_): _MerkleProofWithTargetSum_
 
+Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
+
 ```typescript
-const proofWithTargetSum = tree.createProof(0, BigInt(75))
+const merkleProofWithTargetSum = tree.createProof(0, BigInt(75))
 ```
 
 \# **verifyProof**(proof: _MerkleProof_): _boolean_
+
+Verifies a proof and returns true or false.
+It verifies that a leaf is included in the tree and that the sum computed from the leaf to the root is equal to the total sum of the tree.
 
 ```typescript
 console.log(tree.verifyProof(proof)) // true
 ```
 
-\# **verifyWithTargetSum**(proof: _MerkleProofWithTargetSum_): _boolean_
+\# **verifyWithTargetSum**(merkleProofWithTargetSum: _MerkleProofWithTargetSum_): _boolean_
+
+Verifies a proofWithTargetSum and returns true or false.
+In addition to the verifyProof method, it verifies that the sum of the tree is less or equal to the target sum.
 
 ```typescript
-// This will verify that the leaf is in the tree and that the target sum is greater or equal to the tree sum.
-console.log(tree.verifyProof(proofWithTargetSum)) // true
+console.log(tree.verifyProofWithTargetSum(merkleProofWithTargetSum)) // true
 ```
 ## Code Quality and Formatting
 

@@ -1,4 +1,4 @@
-import { HashFunction, MerkleProof, Node } from './types';
+import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum } from './types';
 /**
  * A Merkle tree is a tree in which every leaf node is labelled with the cryptographic hash of a
  * data block, and every non-leaf node is labelled with the cryptographic hash of the labels of its child nodes.
@@ -72,15 +72,30 @@ export default class IncrementalMerkleSumTree {
      */
     update(index: number, newEntryValue: bigint, newEntrySum: bigint): void;
     /**
-     * Creates a proof of membership.
+     * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
      * @param index Index of the proof's leaf.
-     * @returns Proof object.
+     * @returns MerkleProof object.
      */
     createProof(index: number): MerkleProof;
     /**
+     * Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
+     * @param index Index of the proof's leaf.
+     * @param targetSum value which the tree sum should be less or equal than.
+     * @returns Proof object.
+     */
+    createProofWithTargetSum(index: number, targetSum: bigint): MerkleProofWithTargetSum;
+    /**
      * Verifies a proof and return true or false.
+     * It verifies that a leaf is included in the tree and that the sum computed from the leaf to the root is equal to the total sum of the tree.
      * @param proof Proof to be verified.
      * @returns True or false.
      */
     verifyProof(proof: MerkleProof): boolean;
+    /**
+   * Verifies a proofWithTargetSum and return true or false.
+   * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
+   * @param proof Proof to be verified.
+   * @returns True or false.
+   */
+    verifyProofWithTargetSum(merkleProofWithTargetSum: MerkleProofWithTargetSum): boolean;
 }

@@ -3,10 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var checkParameter_1 = require("./checkParameter");
 var createNode_1 = require("./createNode");
 var createProof_1 = require("./createProof");
+var createProofWithTargetSum_1 = require("./createProofWithTargetSum");
 var indexOf_1 = require("./indexOf");
 var insert_1 = require("./insert");
 var update_1 = require("./update");
 var verifyProof_1 = require("./verifyProof");
+var verifyProofWithTargetSum_1 = require("./verifyProofWithTargetSum");
 /**
  * A Merkle tree is a tree in which every leaf node is labelled with the cryptographic hash of a
  * data block, and every non-leaf node is labelled with the cryptographic hash of the labels of its child nodes.
@@ -142,20 +144,39 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
         this._root = (0, update_1.default)(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
     };
     /**
-     * Creates a proof of membership.
+     * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
      * @param index Index of the proof's leaf.
-     * @returns Proof object.
+     * @returns MerkleProof object.
      */
     IncrementalMerkleSumTree.prototype.createProof = function (index) {
         return (0, createProof_1.default)(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
     };
     /**
+     * Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
+     * @param index Index of the proof's leaf.
+     * @param targetSum value which the tree sum should be less or equal than.
+     * @returns Proof object.
+     */
+    IncrementalMerkleSumTree.prototype.createProofWithTargetSum = function (index, targetSum) {
+        return (0, createProofWithTargetSum_1.default)(index, targetSum, this.depth, this.arity, this._nodes, this.zeroes, this.root);
+    };
+    /**
      * Verifies a proof and return true or false.
+     * It verifies that a leaf is included in the tree and that the sum computed from the leaf to the root is equal to the total sum of the tree.
      * @param proof Proof to be verified.
      * @returns True or false.
      */
     IncrementalMerkleSumTree.prototype.verifyProof = function (proof) {
         return (0, verifyProof_1.default)(proof, this._hash);
+    };
+    /**
+   * Verifies a proofWithTargetSum and return true or false.
+   * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
+   * @param proof Proof to be verified.
+   * @returns True or false.
+   */
+    IncrementalMerkleSumTree.prototype.verifyProofWithTargetSum = function (merkleProofWithTargetSum) {
+        return (0, verifyProofWithTargetSum_1.default)(merkleProofWithTargetSum, this._hash);
     };
     IncrementalMerkleSumTree.maxDepth = 32;
     return IncrementalMerkleSumTree;

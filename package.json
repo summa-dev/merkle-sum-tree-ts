@@ -36,7 +36,7 @@
     "url": "git+https://github.com/pan-y-tomate/ts-merkle-sum-tree.git"
   },
   "author": "Enrico Bottazzi",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/pan-y-tomate/ts-merkle-sum-tree/issues"
   },

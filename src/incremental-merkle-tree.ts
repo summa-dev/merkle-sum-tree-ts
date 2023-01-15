@@ -2,13 +2,11 @@ import checkParameter from './checkParameter';
 import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
 import { poseidon } from "circomlibjs"
 import _createProof from './createProof';
-import _createProofWithTargetSum from './createProofWithTargetSum';
 import _indexOf from './indexOf';
 import _insert from './insert';
-import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum, Entry} from './types';
+import { HashFunction, MerkleProof, Node, Entry} from './types';
 import _parseCsv from './utils/csv';
 import _verifyProof from './verifyProof';
-import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
 
 /**
  * A Merkle tree is a tree in which every leaf node is labelled with the cryptographic hash of a

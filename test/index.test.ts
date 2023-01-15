@@ -19,6 +19,18 @@ describe("Incremental Merkle Tree", () => {
         expect(fun2).toThrow("Parameter 'path' is none of these types: string")
     })
 
+    it("Should not initialize a tree if the csv contains invalid salt type", () => {
+        const pathToInvalidCsv = "test/entries/entry-16-invalid-salt-type.csv"
+        const fun1 = () => new IncrementalMerkleSumTree(pathToInvalidCsv)
+        expect(fun1).toThrow("Salt must be a number")
+    })
+
+    it("Should not initialize a tree if the csv contains invalid balance type", () => {
+        const pathToInvalidCsv = "test/entries/entry-16-invalid-balance-type.csv"
+        const fun1 = () => new IncrementalMerkleSumTree(pathToInvalidCsv)
+        expect(fun1).toThrow("Balance must be a number")
+    })
+
     it("Should initialize a tree with the right parameters", () => {
         // Check the tree
         expect(tree.depth).toEqual(4)

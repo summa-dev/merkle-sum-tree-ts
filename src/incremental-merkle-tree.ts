@@ -2,6 +2,7 @@ import checkParameter from './checkParameter';
 import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
 import { poseidon } from "circomlibjs"
 import _createProof from './createProof';
+import _build from './build';
 import _indexOf from './indexOf';
 import { HashFunction, MerkleProof, Node, Entry} from './types';
 import _parseCsv from './utils/csv';
@@ -109,39 +110,13 @@ export default class IncrementalMerkleSumTree {
     return _indexOf(leaf, this._nodes);
   }
 
-  // [] add build tree function in a separate file 
   /**
    * Build the merkle tree from a list of entries.
    * @param entries array of the entries to be added to the tree.
    */
   _build(entries: Entry[]) {
-
-    // range over each level of the tree
-    for (let i = 0; i < this._depth; i++) {
-
-      this._nodes[i] = [];
-
-      // if level is 0, the nodes are the leaves, we need to create them from the entries
-      if (i === 0) {
-        for (let j = 0; j < entries.length; j++) {
-          this._nodes[i].push(createLeafNodeFromEntry(entries[j], this._hash))
-        }
-      }
-
-      // else, the nodes are the middle nodes, we need to create them from the previous level
-      else {
-        for (let j = 0; j < this._nodes[i-1].length; j+=2) {
-          this._nodes[i].push(createMiddleNode(this._nodes[i-1][j], this._nodes[i-1][j+1], this._hash))
-        }
-      }
-    }
-
-    // return the root of the tree
-    return createMiddleNode(this._nodes[this._depth-1][0], this._nodes[this._depth-1][1], this._hash);
-
+    return _build(entries, this._depth, this._nodes, this._hash);
   }
-
-
 
   // /**
   //  * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.

@@ -30,20 +30,26 @@ export default class IncrementalMerkleSumTree {
    * Initializes the tree with the csv file containing the entries of the tree.
    * @param path path to the csv file storing the entries.
    */
-    constructor(path: string, depth: number) {
+    constructor(path: string) {
       checkParameter(path, 'path', 'string');
-
-      if (depth < 1 || depth > IncrementalMerkleSumTree.maxDepth) {
-        throw new Error('The tree depth must be between 1 and 32');
-      }
 
       // Initialize the attributes.
       this._hash = poseidon;
-      this._depth = depth;
       this._zeroes = [];
       this._nodes = [];
       this._arity = 2;
       this._entries = _parseCsv(path);
+
+      // get the depth of the tree from the log of the number of entries
+      // if this is not an integer, then return an error 
+      this._depth = Math.log2(this._entries.length)
+      if (this._depth % 1 !== 0) {
+        throw new Error('The number of entries must be a power of 2');
+      }
+
+      if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
+        throw new Error('The tree depth must be between 1 and 32');
+      }
 
       let zeroEntry : Entry = {username: "/", salt: BigInt(0), balance: BigInt(0)};
 

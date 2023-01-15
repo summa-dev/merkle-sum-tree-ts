@@ -3,6 +3,12 @@ export type Node = {
   sum: bigint;
 };
 
+export type Entry = {
+  username: string;
+  salt: bigint;
+  balance: bigint;
+};
+
 export type HashFunction = (values: bigint[]) => bigint;
 
 export type MerkleProof = {

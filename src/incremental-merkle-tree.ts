@@ -16,6 +16,11 @@ import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
  * The IncrementalMerkleSumTree class is a TypeScript implementation of Incremental Merkle Sum tree and it
  * provides all the functions to create efficient trees and to generate and verify proofs of membership.
  */
+
+// [] Use poseidon hash function by default
+// [] calculate the depth of the tree by default 
+// [] take a csv file as input to create the tree inside the constructor 
+// [] add a new type which is entry
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
 
@@ -108,6 +113,8 @@ export default class IncrementalMerkleSumTree {
     return this._arity;
   }
 
+  // [] Add a function to return the entries of the tree
+
   /**
    * Returns the index of a leaf. If the leaf does not exist it returns -1.
    * @param entryValue value of the entry of the queried leaf.
@@ -119,6 +126,7 @@ export default class IncrementalMerkleSumTree {
     return _indexOf(leaf, this._nodes);
   }
 
+  // [] It takes an entry as input
   /**
    * Inserts a new leaf in the tree.
    * @param entryValue value of the entry to be added to the tree.
@@ -129,6 +137,8 @@ export default class IncrementalMerkleSumTree {
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
+  // [] remove this function
+
   /**
    * Deletes a leaf from the tree. It does not remove the leaf from
    * the data structure. It set the leaf to be deleted to a zero value.
@@ -137,6 +147,8 @@ export default class IncrementalMerkleSumTree {
   public delete(index: number) {
     this._root = _update(index, this.zeroes[0], this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
+
+  // [] remove this function
 
   /**
    * Updates a leaf in the tree.
@@ -158,6 +170,8 @@ export default class IncrementalMerkleSumTree {
     return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
   }
 
+  // [] Remove this function
+
   /**
    * Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
    * @param index Index of the proof's leaf.
@@ -178,6 +192,7 @@ export default class IncrementalMerkleSumTree {
     return _verifyProof(proof, this._hash);
   }
 
+  // [] Remove this function
   /**
    * Verifies a proofWithTargetSum and return true or false.
    * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.

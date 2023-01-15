@@ -1,6 +1,6 @@
-import { poseidon } from "circomlibjs"
 import { IncrementalMerkleSumTree, MerkleProof } from "../src"
 import { Entry } from "../src/types"
+import parseCsv from "../src/utils/csv"
 
 describe("Incremental Merkle Tree", () => {
 
@@ -66,67 +66,21 @@ describe("Incremental Merkle Tree", () => {
         expect(tree2.depth).toEqual(5)
     })
 
-    it("Should generate a tree with the correct total sum starting from 32 leaves"), () => {
+    // // let numberOfEntries = [32, 64, 128, 256, 512, 262144]
+    // let numberOfEntries = [32, 64, 128, 512, 262144]
+    // let expectedSum = [166540, 323523, 644795, 2512011, 1312081244]
 
-    }
+    // for (let i = 0; i < numberOfEntries.length; i += 1) {
 
-    it("Should generate a tree with the correct total sum starting from 64 leaves"), () => {
+    //     it(`Should generate a tree with the correct total sum starting from ${numberOfEntries[i]} leaves`, () => {
 
-    }
+    //         const pathTocsv = `test/entries/entry-${numberOfEntries[i]}-valid.csv`
 
-    it("Should generate a tree with the correct total sum starting from 128 leaves"), () => {
+    //         const tree2 = new IncrementalMerkleSumTree(pathTocsv)
 
-    }
-
-    it("Should generate a tree with the correct total sum starting from 256 leaves"), () => {
-
-    }
-
-    it("Should generate a tree with the correct total sum starting from 512 leaves"), () => {
-
-    }
-
-    it("Should generate a tree with the correct total sum starting from 262144 leaves = 2^18"), () => {
-
-    }
-
-
-            // it(`Should insert ${numberOfLeaves} leaves`, () => {
-
-            //     let sum = BigInt(0)
-
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i), BigInt(i + 1))
-            //         expect(tree.leaves).toHaveLength(i + 1)
-            //         // The leaves should be initiated with the correct value and the correct sum
-            //         expect(tree.leaves[i].hash).toEqual(poseidon([BigInt(i), BigInt(i + 1)]))
-            //         expect(tree.leaves[i].sum).toEqual(BigInt(i + 1))
-            //         sum += BigInt(i + 1)
-            //         // The root should store the correct sum
-            //         expect(tree.root.sum).toEqual(sum)
-            //         // IndexOf should return the correct index
-            //         expect(tree.indexOf(BigInt(i), BigInt(i+1))).toEqual(i)
-            //     }
-            // })
-
-            // it("Should not update a leaf with a negative sum", () => {
-            //     const fun = () => tree.update(0, BigInt(0), BigInt(-1))
-            //     expect(fun).toThrow("entrySum cant be negative")
-            // })
-
-            // it("Should create valid proofs for each inserted entry", () => {
-
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i), BigInt(i + 1))
-            //         const proof : MerkleProof = tree.createProof(i)
-            //         expect(proof.siblingsHashes).toHaveLength(depth)
-            //         expect(proof.leafHash).toEqual(tree.leaves[i].hash)
-            //         expect(proof.leafSum).toEqual(tree.leaves[i].sum)
-            //         expect(proof.rootHash).toEqual(tree.root.hash)
-
-            //     }
-            // })
-
+    //         expect(tree2.root.sum).toEqual(BigInt(expectedSum[i]))
+    //     })
+    // }
 
     it("Should return the index of an entry that exist", () => {
 
@@ -154,27 +108,37 @@ describe("Incremental Merkle Tree", () => {
 
     })
 
-            // it("Should create a valid proof with target sum", () => {
+    it("Should create valid proofs for each inserted entry", () => {
 
-            //     tree.insert(BigInt(1), BigInt(1))
-            //     tree.insert(BigInt(2), BigInt(2))   
+        // extract the entries from the csv file 
+        const pathToCsv = "test/entries/entry-16-valid.csv"
+        const entries = parseCsv(pathToCsv)
 
-            //     const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(60))
+        // loop over each entry and generate a proof for it
+        for (let i = 0; i < entries.length; i += 1) {
+            const proof : MerkleProof = tree.createProof(i)
+            expect(proof.siblingsHashes).toHaveLength(tree.depth)
+            expect(proof.leafHash).toEqual(tree.leaves[i].hash)
+            expect(proof.leafSum).toEqual(tree.leaves[i].sum)
+            expect(proof.rootHash).toEqual(tree.root.hash)
+        }
+    })
 
-            //     expect(proofWithTargetSum.targetSum).toEqual(BigInt(60))
+    it("Should not create a proof if the entry does not exist", () => {
 
-            // })
+        const invalidEntry : Entry = {
+            username : "gAdsIaKy",
+            salt : BigInt(1389),
+            balance : BigInt(7530)
+        }
 
-            // it("Should not create any proof if the leaf does not exist", () => {
+        const indexOf = tree.indexOf(invalidEntry)
 
-            //     // Add a single leaf to the tree
-            //     tree.insert(BigInt(1), BigInt(1))
+        // Query proof for a non existing leaf
+        const fun = () => tree.createProof(indexOf)
 
-            //     // Query proof for a non existing leaf
-            //     const fun = () => tree.createProof(3)
-
-            //     expect(fun).toThrow("The leaf does not exist in this tree")
-            // })
+        expect(fun).toThrow("The leaf does not exist in this tree")
+    })
 
             // it("Should verify a valid proof for each entry", () => {
             //     for (let i = 0; i < numberOfLeaves; i += 1) {

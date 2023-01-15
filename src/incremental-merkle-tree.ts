@@ -1,10 +1,12 @@
 import checkParameter from './checkParameter';
 import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
+import { poseidon } from "circomlibjs"
 import _createProof from './createProof';
 import _createProofWithTargetSum from './createProofWithTargetSum';
 import _indexOf from './indexOf';
 import _insert from './insert';
-import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum } from './types';
+import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum, Entry} from './types';
+import _parseCsv from './csv';
 import _update from './update';
 import _verifyProof from './verifyProof';
 import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
@@ -17,61 +19,103 @@ import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
  * provides all the functions to create efficient trees and to generate and verify proofs of membership.
  */
 
-// [] Use poseidon hash function by default
+// [x] Use poseidon hash function by default
 // [] calculate the depth of the tree by default 
 // [] take a csv file as input to create the tree inside the constructor 
-// [] add a new type which is entry
+// [] add the entries as leaves inside the tree
+// [x] add a new type which is entry
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
-
   private _root: Node;
   private readonly _nodes: Node[][];
   private readonly _zeroes: Node[];
   private readonly _hash: HashFunction;
   private readonly _depth: number;
   private readonly _arity: number;
+  private readonly _entries: Entry[];
 
-  /**
-   * Initializes the tree with the hash function, the depth.
-   * @param hash Hash function.
-   * @param depth Tree depth.
+    /**
+   * Initializes the tree with the csv file containing the entries of the tree.
+   * @param path path to the csv file storing the entries.
    */
-  constructor(hash: HashFunction, depth: number) {
-    checkParameter(hash, 'hash', 'function');
-    checkParameter(depth, 'depth', 'number');
+    constructor(path: string) {
+      checkParameter(path, 'path', 'string');
 
-    // Init zeroNode
-    let zeroNode: Node = createLeafNodeFromEntry(BigInt(0), BigInt(0), hash);
-    const arity = 2;
-
-    checkParameter(arity, 'arity', 'number');
-
-    if (depth < 1 || depth > IncrementalMerkleSumTree.maxDepth) {
-      throw new Error('The tree depth must be between 1 and 32');
+      // Initialize the attributes.
+      this._hash = poseidon;
+      this._depth = 32;
+      this._zeroes = [];
+      this._nodes = [];
+      this._arity = 2;
+      this._entries = _parseCsv(path);
+  
+      // Init zeroNode
+      let zeroNode: Node = createLeafNodeFromEntry(BigInt(0), BigInt(0), this._hash);
+      const arity = 2;
+  
+      checkParameter(arity, 'arity', 'number');
+  
+      // if (depth < 1 || depth > IncrementalMerkleSumTree.maxDepth) {
+      //   throw new Error('The tree depth must be between 1 and 32');
+      // }
+  
+      for (let i = 0; i < this._depth; i += 1) {
+        this._zeroes.push(zeroNode);
+        this._nodes[i] = [];
+        // There must be a zero value for each tree level (except the root).
+        // Create next zeroValue by following the hashing rule of the merkle sum tree
+        zeroNode = createMiddleNode(zeroNode, zeroNode, this._hash);
+      }
+  
+      // The zero root is the last zero value.
+      this._root = zeroNode;
+      
+      // Freeze the array objects. It prevents unintentional changes.
+      Object.freeze(this._zeroes);
+      Object.freeze(this._nodes);
     }
 
-    // Initialize the attributes.
-    this._hash = hash;
-    this._depth = depth;
-    this._zeroes = [];
-    this._nodes = [];
-    this._arity = arity;
+  // /**
+  //  * Initializes the tree with the hash function, the depth.
+  //  * @param hash Hash function.
+  //  * @param depth Tree depth.
+  //  */
+  // constructor(hash: HashFunction, depth: number) {
+  //   checkParameter(hash, 'hash', 'function');
+  //   checkParameter(depth, 'depth', 'number');
 
-    for (let i = 0; i < depth; i += 1) {
-      this._zeroes.push(zeroNode);
-      this._nodes[i] = [];
-      // There must be a zero value for each tree level (except the root).
-      // Create next zeroValue by following the hashing rule of the merkle sum tree
-      zeroNode = createMiddleNode(zeroNode, zeroNode, hash);
-    }
+  //   // Init zeroNode
+  //   let zeroNode: Node = createLeafNodeFromEntry(BigInt(0), BigInt(0), hash);
+  //   const arity = 2;
 
-    // The zero root is the last zero value.
-    this._root = zeroNode;
+  //   checkParameter(arity, 'arity', 'number');
 
-    // Freeze the array objects. It prevents unintentional changes.
-    Object.freeze(this._zeroes);
-    Object.freeze(this._nodes);
-  }
+  //   if (depth < 1 || depth > IncrementalMerkleSumTree.maxDepth) {
+  //     throw new Error('The tree depth must be between 1 and 32');
+  //   }
+
+  //   // Initialize the attributes.
+  //   this._hash = hash;
+  //   this._depth = depth;
+  //   this._zeroes = [];
+  //   this._nodes = [];
+  //   this._arity = arity;
+
+  //   for (let i = 0; i < depth; i += 1) {
+  //     this._zeroes.push(zeroNode);
+  //     this._nodes[i] = [];
+  //     // There must be a zero value for each tree level (except the root).
+  //     // Create next zeroValue by following the hashing rule of the merkle sum tree
+  //     zeroNode = createMiddleNode(zeroNode, zeroNode, hash);
+  //   }
+
+  //   // The zero root is the last zero value.
+  //   this._root = zeroNode;
+
+  //   // Freeze the array objects. It prevents unintentional changes.
+  //   Object.freeze(this._zeroes);
+  //   Object.freeze(this._nodes);
+  // }
 
   /**
    * Returns the root hash of the tree.
@@ -112,6 +156,14 @@ export default class IncrementalMerkleSumTree {
   public get arity(): number {
     return this._arity;
   }
+
+  /**
+   * Returns the entries of the tree.
+   * @returns List of entries.
+   */
+    public get entries(): Entry[] {
+      return this._entries;
+    }
 
   // [] Add a function to return the entries of the tree
 

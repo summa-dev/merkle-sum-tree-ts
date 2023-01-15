@@ -3,7 +3,6 @@ import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
 import { poseidon } from "circomlibjs"
 import _createProof from './createProof';
 import _indexOf from './indexOf';
-import _insert from './insert';
 import { HashFunction, MerkleProof, Node, Entry} from './types';
 import _parseCsv from './utils/csv';
 import _verifyProof from './verifyProof';
@@ -20,7 +19,6 @@ export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
   private _root: Node;
   private readonly _nodes: Node[][];
-  private readonly _zeroes: Node[];
   private readonly _hash: HashFunction;
   private readonly _depth: number;
   private readonly _arity: number;
@@ -35,7 +33,6 @@ export default class IncrementalMerkleSumTree {
 
       // Initialize the attributes.
       this._hash = poseidon;
-      this._zeroes = [];
       this._nodes = [];
       this._arity = 2;
       this._entries = _parseCsv(path);
@@ -50,32 +47,16 @@ export default class IncrementalMerkleSumTree {
       if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
         throw new Error('The tree depth must be between 1 and 32');
       }
-
-      let zeroEntry : Entry = {username: "/", salt: BigInt(0), balance: BigInt(0)};
-
-      // Init zeroNode
-      let zeroNode: Node = createLeafNodeFromEntry(zeroEntry, this._hash);
-    
-      for (let i = 0; i < this._depth; i += 1) {
-        this._zeroes.push(zeroNode);
-        this._nodes[i] = [];
-        // There must be a zero value for each tree level (except the root).
-        // Create next zeroValue by following the hashing rule of the merkle sum tree
-        zeroNode = createMiddleNode(zeroNode, zeroNode, this._hash);
-      }
-  
-      // The zero root is the last zero value.
-      this._root = zeroNode;
       
-      // Freeze the array objects. It prevents unintentional changes.
-      Object.freeze(this._zeroes);
+      // Freeze the entries. It prevents unintentional changes.
       Object.freeze(this._entries);
-      Object.freeze(this._nodes);
 
-      // Insert the entries as leaves inside the tree
-      for (let i = 0; i < this._entries.length; i++) {
-        this.insert(this._entries[i]);
-      }
+      // Build the tree
+      this._root = this._build(this._entries);
+
+      // Freeze the tree. It prevents unintentional changes.
+      Object.freeze(this._root);
+      Object.freeze(this._nodes);
     }
 
   /**
@@ -100,14 +81,6 @@ export default class IncrementalMerkleSumTree {
    */
   public get leaves(): Node[] {
     return this._nodes[0].slice();
-  }
-
-  /**
-   * Returns the zeroes nodes of the tree.
-   * @returns List of zeroes.
-   */
-  public get zeroes(): Node[] {
-    return this._zeroes;
   }
 
   /**
@@ -136,23 +109,48 @@ export default class IncrementalMerkleSumTree {
     return _indexOf(leaf, this._nodes);
   }
 
+  // [] add build tree function in a separate file 
   /**
-   * Inserts a new leaf in the tree.
-   * @param entry entry to be added to the tree.
+   * Build the merkle tree from a list of entries.
+   * @param entries array of the entries to be added to the tree.
    */
-  public insert(entry : Entry) {
-    const leaf: Node = createLeafNodeFromEntry(entry, this._hash);
-    this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  _build(entries: Entry[]) {
+
+    // range over each level of the tree
+    for (let i = 0; i < this._depth; i++) {
+
+      this._nodes[i] = [];
+
+      // if level is 0, the nodes are the leaves, we need to create them from the entries
+      if (i === 0) {
+        for (let j = 0; j < entries.length; j++) {
+          this._nodes[i].push(createLeafNodeFromEntry(entries[j], this._hash))
+        }
+      }
+
+      // else, the nodes are the middle nodes, we need to create them from the previous level
+      else {
+        for (let j = 0; j < this._nodes[i-1].length; j+=2) {
+          this._nodes[i].push(createMiddleNode(this._nodes[i-1][j], this._nodes[i-1][j+1], this._hash))
+        }
+      }
+    }
+
+    // return the root of the tree
+    return createMiddleNode(this._nodes[this._depth-1][0], this._nodes[this._depth-1][1], this._hash);
+
   }
 
-  /**
-   * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
-   * @param index Index of the proof's leaf.
-   * @returns MerkleProof object.
-   */
-  public createProof(index: number): MerkleProof {
-    return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
-  }
+
+
+  // /**
+  //  * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
+  //  * @param index Index of the proof's leaf.
+  //  * @returns MerkleProof object.
+  //  */
+  // public createProof(index: number): MerkleProof {
+  //   return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
+  // }
 
   /**
    * Verifies a proof and return true or false.

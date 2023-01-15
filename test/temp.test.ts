@@ -8,16 +8,7 @@ describe("Incremental Merkle Tree", () => {
         const tree = new IncrementalMerkleSumTree(pathToCsv)
 
         // return entries 
-        console.log("entries", tree.entries)
-
-        // return root 
-        console.log("root sum", tree.root.sum)
-
-        // return zeroes 
-        console.log("zeroes", tree.zeroes)
-
-        // return leaves (only 4 of them are returned)
-        console.log("leaves", tree.leaves)
+        console.log(JSON.stringify(tree, (_, v) => (typeof v === "bigint" ? v.toString() : v)))
 
         expect(tree).toBeTruthy()
     })

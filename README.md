@@ -109,4 +109,3 @@ Run Prettier to check formatting rules and to fix them:
 ## Testing
 
 ```npm run test```
-

@@ -1,17 +1,22 @@
 import checkParameter from './checkParameter';
-import { HashFunction, Node } from './types';
+import { HashFunction, Node, Entry } from './types';
+import _parseUsername from './utils/username';
 
-export function createLeafNodeFromEntry(entryValue: bigint, entrySum: bigint, hash: HashFunction): Node {
-  if (entrySum < BigInt(0)) {
+export function createLeafNodeFromEntry(entry: Entry, hash: HashFunction): Node {
+
+  if (entry.balance < BigInt(0)) {
     throw new Error('entrySum cant be negative');
   }
 
-  checkParameter(entryValue, 'value', 'bigint');
-  checkParameter(entrySum, 'sum', 'bigint');
+  checkParameter(entry.username, 'username', 'string');
+  checkParameter(entry.salt, 'salt', 'bigint');
+  checkParameter(entry.balance, 'balance', 'bigint');
 
-  const hashPreimage: bigint[] = [entryValue, entrySum];
+  const parsedUsername : bigint = _parseUsername(entry.username);
 
-  const leaf: Node = { hash: hash(hashPreimage), sum: entrySum };
+  const hashPreimage: bigint[] = [parsedUsername, entry.salt, entry.balance];
+
+  const leaf: Node = {hash: hash(hashPreimage), sum: entry.balance};
 
   checkParameter(leaf, 'leaf', 'object');
   checkParameter(leaf.hash, 'hash', 'bigint');

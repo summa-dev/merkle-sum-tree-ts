@@ -10,6 +10,9 @@ describe("Incremental Merkle Tree", () => {
         // return entries 
         console.log(tree.entries)
 
+        // return root 
+        console.log(tree.root.sum)
+
         expect(tree).toBeTruthy()
     })
 

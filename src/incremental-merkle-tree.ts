@@ -6,7 +6,7 @@ import _createProofWithTargetSum from './createProofWithTargetSum';
 import _indexOf from './indexOf';
 import _insert from './insert';
 import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum, Entry} from './types';
-import _parseCsv from './csv';
+import _parseCsv from './utils/csv';
 import _update from './update';
 import _verifyProof from './verifyProof';
 import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
@@ -24,6 +24,7 @@ import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
 // [] take a csv file as input to create the tree inside the constructor 
 // [] add the entries as leaves inside the tree
 // [x] add a new type which is entry
+// [ ] Make sure to randomize zero entries
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
   private _root: Node;
@@ -48,13 +49,12 @@ export default class IncrementalMerkleSumTree {
       this._nodes = [];
       this._arity = 2;
       this._entries = _parseCsv(path);
-  
+
+      let zeroEntry : Entry = {username: "/", salt: BigInt(0), balance: BigInt(0)};
+
       // Init zeroNode
-      let zeroNode: Node = createLeafNodeFromEntry(BigInt(0), BigInt(0), this._hash);
-      const arity = 2;
-  
-      checkParameter(arity, 'arity', 'number');
-  
+      let zeroNode: Node = createLeafNodeFromEntry(zeroEntry, this._hash);
+    
       // if (depth < 1 || depth > IncrementalMerkleSumTree.maxDepth) {
       //   throw new Error('The tree depth must be between 1 and 32');
       // }
@@ -72,7 +72,13 @@ export default class IncrementalMerkleSumTree {
       
       // Freeze the array objects. It prevents unintentional changes.
       Object.freeze(this._zeroes);
+      Object.freeze(this._entries);
       Object.freeze(this._nodes);
+
+      // Insert the entries as leaves inside the tree
+      for (let i = 0; i < this._entries.length; i++) {
+        this.insert(this._entries[i]);
+      }
     }
 
   // /**
@@ -167,25 +173,24 @@ export default class IncrementalMerkleSumTree {
 
   // [] Add a function to return the entries of the tree
 
-  /**
-   * Returns the index of a leaf. If the leaf does not exist it returns -1.
-   * @param entryValue value of the entry of the queried leaf.
-   * @param entrySum sum of the entry of the queried leaf.
-   * @returns Index of the leaf.
-   */
-  public indexOf(entryValue: bigint, entrySum: bigint): number {
-    const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
-    return _indexOf(leaf, this._nodes);
-  }
+  // /**
+  //  * Returns the index of a leaf. If the leaf does not exist it returns -1.
+  //  * @param entryValue value of the entry of the queried leaf.
+  //  * @param entrySum sum of the entry of the queried leaf.
+  //  * @returns Index of the leaf.
+  //  */
+  // public indexOf(entryValue: bigint, entrySum: bigint): number {
+  //   const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
+  //   return _indexOf(leaf, this._nodes);
+  // }
 
-  // [] It takes an entry as input
+  // [x] It takes an entry as input
   /**
    * Inserts a new leaf in the tree.
-   * @param entryValue value of the entry to be added to the tree.
-   * @param entrySum sum of the entry to be added to the tree.
+   * @param entry entry to be added to the tree.
    */
-  public insert(entryValue: bigint, entrySum: bigint) {
-    const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
+  public insert(entry : Entry) {
+    const leaf: Node = createLeafNodeFromEntry(entry, this._hash);
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
 
@@ -208,10 +213,10 @@ export default class IncrementalMerkleSumTree {
    * @param newEntryValue New value of the entry to be updated.
    * @param newEntrySum New sum of the entry to be updated.
    */
-  public update(index: number, newEntryValue: bigint, newEntrySum: bigint) {
-    const newLeaf: Node = createLeafNodeFromEntry(newEntryValue, newEntrySum, this._hash);
-    this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  }
+  // public update(index: number, newEntryValue: bigint, newEntrySum: bigint) {
+  //   const newLeaf: Node = createLeafNodeFromEntry(newEntryValue, newEntrySum, this._hash);
+  //   this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
+  // }
 
   /**
    * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.

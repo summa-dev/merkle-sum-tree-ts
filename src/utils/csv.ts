@@ -1,4 +1,4 @@
-import { Entry } from './types';
+import { Entry } from '../types';
 const fs = require('fs');
 
 export default function parseCsv(path : string) : Entry[] {

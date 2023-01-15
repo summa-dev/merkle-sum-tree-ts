@@ -5,7 +5,7 @@ describe("Incremental Merkle Tree", () => {
     it("should create a new tree", () => {
 
         const pathToCsv = "test/entries/entry1.csv"
-        const tree = new IncrementalMerkleSumTree(pathToCsv)
+        const tree = new IncrementalMerkleSumTree(pathToCsv, 16)
 
         // return entries 
         console.log(tree.entries)

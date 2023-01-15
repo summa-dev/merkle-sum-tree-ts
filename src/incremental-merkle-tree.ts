@@ -16,12 +16,6 @@ import _verifyProof from './verifyProof';
  * provides all the functions to create efficient trees and to generate and verify proofs of membership.
  */
 
-// [x] Use poseidon hash function by default
-// [x] take a csv file as input to create the tree inside the constructor 
-// [x] add the entries as leaves inside the tree
-// [x] add a new type which is entry
-// [ ] Make sure to randomize zero entries
-// [ ] Zeroes node shouldn't exist in the tree as all the leaves will be added to the tree
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
   private _root: Node;

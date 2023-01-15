@@ -183,7 +183,6 @@ export default class IncrementalMerkleSumTree {
   //   return _indexOf(leaf, this._nodes);
   // }
 
-  // [x] It takes an entry as input
   /**
    * Inserts a new leaf in the tree.
    * @param entry entry to be added to the tree.
@@ -202,18 +201,6 @@ export default class IncrementalMerkleSumTree {
     return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
   }
 
-  // [] Remove this function
-
-  /**
-   * Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
-   * @param index Index of the proof's leaf.
-   * @param targetSum value which the tree sum should be less or equal than.
-   * @returns Proof object.
-   */
-  public createProofWithTargetSum(index: number, targetSum: bigint): MerkleProofWithTargetSum {
-    return _createProofWithTargetSum(index, targetSum, this.depth, this.arity, this._nodes, this.zeroes, this.root);
-  }
-
   /**
    * Verifies a proof and return true or false.
    * It verifies that a leaf is included in the tree and that the sum computed from the leaf to the root is equal to the total sum of the tree.
@@ -224,14 +211,4 @@ export default class IncrementalMerkleSumTree {
     return _verifyProof(proof, this._hash);
   }
 
-  // [] Remove this function
-  /**
-   * Verifies a proofWithTargetSum and return true or false.
-   * In addition to the verifyProof, it verifies that the sum of the tree is less or equal to the target sum.
-   * @param proof Proof to be verified.
-   * @returns True or false.
-   */
-  public verifyProofWithTargetSum(merkleProofWithTargetSum: MerkleProofWithTargetSum): boolean {
-    return _verifyProofWithTargetSum(merkleProofWithTargetSum, this._hash);
-  }
 }

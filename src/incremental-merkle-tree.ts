@@ -7,7 +7,6 @@ import _indexOf from './indexOf';
 import _insert from './insert';
 import { HashFunction, MerkleProof, Node, MerkleProofWithTargetSum, Entry} from './types';
 import _parseCsv from './utils/csv';
-import _update from './update';
 import _verifyProof from './verifyProof';
 import _verifyProofWithTargetSum from './verifyProofWithTargetSum';
 
@@ -193,30 +192,6 @@ export default class IncrementalMerkleSumTree {
     const leaf: Node = createLeafNodeFromEntry(entry, this._hash);
     this._root = _insert(leaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
   }
-
-  // [] remove this function
-
-  /**
-   * Deletes a leaf from the tree. It does not remove the leaf from
-   * the data structure. It set the leaf to be deleted to a zero value.
-   * @param index Index of the leaf to be deleted.
-   */
-  public delete(index: number) {
-    this._root = _update(index, this.zeroes[0], this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  }
-
-  // [] remove this function
-
-  /**
-   * Updates a leaf in the tree.
-   * @param index Index of the leaf to be updated.
-   * @param newEntryValue New value of the entry to be updated.
-   * @param newEntrySum New sum of the entry to be updated.
-   */
-  // public update(index: number, newEntryValue: bigint, newEntrySum: bigint) {
-  //   const newLeaf: Node = createLeafNodeFromEntry(newEntryValue, newEntrySum, this._hash);
-  //   this._root = _update(index, newLeaf, this.depth, this.arity, this._nodes, this.zeroes, this._hash);
-  // }
 
   /**
    * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.

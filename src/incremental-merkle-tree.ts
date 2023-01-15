@@ -1,5 +1,5 @@
 import checkParameter from './checkParameter';
-import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
+import { createLeafNodeFromEntry } from './createNode';
 import { poseidon } from "circomlibjs"
 import _createProof from './createProof';
 import _build from './build';
@@ -118,14 +118,14 @@ export default class IncrementalMerkleSumTree {
     return _build(entries, this._depth, this._nodes, this._hash);
   }
 
-  // /**
-  //  * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
-  //  * @param index Index of the proof's leaf.
-  //  * @returns MerkleProof object.
-  //  */
-  // public createProof(index: number): MerkleProof {
-  //   return _createProof(index, this.depth, this.arity, this._nodes, this.zeroes, this.root);
-  // }
+  /**
+   * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
+   * @param index Index of the proof's leaf.
+   * @returns MerkleProof object.
+   */
+  public createProof(index: number): MerkleProof {
+    return _createProof(index, this.depth, this.arity, this._nodes, this.root);
+  }
 
   /**
    * Verifies a proof and return true or false.

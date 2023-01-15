@@ -6,7 +6,6 @@ export default function createProof(
   depth: number,
   arity: number,
   nodes: Node[][],
-  zeroes: Node[],
   root: Node,
 ): MerkleProof {
   checkParameter(index, 'index', 'number');
@@ -29,16 +28,10 @@ export default function createProof(
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i !== index) {
-        if (i < nodes[level].length) {
-          siblingsHashes[level] = nodes[level][i].hash;
-          siblingsSums[level] = nodes[level][i].sum;
-        } else {
-          siblingsHashes[level] = zeroes[level].hash;
-          siblingsSums[level] = zeroes[level].sum;
-        }
+        siblingsHashes[level] = nodes[level][i].hash;
+        siblingsSums[level] = nodes[level][i].sum;
       }
     }
-
     index = Math.floor(index / arity);
   }
 

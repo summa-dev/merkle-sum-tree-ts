@@ -108,7 +108,7 @@ describe("Incremental Merkle Tree", () => {
 
     })
 
-    it("Should create valid proofs for each inserted entry", () => {
+    it("Should create valid proofs for each inserted entry and verify it", () => {
 
         // extract the entries from the csv file 
         const pathToCsv = "test/entries/entry-16-valid.csv"
@@ -121,7 +121,10 @@ describe("Incremental Merkle Tree", () => {
             expect(proof.leafHash).toEqual(tree.leaves[i].hash)
             expect(proof.leafSum).toEqual(tree.leaves[i].sum)
             expect(proof.rootHash).toEqual(tree.root.hash)
+            expect(tree.verifyProof(proof)).toBeTruthy()
         }
+
+        
     })
 
     it("Should not create a proof if the entry does not exist", () => {
@@ -140,107 +143,38 @@ describe("Incremental Merkle Tree", () => {
         expect(fun).toThrow("The leaf does not exist in this tree")
     })
 
-            // it("Should verify a valid proof for each entry", () => {
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i), BigInt(i + 1))
-            //     }
-
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         const proof = tree.createProof(i)
-            //         expect(tree.verifyProof(proof)).toBeTruthy()
-            //     }
-            // })
             
-            // it("Shouldn't verify an invalid proof with a wrong leaf sum", () => {
+    it("Shouldn't verify a proof with a wrong leaf sum", () => {
 
-            //     // Gen tree
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i), BigInt(i + 1))
-            //     }
+        const proof : MerkleProof = tree.createProof(0)
 
-            //     const proof = tree.createProof(0)
+        // add invalid leaf sum
+        proof.leafSum = BigInt(0)
 
-            //     // add invalid leaf sum
-            //     proof.leafSum = BigInt(0)
+        expect(tree.verifyProof(proof)).toBeFalsy()
 
-            //     expect(tree.verifyProof(proof)).toBeFalsy()
+    })
 
-            // })
+    it("Shouldn't verify a proof with a wrong leaf hash", () => {
 
-            // it("Shouldn't verify an invalid proof with a wrong leaf hash", () => {
+        const proof : MerkleProof = tree.createProof(0)
 
-            //     // Gen tree
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i), BigInt(i + 1))
-            //     }
+        // add invalid leaf hash
+        proof.leafHash = BigInt(7)
 
-            //     const proof = tree.createProof(0)
+        expect(tree.verifyProof(proof)).toBeFalsy()
 
-            //     // add invalid leaf hash
-            //     proof.leafHash = BigInt(7)
+    })
 
-            //     expect(tree.verifyProof(proof)).toBeFalsy()
+    it("Shouldn't verify a proof against a wrong root hash", () => {
 
-            // })
+        const proof : MerkleProof = tree.createProof(0)
 
-            // it("Shouldn't verify a proof against a wrong root hash", () => {
+        // add invalid leaf hash
+        proof.rootHash = BigInt(7)
 
-            //     // Gen tree
-            //     for (let i = 0; i < numberOfLeaves; i += 1) {
-            //         tree.insert(BigInt(i), BigInt(i + 1))
-            //     }
+        expect(tree.verifyProof(proof)).toBeFalsy()
 
-            //     const proof = tree.createProof(0)
+    })
 
-            //     // add invalid leaf hash
-            //     proof.rootHash = BigInt(7)
-
-            //     expect(tree.verifyProof(proof)).toBeFalsy()
-
-            // })
-
-            // it("Should verify a proof with target sum when target sum > tree sum", () => {
-
-            //     tree.insert(BigInt(1), BigInt(1))
-            //     tree.insert(BigInt(2), BigInt(2))
-            //     tree.insert(BigInt(2), BigInt(5))   
-
-            //     // tree sum is 8
-            //     // target sum is 60
-
-            //     const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(60))
-
-            //     expect(tree.verifyProofWithTargetSum(proofWithTargetSum)).toBeTruthy()
-
-            // })
-
-            // it("Should verify a proof with target sum when target sum = tree sum", () => {
-
-            //     tree.insert(BigInt(1), BigInt(1))
-            //     tree.insert(BigInt(2), BigInt(2))
-            //     tree.insert(BigInt(2), BigInt(5))   
-
-            //     // tree sum is 8
-            //     // target sum is 8
-
-            //     const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(8))
-
-            //     expect(tree.verifyProofWithTargetSum(proofWithTargetSum)).toBeTruthy()
-
-            // })
-
-
-            // it("Shouldn't verify a proof with target sum when target sum < tree sum", () => {
-
-            //     tree.insert(BigInt(1), BigInt(1))
-            //     tree.insert(BigInt(2), BigInt(2))
-            //     tree.insert(BigInt(2), BigInt(5))   
-
-            //     // tree sum is 8
-            //     // target sum is 7
-            //     const proofWithTargetSum = tree.createProofWithTargetSum(1, BigInt(7))
-
-            //     expect(tree.verifyProofWithTargetSum(proofWithTargetSum)).toBeFalsy()
-
-            // })
 })

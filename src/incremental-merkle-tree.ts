@@ -21,6 +21,7 @@ import _verifyProof from './verifyProof';
 // [x] add the entries as leaves inside the tree
 // [x] add a new type which is entry
 // [ ] Make sure to randomize zero entries
+// [ ] Zeroes node shouldn't exist in the tree as all the leaves will be added to the tree
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
   private _root: Node;
@@ -55,7 +56,6 @@ export default class IncrementalMerkleSumTree {
       // Init zeroNode
       let zeroNode: Node = createLeafNodeFromEntry(zeroEntry, this._hash);
     
-
       for (let i = 0; i < this._depth; i += 1) {
         this._zeroes.push(zeroNode);
         this._nodes[i] = [];
@@ -126,16 +126,15 @@ export default class IncrementalMerkleSumTree {
       return this._entries;
     }
 
-  // /**
-  //  * Returns the index of a leaf. If the leaf does not exist it returns -1.
-  //  * @param entryValue value of the entry of the queried leaf.
-  //  * @param entrySum sum of the entry of the queried leaf.
-  //  * @returns Index of the leaf.
-  //  */
-  // public indexOf(entryValue: bigint, entrySum: bigint): number {
-  //   const leaf: Node = createLeafNodeFromEntry(entryValue, entrySum, this._hash);
-  //   return _indexOf(leaf, this._nodes);
-  // }
+  /**
+   * Returns the index of a leaf. If the leaf does not exist it returns -1.
+   * @param entry value of the entry of the queried leaf.
+   * @returns Index of the leaf.
+   */
+  public indexOf(entry: Entry): number {
+    const leaf: Node = createLeafNodeFromEntry(entry, this._hash);
+    return _indexOf(leaf, this._nodes);
+  }
 
   /**
    * Inserts a new leaf in the tree.

@@ -20,17 +20,12 @@ export default function parseCsv(path : string) : Entry[] {
   const entries : Entry[] = values.map((values : any) => {
 
     if (isNaN(values[1])) {
-        throw new Error("Salt must be a number");
-    }
-
-    if (isNaN(values[2])) {
         throw new Error("Balance must be a number");
     }
 
     return {
         username: values[0],
-        salt: BigInt(values[1]),
-        balance: BigInt(values[2].replace("\r", "")),
+        balance: BigInt(values[1].replace("\r", "")),
     };
 });
 

@@ -38,22 +38,19 @@ export default class IncrementalMerkleSumTree {
       this._arity = 2;
       this._entries = _parseCsv(path);
 
-      // get the depth of the tree from the log of the number of entries
-      // if this is not an integer, then return an error 
-      this._depth = Math.log2(this._entries.length)
-      if (this._depth % 1 !== 0) {
-        throw new Error('The number of entries must be a power of 2');
-      }
+      // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
+      this._depth = Math.ceil(Math.log2(this._entries.length))
 
       if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
         throw new Error('The tree depth must be between 1 and 32');
       }
-      
-      // Freeze the entries. It prevents unintentional changes.
-      Object.freeze(this._entries);
 
       // Build the tree
       this._root = this._build(this._entries);
+
+      // Freeze the entries. It prevents unintentional changes.
+      Object.freeze(this._entries);
+
 
       // Freeze the tree. It prevents unintentional changes.
       Object.freeze(this._root);
@@ -124,7 +121,7 @@ export default class IncrementalMerkleSumTree {
    * @returns MerkleProof object.
    */
   public createProof(index: number): MerkleProof {
-    return _createProof(index, this.depth, this.arity, this._nodes, this.root);
+    return _createProof(index, this.entries, this.depth, this.arity, this._nodes, this.root);
   }
 
   /**

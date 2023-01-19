@@ -109,3 +109,11 @@ Run Prettier to check formatting rules and to fix them:
 ## Testing
 
 ```npm run test```
+
+
+## Benchmark
+
+To build a Merkle Sum Tree with 262144 (2**18 leaves) it takes 154s on a Macbook Air M1, 2020 AWS, 8GB memory
+
+## TO DO 
+- [ ] Export utils too

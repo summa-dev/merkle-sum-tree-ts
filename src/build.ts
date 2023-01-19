@@ -7,6 +7,14 @@ export default function build(
     nodes : Node[][],
     hash : HashFunction
     ): Node {
+
+    // if entries is not a power of 2, fill it with zero entries
+    let zeroEntry : Entry = {username: "/", balance: BigInt(0)};
+
+    while (entries.length < 2**depth) {
+      entries.push(zeroEntry);
+    }
+
     // range over each level of the tree
     for (let i = 0; i < depth; i++) {
 

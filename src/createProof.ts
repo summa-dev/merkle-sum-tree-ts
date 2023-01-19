@@ -1,8 +1,10 @@
 import checkParameter from './checkParameter';
-import { MerkleProof, Node } from './types';
+import { MerkleProof, Node, Entry} from './types';
+import {parseUsernameToBigInt} from './utils/username';
 
 export default function createProof(
   index: number,
+  entries : Entry[],
   depth: number,
   arity: number,
   nodes: Node[][],
@@ -37,7 +39,7 @@ export default function createProof(
 
   return {
     rootHash: root.hash,
-    leafHash: nodes[0][leafIndex].hash,
+    leafUsername: parseUsernameToBigInt(entries[leafIndex].username),
     leafSum: nodes[0][leafIndex].sum,
     pathIndices,
     siblingsHashes,

@@ -1,2 +1,2 @@
-import { MerkleProof, Node } from './types';
-export default function createProof(index: number, depth: number, arity: number, nodes: Node[][], zeroes: Node[], root: Node): MerkleProof;
+import { MerkleProof, Node, Entry } from './types';
+export default function createProof(index: number, entries: Entry[], depth: number, arity: number, nodes: Node[][], root: Node): MerkleProof;

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var checkParameter_1 = require("./checkParameter");
-function createProof(index, depth, arity, nodes, zeroes, root) {
+var utils_1 = require("./utils");
+function createProof(index, entries, depth, arity, nodes, root) {
     (0, checkParameter_1.default)(index, 'index', 'number');
     if (index < 0 || index >= nodes[0].length) {
         throw new Error('The leaf does not exist in this tree');
@@ -17,21 +18,15 @@ function createProof(index, depth, arity, nodes, zeroes, root) {
         pathIndices[level] = position;
         for (var i = levelStartIndex; i < levelEndIndex; i += 1) {
             if (i !== index) {
-                if (i < nodes[level].length) {
-                    siblingsHashes[level] = nodes[level][i].hash;
-                    siblingsSums[level] = nodes[level][i].sum;
-                }
-                else {
-                    siblingsHashes[level] = zeroes[level].hash;
-                    siblingsSums[level] = zeroes[level].sum;
-                }
+                siblingsHashes[level] = nodes[level][i].hash;
+                siblingsSums[level] = nodes[level][i].sum;
             }
         }
         index = Math.floor(index / arity);
     }
     return {
         rootHash: root.hash,
-        leafHash: nodes[0][leafIndex].hash,
+        leafUsername: utils_1.default.parseUsernameToBigInt(entries[leafIndex].username),
         leafSum: nodes[0][leafIndex].sum,
         pathIndices: pathIndices,
         siblingsHashes: siblingsHashes,

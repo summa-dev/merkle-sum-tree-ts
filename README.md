@@ -1,4 +1,4 @@
-# TS Merkle Sum Tree
+# Merkle Sum Tree
 
 **This package is a fork of [ZK-KIT](https://github.com/privacy-scaling-explorations/zk-kit)**
 

@@ -1,10 +1,10 @@
 import checkParameter from './checkParameter';
-import { MerkleProof, Node, Entry} from './types';
+import { MerkleProof, Node, Entry } from './types';
 import Utils from './utils';
 
 export default function createProof(
   index: number,
-  entries : Entry[],
+  entries: Entry[],
   depth: number,
   arity: number,
   nodes: Node[][],

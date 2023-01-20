@@ -3,7 +3,6 @@ import { HashFunction, Node, Entry } from './types';
 import Utils from './utils';
 
 export function createLeafNodeFromEntry(entry: Entry, hash: HashFunction): Node {
-
   if (entry.balance < BigInt(0)) {
     throw new Error('entrySum cant be negative');
   }
@@ -13,7 +12,7 @@ export function createLeafNodeFromEntry(entry: Entry, hash: HashFunction): Node 
 
   const hashPreimage: bigint[] = [Utils.parseUsernameToBigInt(entry.username), entry.balance];
 
-  const leaf: Node = {hash: hash(hashPreimage), sum: entry.balance};
+  const leaf: Node = { hash: hash(hashPreimage), sum: entry.balance };
 
   checkParameter(leaf, 'leaf', 'object');
   checkParameter(leaf.hash, 'hash', 'bigint');

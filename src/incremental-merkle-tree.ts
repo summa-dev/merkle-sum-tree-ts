@@ -1,16 +1,16 @@
 import checkParameter from './checkParameter';
 import { createLeafNodeFromEntry } from './createNode';
-import { poseidon } from "circomlibjs"
+import { poseidon } from 'circomlibjs';
 import _createProof from './createProof';
 import _build from './build';
 import _indexOf from './indexOf';
-import { HashFunction, MerkleProof, Node, Entry} from './types';
+import { HashFunction, MerkleProof, Node, Entry } from './types';
 import Utils from './utils';
 import _verifyProof from './verifyProof';
 
 /**
  * A Merkle Sum Tree is a binary Merkle Tree with the following properties:
- * - Each entry of a Merkle Sum Tree is a pair of a value and a sum. 
+ * - Each entry of a Merkle Sum Tree is a pair of a value and a sum.
  * - Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
  * - Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
  * - The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
@@ -27,37 +27,36 @@ export default class IncrementalMerkleSumTree {
   private readonly _arity: number;
   private readonly _entries: Entry[];
 
-    /**
-     * Initializes the tree with the csv file containing the entries of the tree.
-     * @param path path to the csv file storing the entries.
-     */
-    constructor(path: string) {
-      checkParameter(path, 'path', 'string');
+  /**
+   * Initializes the tree with the csv file containing the entries of the tree.
+   * @param path path to the csv file storing the entries.
+   */
+  constructor(path: string) {
+    checkParameter(path, 'path', 'string');
 
-      // Initialize the attributes.
-      this._hash = poseidon;
-      this._nodes = [];
-      this._arity = 2;
-      this._entries = Utils.parseCsv(path);
+    // Initialize the attributes.
+    this._hash = poseidon;
+    this._nodes = [];
+    this._arity = 2;
+    this._entries = Utils.parseCsv(path);
 
-      // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
-      this._depth = Math.ceil(Math.log2(this._entries.length))
+    // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
+    this._depth = Math.ceil(Math.log2(this._entries.length));
 
-      if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
-        throw new Error('The tree depth must be between 1 and 32');
-      }
-
-      // Build the tree
-      this._root = this._build(this._entries);
-
-      // Freeze the entries. It prevents unintentional changes.
-      Object.freeze(this._entries);
-
-
-      // Freeze the tree. It prevents unintentional changes.
-      Object.freeze(this._root);
-      Object.freeze(this._nodes);
+    if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
+      throw new Error('The tree depth must be between 1 and 32');
     }
+
+    // Build the tree
+    this._root = this._build(this._entries);
+
+    // Freeze the entries. It prevents unintentional changes.
+    Object.freeze(this._entries);
+
+    // Freeze the tree. It prevents unintentional changes.
+    Object.freeze(this._root);
+    Object.freeze(this._nodes);
+  }
 
   /**
    * Returns the root hash of the tree.
@@ -95,9 +94,9 @@ export default class IncrementalMerkleSumTree {
    * Returns the entries of the tree.
    * @returns List of entries.
    */
-    public get entries(): Entry[] {
-      return this._entries;
-    }
+  public get entries(): Entry[] {
+    return this._entries;
+  }
 
   /**
    * Returns the index of a leaf. If the leaf does not exist it returns -1.
@@ -135,5 +134,4 @@ export default class IncrementalMerkleSumTree {
   public verifyProof(proof: MerkleProof): boolean {
     return _verifyProof(proof, this._hash);
   }
-
 }

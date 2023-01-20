@@ -9,9 +9,11 @@ import Utils from './utils';
 import _verifyProof from './verifyProof';
 
 /**
- * A Merkle tree is a tree in which every leaf node is labelled with the cryptographic hash of a
- * data block, and every non-leaf node is labelled with the cryptographic hash of the labels of its child nodes.
- * It allows efficient and secure verification of the contents of large data structures.
+ * A Merkle Sum Tree is a binary Merkle Tree with the following properties:
+ * - Each entry of a Merkle Sum Tree is a pair of a value and a sum. 
+ * - Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
+ * - Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
+ * - The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
  * The IncrementalMerkleSumTree class is a TypeScript implementation of Incremental Merkle Sum tree and it
  * provides all the functions to create efficient trees and to generate and verify proofs of membership.
  */

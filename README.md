@@ -16,45 +16,22 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 </div>
 <br>
 
-## Install 
+## Setup  
 
-```npm install ts-merkle-sum-tree``` 
+- ```npm install ts-merkle-sum-tree``` 
 
-## APIs
+- Import your database of users and their balances to a csv file, for example [entry-16-valid.csv](.test/entries/entry-16-valid.csv).
 
-\# **new IncrementalMerkleSumTree**(hash: _HashFunction_, depth: _number_): _IncrementalMerkleSumTree_
+## APIs tree
+
+\# **new IncrementalMerkleSumTree**(pathToCsv: _string_): _IncrementalMerkleSumTree_
 
 ```typescript
 import { IncrementalMerkleSumTree } from "ts-merkle-sum-tree"
-import { poseidon } from "circomlibjs" // v0.0.8
 
-const tree = new IncrementalMerkleSumTree(poseidon, 16) // Binary tree with 16 levels and poseidon hash function
-```
+const pathToCsv = "test/entries/entry-16-valid.csv" 
 
-\# **insert**(entryValue: _bigint_, entrySum: _bigint_)
-
-```typescript
-tree.insert(BigInt(1), BigInt(25))
-```
-
-\# **update**(index: _number_, newEntryValue: _bigint_, newEntrySum: _bigint_)
-
-```typescript
-// 0 is the index of the leaf to be updated
-tree.update(0, BigInt(2), BigInt(50))
-```
-
-\# **delete**(index: _number_)
-
-```typescript
-// 0 is the index of the leaf to be deleted
-tree.delete(0)
-```
-
-\# **getTreeSum** 
-
-```typescript
-tree.root.sum 
+const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
 ```
 
 \# **indexOf**(entryValue: _bigint_, entrySum: _bigint_): _number_
@@ -71,14 +48,6 @@ Creates a proof of membership. The MerkleProof contains the path from the leaf t
 const proof = tree.createProof(0)
 ```
 
-\# **createProofWithTargetSum**(index: _number_, targetSum: _bigint_): _MerkleProofWithTargetSum_
-
-Creates a proof of membership with target Sum. The MerkleProofWithTargetSum contains the path from the leaf to the root and the target sum of the tree.
-
-```typescript
-const merkleProofWithTargetSum = tree.createProof(0, BigInt(75))
-```
-
 \# **verifyProof**(proof: _MerkleProof_): _boolean_
 
 Verifies a proof and returns true or false.
@@ -88,14 +57,35 @@ It verifies that a leaf is included in the tree and that the sum computed from t
 console.log(tree.verifyProof(proof)) // true
 ```
 
-\# **verifyWithTargetSum**(merkleProofWithTargetSum: _MerkleProofWithTargetSum_): _boolean_
+## APIs utils
 
-Verifies a proofWithTargetSum and returns true or false.
-In addition to the verifyProof method, it verifies that the sum of the tree is less or equal to the target sum.
+\# **parseCsv**(pathToCsv: _string_): _Entry[]_
 
 ```typescript
-console.log(tree.verifyProofWithTargetSum(merkleProofWithTargetSum)) // true
+import { Utils } from "ts-merkle-sum-tree"
+
+const pathToCsv = "test/entries/entry-16-valid.csv" 
+
+const entries = Utils.parseCsv(pathToCsv)
+//  [{ username: 'gAdsIaKy', balance: 7534n }, { username: 'SbuqOZGg', balance: 2060n }, ...]
 ```
+
+\# **parseUsernameToBigInt**(username: _string_): _bigint_
+
+```typescript
+const username = "alice" 
+
+const usernameToBigInt = Utils.parseUsernameToBigInt(username) // 418430673765n
+```
+
+\# **parseBigIntToUsername**(bigIntUsername: _bigint_): _string_
+
+```typescript
+const usernameToBigInt = 418430673765n
+
+const username = Utils.parseBigIntToUsername(bigIntUsername) // alice
+```
+
 ## Code Quality and Formatting
 
 Run ESLint to analyze the code and catch bugs:
@@ -110,3 +100,6 @@ Run Prettier to check formatting rules and to fix them:
 
 ```npm run test```
 
+## Benchmark
+
+To build a Merkle Sum Tree with 262144 (2**18 leaves) it takes 154s on a Macbook Air M1, 2020 AWS, 8GB memory

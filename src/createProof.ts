@@ -1,12 +1,13 @@
 import checkParameter from './checkParameter';
-import { MerkleProof, Node } from './types';
+import { MerkleProof, Node, Entry} from './types';
+import Utils from './utils';
 
 export default function createProof(
   index: number,
+  entries : Entry[],
   depth: number,
   arity: number,
   nodes: Node[][],
-  zeroes: Node[],
   root: Node,
 ): MerkleProof {
   checkParameter(index, 'index', 'number');
@@ -29,22 +30,16 @@ export default function createProof(
 
     for (let i = levelStartIndex; i < levelEndIndex; i += 1) {
       if (i !== index) {
-        if (i < nodes[level].length) {
-          siblingsHashes[level] = nodes[level][i].hash;
-          siblingsSums[level] = nodes[level][i].sum;
-        } else {
-          siblingsHashes[level] = zeroes[level].hash;
-          siblingsSums[level] = zeroes[level].sum;
-        }
+        siblingsHashes[level] = nodes[level][i].hash;
+        siblingsSums[level] = nodes[level][i].sum;
       }
     }
-
     index = Math.floor(index / arity);
   }
 
   return {
     rootHash: root.hash,
-    leafHash: nodes[0][leafIndex].hash,
+    leafUsername: Utils.parseUsernameToBigInt(entries[leafIndex].username),
     leafSum: nodes[0][leafIndex].sum,
     pathIndices,
     siblingsHashes,

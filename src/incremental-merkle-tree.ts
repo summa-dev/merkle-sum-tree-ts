@@ -28,9 +28,9 @@ export default class IncrementalMerkleSumTree {
   private readonly _entries: Entry[];
 
     /**
-   * Initializes the tree with the csv file containing the entries of the tree.
-   * @param path path to the csv file storing the entries.
-   */
+     * Initializes the tree with the csv file containing the entries of the tree.
+     * @param path path to the csv file storing the entries.
+     */
     constructor(path: string) {
       checkParameter(path, 'path', 'string');
 

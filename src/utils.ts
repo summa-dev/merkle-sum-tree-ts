@@ -1,14 +1,15 @@
 import { Entry } from './types';
-const fs = require('fs');
 
 export default class Utils {
 
     /**
-    * Takes the path to a csv file as input and return its representation as array of Entries
-    * @param path string of the path to the csv file
-    * @return array of the entries
-    */
+     * Takes the path to a csv file as input and return its representation as array of Entries
+     * @param path string of the path to the csv file
+     * @return array of the entries
+     */
     static parseCsv(path : string) : Entry[] {
+
+        const fs = require('fs');
 
         // Read the CSV file
         const file = fs.readFileSync(path, "utf8");
@@ -24,15 +25,15 @@ export default class Utils {
       
         // create an Entry for each line
         // remove \r from the balance
-        const entries : Entry[] = values.map((values : any) => {
+        const entries : Entry[] = values.map((entry : any) => {
       
-          if (isNaN(values[1])) {
+          if (isNaN(entry[1])) {
               throw new Error("Balance must be a number");
           }
       
           return {
-              username: values[0],
-              balance: BigInt(values[1].replace("\r", "")),
+              username: entry[0],
+              balance: BigInt(entry[1].replace("\r", "")),
           };
       });
       
@@ -41,10 +42,10 @@ export default class Utils {
 
 
     /**
-    * Transform a username into its utf8 bytes representation, convert it to BigInt and return it
-    * @param username the string of the username to be converted
-    * @return BigInt representation of the username
-    */
+     * Transform a username into its utf8 bytes representation, convert it to BigInt and return it
+     * @param username the string of the username to be converted
+     * @return BigInt representation of the username
+     */
     static parseUsernameToBigInt(username:string) : bigint {
 
         const encoder = new TextEncoder();
@@ -56,10 +57,10 @@ export default class Utils {
     }
 
     /**
-    * Transform a BigInt into its utf8 bytes representation, convert it to a username and return it.
-    * @param bigIntUsername the bigInt to be converted
-    * @return string representation of the username
-    */
+     * Transform a BigInt into its utf8 bytes representation, convert it to a username and return it.
+     * @param bigIntUsername the bigInt to be converted
+     * @return string representation of the username
+     */
     static parseBigIntToUsername(bigIntUsername: bigint) : string {
         const hexString = bigIntUsername.toString(16);
         const hexArray = hexString.match(/.{2}/g) || [];

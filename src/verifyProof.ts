@@ -14,7 +14,7 @@ export default function verifyProof(proof: MerkleProof, hash: HashFunction): boo
 
   let sum = proof.leafSum;
 
-  let node : Node = {hash: hash([proof.leafUsername, proof.leafSum]), sum: sum};
+  let node : Node = {hash: hash([proof.leafUsername, proof.leafSum]), sum};
 
   for (let i = 0; i < proof.siblingsHashes.length; i += 1) {
     const siblingNode = {hash: proof.siblingsHashes[i], sum: proof.siblingsSums[i]};

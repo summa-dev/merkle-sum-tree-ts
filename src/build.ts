@@ -9,7 +9,7 @@ export default function build(
     ): Node {
 
     // if entries is not a power of 2, fill it with zero entries
-    let zeroEntry : Entry = {username: "/", balance: BigInt(0)};
+    const zeroEntry : Entry = {username: "/", balance: BigInt(0)};
 
     while (entries.length < 2**depth) {
       entries.push(zeroEntry);
@@ -22,8 +22,8 @@ export default function build(
   
         // if level is 0, the nodes are the leaves, we need to create them from the entries
         if (i === 0) {
-          for (let j = 0; j < entries.length; j++) {
-            nodes[i].push(createLeafNodeFromEntry(entries[j], hash))
+          for (const entry of entries) {
+            nodes[i].push(createLeafNodeFromEntry(entry, hash))
           }
         }
   

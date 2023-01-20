@@ -67,6 +67,7 @@ import { Utils } from "ts-merkle-sum-tree"
 const pathToCsv = "test/entries/entry-16-valid.csv" 
 
 const entries = Utils.parseCsv(pathToCsv)
+//  [{ username: 'gAdsIaKy', balance: 7534n }, { username: 'SbuqOZGg', balance: 2060n }, ...]
 ```
 
 \# **parseUsernameToBigInt**(username: _string_): _bigint_

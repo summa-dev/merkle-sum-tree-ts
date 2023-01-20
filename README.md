@@ -27,7 +27,7 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 \# **new IncrementalMerkleSumTree**(pathToCsv: _string_): _IncrementalMerkleSumTree_
 
 ```typescript
-import { IncrementalMerkleSumTree } from "ts-merkle-sum-tree"
+import { IncrementalMerkleSumTree } from "pyt-merkle-sum-tree"
 
 const pathToCsv = "test/entries/entry-16-valid.csv" 
 
@@ -62,7 +62,7 @@ console.log(tree.verifyProof(proof)) // true
 \# **parseCsv**(pathToCsv: _string_): _Entry[]_
 
 ```typescript
-import { Utils } from "ts-merkle-sum-tree"
+import { Utils } from "pyt-merkle-sum-tree"
 
 const pathToCsv = "test/entries/entry-16-valid.csv" 
 

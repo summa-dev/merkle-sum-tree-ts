@@ -1,4 +1,4 @@
-# Merkle Sum Tree
+# pyt-merkle-sum-tree
 
 **This package is a fork of [ZK-KIT](https://github.com/privacy-scaling-explorations/zk-kit)**
 
@@ -18,7 +18,7 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
 ## Setup  
 
-- ```npm install ts-merkle-sum-tree``` 
+- ```npm install pyt-merkle-sum-tree``` 
 
 - Import your database of users and their balances to a csv file, for example [entry-16-valid.csv](.test/entries/entry-16-valid.csv).
 

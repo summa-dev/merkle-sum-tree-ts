@@ -67,9 +67,8 @@ describe("Incremental Merkle Tree", () => {
     // let numberOfEntries = [32, 512, 262144]
     // let expectedSum = [1534390, 25911479, 6557852207]
 
-    let numberOfEntries = [262144]
-    let expectedSum = [6557852207]
-
+    let numberOfEntries = [32, 512]
+    let expectedSum = [1534390, 25911479]
 
     for (let i = 0; i < numberOfEntries.length; i += 1) {
 
@@ -120,9 +119,6 @@ describe("Incremental Merkle Tree", () => {
         for (let i = 0; i < entries.length; i += 1) {
             const proof : MerkleProof = tree.createProof(i)
             expect(proof.siblingsHashes).toHaveLength(tree.depth)
-            console.log(tree.entries[i].username.length)
-            console.log(parseBigIntToUsername(proof.leafUsername).length)
-
             expect(parseBigIntToUsername(proof.leafUsername)).toEqual(tree.entries[i].username)
             expect(proof.leafSum).toEqual(tree.leaves[i].sum)
             expect(proof.rootHash).toEqual(tree.root.hash)

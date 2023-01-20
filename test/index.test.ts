@@ -1,7 +1,4 @@
-import { IncrementalMerkleSumTree, MerkleProof } from "../src"
-import { Entry } from "../src/types"
-import parseCsv from "../src/utils/csv"
-import { parseBigIntToUsername } from "../src/utils/username"
+import { IncrementalMerkleSumTree, MerkleProof, Utils, Entry} from "../src"
 
 describe("Incremental Merkle Tree", () => {
 
@@ -113,13 +110,13 @@ describe("Incremental Merkle Tree", () => {
 
         // extract the entries from the csv file 
         const pathToCsv = "test/entries/entry-16-valid.csv"
-        const entries = parseCsv(pathToCsv)
+        const entries = Utils.parseCsv(pathToCsv)
 
         // loop over each entry and generate a proof for it
         for (let i = 0; i < entries.length; i += 1) {
             const proof : MerkleProof = tree.createProof(i)
             expect(proof.siblingsHashes).toHaveLength(tree.depth)
-            expect(parseBigIntToUsername(proof.leafUsername)).toEqual(tree.entries[i].username)
+            expect(Utils.parseBigIntToUsername(proof.leafUsername)).toEqual(tree.entries[i].username)
             expect(proof.leafSum).toEqual(tree.leaves[i].sum)
             expect(proof.rootHash).toEqual(tree.root.hash)
             expect(tree.verifyProof(proof)).toBeTruthy()

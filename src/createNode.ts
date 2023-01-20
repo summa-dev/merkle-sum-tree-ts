@@ -1,6 +1,6 @@
 import checkParameter from './checkParameter';
 import { HashFunction, Node, Entry } from './types';
-import {parseUsernameToBigInt} from './utils/username';
+import Utils from './utils';
 
 export function createLeafNodeFromEntry(entry: Entry, hash: HashFunction): Node {
 
@@ -11,7 +11,7 @@ export function createLeafNodeFromEntry(entry: Entry, hash: HashFunction): Node 
   checkParameter(entry.username, 'username', 'string');
   checkParameter(entry.balance, 'balance', 'bigint');
 
-  const hashPreimage: bigint[] = [parseUsernameToBigInt(entry.username), entry.balance];
+  const hashPreimage: bigint[] = [Utils.parseUsernameToBigInt(entry.username), entry.balance];
 
   const leaf: Node = {hash: hash(hashPreimage), sum: entry.balance};
 

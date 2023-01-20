@@ -5,7 +5,7 @@ import _createProof from './createProof';
 import _build from './build';
 import _indexOf from './indexOf';
 import { HashFunction, MerkleProof, Node, Entry} from './types';
-import _parseCsv from './utils/csv';
+import Utils from './utils';
 import _verifyProof from './verifyProof';
 
 /**
@@ -36,7 +36,7 @@ export default class IncrementalMerkleSumTree {
       this._hash = poseidon;
       this._nodes = [];
       this._arity = 2;
-      this._entries = _parseCsv(path);
+      this._entries = Utils.parseCsv(path);
 
       // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
       this._depth = Math.ceil(Math.log2(this._entries.length))

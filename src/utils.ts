@@ -57,11 +57,11 @@ export default class Utils {
 
     /**
     * Transform a BigInt into its utf8 bytes representation, convert it to a username and return it.
-    * @param bigIntNumber the bigInt to be converted
+    * @param bigIntUsername the bigInt to be converted
     * @return string representation of the username
     */
-    static parseBigIntToUsername(bigIntNumber: bigint) : string {
-        const hexString = bigIntNumber.toString(16);
+    static parseBigIntToUsername(bigIntUsername: bigint) : string {
+        const hexString = bigIntUsername.toString(16);
         const hexArray = hexString.match(/.{2}/g) || [];
         const byteArray = hexArray.map(byte => parseInt(byte, 16));
     

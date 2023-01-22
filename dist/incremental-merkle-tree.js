@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var checkParameter_1 = require("./checkParameter");
-var createNode_1 = require("./createNode");
 var circomlibjs_1 = require("circomlibjs");
 var createProof_1 = require("./createProof");
 var build_1 = require("./build");
@@ -99,12 +98,12 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
     });
     /**
      * Returns the index of a leaf. If the leaf does not exist it returns -1.
-     * @param entry value of the entry of the queried leaf.
+     * @param username username of the queried entry.
+     * @param balance balance of the queried entry.
      * @returns Index of the leaf.
      */
-    IncrementalMerkleSumTree.prototype.indexOf = function (entry) {
-        var leaf = (0, createNode_1.createLeafNodeFromEntry)(entry, this._hash);
-        return (0, indexOf_1.default)(leaf, this._nodes);
+    IncrementalMerkleSumTree.prototype.indexOf = function (username, balance) {
+        return (0, indexOf_1.default)(username, balance, this._nodes, this._hash);
     };
     /**
      * Build the merkle tree from a list of entries.

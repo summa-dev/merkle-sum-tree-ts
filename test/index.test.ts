@@ -90,11 +90,7 @@ describe("Incremental Merkle Tree", () => {
     })
 
     it("Should return -1 as index if the entry that doesn't exist", () => {
-        
-        const invalidEntry : Entry = {
-            username : "gAdsIaKy",
-            balance : BigInt(7530)
-        }
+
         const index = tree.indexOf("gAdsIaKy", BigInt(7530))
 
         expect(index).toBe(-1)

@@ -103,7 +103,7 @@ export default class IncrementalMerkleSumTree {
    * @param balance balance of the queried entry.
    * @returns Index of the leaf.
    */
-  public indexOf(username: string, balance : bigint): number {
+  public indexOf(username: string, balance: bigint): number {
     return _indexOf(username, balance, this._nodes, this._hash);
   }
 

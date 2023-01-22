@@ -26,8 +26,8 @@ function createProof(index, entries, depth, arity, nodes, root) {
     }
     return {
         rootHash: root.hash,
-        leafUsername: utils_1.default.parseUsernameToBigInt(entries[leafIndex].username),
-        leafSum: nodes[0][leafIndex].sum,
+        username: utils_1.default.parseUsernameToBigInt(entries[leafIndex].username),
+        balance: nodes[0][leafIndex].sum,
         pathIndices: pathIndices,
         siblingsHashes: siblingsHashes,
         siblingsSums: siblingsSums,

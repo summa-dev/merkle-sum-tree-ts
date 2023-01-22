@@ -48,10 +48,11 @@ export default class IncrementalMerkleSumTree {
     get entries(): Entry[];
     /**
      * Returns the index of a leaf. If the leaf does not exist it returns -1.
-     * @param entry value of the entry of the queried leaf.
+     * @param username username of the queried entry.
+     * @param balance balance of the queried entry.
      * @returns Index of the leaf.
      */
-    indexOf(entry: Entry): number;
+    indexOf(username: string, balance: bigint): number;
     /**
      * Build the merkle tree from a list of entries.
      * @param entries array of the entries to be added to the tree.

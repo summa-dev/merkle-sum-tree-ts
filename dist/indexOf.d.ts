@@ -1,2 +1,2 @@
-import { Node } from './types';
-export default function indexOf(leaf: Node, nodes: Node[][]): number;
+import { Node, HashFunction } from './types';
+export default function indexOf(username: string, balance: bigint, nodes: Node[][], hash: HashFunction): number;

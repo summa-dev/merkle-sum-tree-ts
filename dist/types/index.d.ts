@@ -9,8 +9,8 @@ export type Entry = {
 export type HashFunction = (values: bigint[]) => bigint;
 export type MerkleProof = {
     rootHash: bigint;
-    leafUsername: bigint;
-    leafSum: bigint;
+    username: bigint;
+    balance: bigint;
     siblingsHashes: bigint[];
     siblingsSums: bigint[];
     pathIndices: number[];

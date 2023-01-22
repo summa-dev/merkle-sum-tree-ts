@@ -5,7 +5,7 @@ var createNode_1 = require("./createNode");
 function indexOf(username, balance, nodes, hash) {
     var entry = {
         username: username,
-        balance: balance
+        balance: balance,
     };
     var leaf = (0, createNode_1.createLeafNodeFromEntry)(entry, hash);
     (0, checkParameter_1.default)(leaf, 'leaf', 'object');

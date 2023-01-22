@@ -34,10 +34,10 @@ const pathToCsv = "test/entries/entry-16-valid.csv"
 const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
 ```
 
-\# **indexOf**(entryValue: _bigint_, entrySum: _bigint_): _number_
+\# **indexOf**(username: _string_, balance: _bigint_): _number_
 
 ```typescript
-const index = tree.indexOf(BigInt(2), BigInt(50)) // 0
+const index = tree.indexOf("gAdsIaKy", BigInt(7543)) // 0
 ```
 
 \# **createProof**(index: _number_): _MerkleProof_

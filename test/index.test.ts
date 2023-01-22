@@ -84,12 +84,7 @@ describe("Incremental Merkle Tree", () => {
 
     it("Should return the index of an entry that exist", () => {
 
-        const entry : Entry = {
-            username : "gAdsIaKy",
-            balance : BigInt(7534)
-        }
-
-        const index = tree.indexOf(entry)
+        const index = tree.indexOf("gAdsIaKy", BigInt(7534))
 
         expect(index).toBe(0)
     })
@@ -100,7 +95,7 @@ describe("Incremental Merkle Tree", () => {
             username : "gAdsIaKy",
             balance : BigInt(7530)
         }
-        const index = tree.indexOf(invalidEntry)
+        const index = tree.indexOf("gAdsIaKy", BigInt(7530))
 
         expect(index).toBe(-1)
 
@@ -116,8 +111,8 @@ describe("Incremental Merkle Tree", () => {
         for (let i = 0; i < entries.length; i += 1) {
             const proof : MerkleProof = tree.createProof(i)
             expect(proof.siblingsHashes).toHaveLength(tree.depth)
-            expect(Utils.parseBigIntToUsername(proof.leafUsername)).toEqual(tree.entries[i].username)
-            expect(proof.leafSum).toEqual(tree.leaves[i].sum)
+            expect(Utils.parseBigIntToUsername(proof.username)).toEqual(tree.entries[i].username)
+            expect(proof.balance).toEqual(tree.leaves[i].sum)
             expect(proof.rootHash).toEqual(tree.root.hash)
             expect(tree.verifyProof(proof)).toBeTruthy()
         }
@@ -126,12 +121,7 @@ describe("Incremental Merkle Tree", () => {
 
     it("Should not create a proof if the entry does not exist", () => {
 
-        const invalidEntry : Entry = {
-            username : "gAdsIaKy",
-            balance : BigInt(7530)
-        }
-
-        const indexOf = tree.indexOf(invalidEntry)
+        const indexOf = tree.indexOf("gAdsIaKy", BigInt(7530))
 
         // Query proof for a non existing leaf
         const fun = () => tree.createProof(indexOf)
@@ -145,7 +135,7 @@ describe("Incremental Merkle Tree", () => {
         const proof : MerkleProof = tree.createProof(0)
 
         // add invalid leaf sum
-        proof.leafSum = BigInt(0)
+        proof.balance = BigInt(0)
 
         expect(tree.verifyProof(proof)).toBeFalsy()
 
@@ -156,7 +146,7 @@ describe("Incremental Merkle Tree", () => {
         const proof : MerkleProof = tree.createProof(0)
 
         // add invalid leaf hash
-        proof.leafUsername = BigInt(7)
+        proof.username = BigInt(7)
 
         expect(tree.verifyProof(proof)).toBeFalsy()
 

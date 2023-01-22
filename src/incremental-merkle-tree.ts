@@ -1,5 +1,4 @@
 import checkParameter from './checkParameter';
-import { createLeafNodeFromEntry } from './createNode';
 import { poseidon } from 'circomlibjs';
 import _createProof from './createProof';
 import _build from './build';
@@ -100,12 +99,12 @@ export default class IncrementalMerkleSumTree {
 
   /**
    * Returns the index of a leaf. If the leaf does not exist it returns -1.
-   * @param entry value of the entry of the queried leaf.
+   * @param username username of the queried entry.
+   * @param balance balance of the queried entry.
    * @returns Index of the leaf.
    */
-  public indexOf(entry: Entry): number {
-    const leaf: Node = createLeafNodeFromEntry(entry, this._hash);
-    return _indexOf(leaf, this._nodes);
+  public indexOf(username: string, balance : bigint): number {
+    return _indexOf(username, balance, this._nodes, this._hash);
   }
 
   /**

@@ -42,7 +42,7 @@ const index = tree.indexOf(BigInt(2), BigInt(50)) // 0
 
 \# **createProof**(index: _number_): _MerkleProof_
 
-Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
+Creates a proof of membership for an entry identified by its index. The MerkleProof contains the path from the leaf to the root.
 
 ```typescript
 const proof = tree.createProof(0)

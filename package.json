@@ -1,6 +1,6 @@
 {
   "name": "pyt-merkle-sum-tree",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "APIs to create efficient merkle sum tree and to generate and verify proofs of membership",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

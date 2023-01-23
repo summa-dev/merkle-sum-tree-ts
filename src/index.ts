@@ -1,4 +1,4 @@
-import IncrementalMerkleSumTree from './incremental-merkle-tree';
+import IncrementalMerkleSumTree from './incrementalMerkleSumTree';
 import Utils from './utils';
 
 export { IncrementalMerkleSumTree, Utils };

@@ -1,6 +1,6 @@
-import { IncrementalMerkleSumTree, MerkleProof, Utils, Entry} from "../src"
+import { IncrementalMerkleSumTree, MerkleProof, Utils } from "../src"
 
-describe("Incremental Merkle Tree", () => {
+describe("Incremental Merkle Sum Tree", () => {
 
     let tree: IncrementalMerkleSumTree
 

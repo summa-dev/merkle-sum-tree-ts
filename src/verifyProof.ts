@@ -1,16 +1,7 @@
-// import checkParameter from './checkParameter';
 import { createMiddleNode } from './createNode';
-import checkParameter from './checkParameter';
 import { HashFunction, MerkleProof, Node } from './types';
 
 export default function verifyProof(proof: MerkleProof, hash: HashFunction): boolean {
-  checkParameter(proof, 'proof', 'object');
-  checkParameter(proof.rootHash, 'proof.rootHash', 'bigint');
-  checkParameter(proof.username, 'proof.leafUsername', 'bigint');
-  checkParameter(proof.balance, 'proof.leafSum', 'bigint');
-  checkParameter(proof.siblingsHashes, 'proof.siblingsHashes', 'object');
-  checkParameter(proof.siblingsSums, 'proof.siblingsSums', 'object');
-  checkParameter(proof.pathIndices, 'proof.pathElements', 'object');
 
   let sum = proof.balance;
 

@@ -1,4 +1,3 @@
-import checkParameter from './checkParameter';
 import { MerkleProof, Node, Entry } from './types';
 import Utils from './utils';
 
@@ -6,11 +5,9 @@ export default function createProof(
   index: number,
   entries: Entry[],
   depth: number,
-  arity: number,
   nodes: Node[][],
   root: Node,
 ): MerkleProof {
-  checkParameter(index, 'index', 'number');
 
   if (index < 0 || index >= nodes[0].length) {
     throw new Error('The leaf does not exist in this tree');
@@ -22,9 +19,9 @@ export default function createProof(
   const leafIndex = index;
 
   for (let level = 0; level < depth; level += 1) {
-    const position = index % arity;
+    const position = index % 2;
     const levelStartIndex = index - position;
-    const levelEndIndex = levelStartIndex + arity;
+    const levelEndIndex = levelStartIndex + 2;
 
     pathIndices[level] = position;
 
@@ -34,13 +31,13 @@ export default function createProof(
         siblingsSums[level] = nodes[level][i].sum;
       }
     }
-    index = Math.floor(index / arity);
+    index = Math.floor(index / 2);
   }
 
   return {
     rootHash: root.hash,
-    username: Utils.parseUsernameToBigInt(entries[leafIndex].username),
-    balance: nodes[0][leafIndex].sum,
+    username: Utils.parseUsername(entries[leafIndex].username),
+    balance: entries[leafIndex].balance,
     pathIndices,
     siblingsHashes,
     siblingsSums,

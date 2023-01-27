@@ -1,12 +1,12 @@
 import { Entry, Node, HashFunction } from './types';
 import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
+import { ZERO_ENTRY } from './createEntry';
 
-export default function build(entries: Entry[], depth: number, nodes: Node[][], hash: HashFunction): Node {
+export default function buildMerkleTreeFromEntries(entries: Entry[], depth: number, nodes: Node[][], hash: HashFunction): Node {
+
   // if entries is not a power of 2, fill it with zero entries
-  const zeroEntry: Entry = { username: '/', balance: BigInt(0) };
-
   while (entries.length < 2 ** depth) {
-    entries.push(zeroEntry);
+    entries.push(ZERO_ENTRY);
   }
 
   // range over each level of the tree

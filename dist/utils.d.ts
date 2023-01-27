@@ -11,11 +11,11 @@ export default class Utils {
      * @param username the string of the username to be converted
      * @return BigInt representation of the username
      */
-    static parseUsernameToBigInt(username: string): bigint;
+    static parseUsername(username: string): bigint;
     /**
      * Transform a BigInt into its utf8 bytes representation, convert it to a username and return it.
      * @param bigIntUsername the bigInt to be converted
      * @return string representation of the username
      */
-    static parseBigIntToUsername(bigIntUsername: bigint): string;
+    static stringifyUsername(bigIntUsername: bigint): string;
 }

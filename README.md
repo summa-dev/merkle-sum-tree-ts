@@ -70,20 +70,18 @@ const entries = Utils.parseCsv(pathToCsv)
 //  [{ username: 'gAdsIaKy', balance: 7534n }, { username: 'SbuqOZGg', balance: 2060n }, ...]
 ```
 
-\# **parseUsernameToBigInt**(username: _string_): _bigint_
+\# **parseUsername**(username: _string_): _bigint_
 
 ```typescript
 const username = "alice" 
 
-const usernameToBigInt = Utils.parseUsernameToBigInt(username) // 418430673765n
+const bigIntUsername = Utils.parseUsername(username) // 418430673765n
 ```
 
-\# **parseBigIntToUsername**(bigIntUsername: _bigint_): _string_
+\# **stringifyUsername**(bigIntUsername: _bigint_): _string_
 
 ```typescript
-const usernameToBigInt = 418430673765n
-
-const username = Utils.parseBigIntToUsername(bigIntUsername) // alice
+const username = Utils.stringifyUsername(bigIntUsername) // alice
 ```
 
 ## Code Quality and Formatting

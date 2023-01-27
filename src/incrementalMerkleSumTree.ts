@@ -1,7 +1,6 @@
-import checkParameter from './checkParameter';
 import { poseidon } from 'circomlibjs';
 import _createProof from './createProof';
-import _build from './build';
+import _buildMerkleTreeFromEntries from './build';
 import _indexOf from './indexOf';
 import { HashFunction, MerkleProof, Node, Entry } from './types';
 import Utils from './utils';
@@ -19,11 +18,10 @@ import _verifyProof from './verifyProof';
 
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
+  private static readonly _hash : HashFunction = poseidon;
   private _root: Node;
   private readonly _nodes: Node[][];
-  private readonly _hash: HashFunction;
   private readonly _depth: number;
-  private readonly _arity: number;
   private readonly _entries: Entry[];
 
   /**
@@ -31,12 +29,8 @@ export default class IncrementalMerkleSumTree {
    * @param path path to the csv file storing the entries.
    */
   constructor(path: string) {
-    checkParameter(path, 'path', 'string');
 
-    // Initialize the attributes.
-    this._hash = poseidon;
     this._nodes = [];
-    this._arity = 2;
     this._entries = Utils.parseCsv(path);
 
     // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
@@ -46,8 +40,8 @@ export default class IncrementalMerkleSumTree {
       throw new Error('The tree depth must be between 1 and 32');
     }
 
-    // Build the tree
-    this._root = this._build(this._entries);
+    // Build the tree from the entries.
+    this._root = _buildMerkleTreeFromEntries(this._entries, this._depth, this._nodes, IncrementalMerkleSumTree._hash);
 
     // Freeze the entries. It prevents unintentional changes.
     Object.freeze(this._entries);
@@ -82,14 +76,6 @@ export default class IncrementalMerkleSumTree {
   }
 
   /**
-   * Returns the number of children for each node.
-   * @returns Number of children per node.
-   */
-  public get arity(): number {
-    return this._arity;
-  }
-
-  /**
    * Returns the entries of the tree.
    * @returns List of entries.
    */
@@ -104,15 +90,7 @@ export default class IncrementalMerkleSumTree {
    * @returns Index of the leaf.
    */
   public indexOf(username: string, balance: bigint): number {
-    return _indexOf(username, balance, this._nodes, this._hash);
-  }
-
-  /**
-   * Build the merkle tree from a list of entries.
-   * @param entries array of the entries to be added to the tree.
-   */
-  _build(entries: Entry[]) {
-    return _build(entries, this._depth, this._nodes, this._hash);
+    return _indexOf(username, balance, this._nodes, IncrementalMerkleSumTree._hash);
   }
 
   /**
@@ -121,7 +99,7 @@ export default class IncrementalMerkleSumTree {
    * @returns MerkleProof object.
    */
   public createProof(index: number): MerkleProof {
-    return _createProof(index, this.entries, this.depth, this.arity, this._nodes, this.root);
+    return _createProof(index, this.entries, this.depth, this._nodes, this.root);
   }
 
   /**
@@ -131,6 +109,6 @@ export default class IncrementalMerkleSumTree {
    * @returns True or false.
    */
   public verifyProof(proof: MerkleProof): boolean {
-    return _verifyProof(proof, this._hash);
+    return _verifyProof(proof, IncrementalMerkleSumTree._hash);
   }
 }

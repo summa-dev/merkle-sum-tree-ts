@@ -10,11 +10,10 @@ import { MerkleProof, Node, Entry } from './types';
  */
 export default class IncrementalMerkleSumTree {
     static readonly maxDepth = 32;
+    private static readonly _hash;
     private _root;
     private readonly _nodes;
-    private readonly _hash;
     private readonly _depth;
-    private readonly _arity;
     private readonly _entries;
     /**
      * Initializes the tree with the csv file containing the entries of the tree.
@@ -37,11 +36,6 @@ export default class IncrementalMerkleSumTree {
      */
     get leaves(): Node[];
     /**
-     * Returns the number of children for each node.
-     * @returns Number of children per node.
-     */
-    get arity(): number;
-    /**
      * Returns the entries of the tree.
      * @returns List of entries.
      */
@@ -53,11 +47,6 @@ export default class IncrementalMerkleSumTree {
      * @returns Index of the leaf.
      */
     indexOf(username: string, balance: bigint): number;
-    /**
-     * Build the merkle tree from a list of entries.
-     * @param entries array of the entries to be added to the tree.
-     */
-    _build(entries: Entry[]): Node;
     /**
      * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
      * @param index Index of the proof's leaf.

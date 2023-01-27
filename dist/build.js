@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var createNode_1 = require("./createNode");
-function build(entries, depth, nodes, hash) {
+var createEntry_1 = require("./createEntry");
+function buildMerkleTreeFromEntries(entries, depth, nodes, hash) {
     // if entries is not a power of 2, fill it with zero entries
-    var zeroEntry = { username: '/', balance: BigInt(0) };
     while (entries.length < Math.pow(2, depth)) {
-        entries.push(zeroEntry);
+        entries.push(createEntry_1.ZERO_ENTRY);
     }
     // range over each level of the tree
     for (var i = 0; i < depth; i++) {
@@ -27,4 +27,4 @@ function build(entries, depth, nodes, hash) {
     // return the root of the tree
     return (0, createNode_1.createMiddleNode)(nodes[depth - 1][0], nodes[depth - 1][1], hash);
 }
-exports.default = build;
+exports.default = buildMerkleTreeFromEntries;

@@ -1,4 +1,5 @@
-import { IncrementalMerkleSumTree, MerkleProof, Utils } from "../src"
+import { IncrementalMerkleSumTree, MerkleProof, Utils, Entry, Node} from "../src"
+import { poseidon } from 'circomlibjs';
 
 describe("Incremental Merkle Sum Tree", () => {
 
@@ -7,14 +8,6 @@ describe("Incremental Merkle Sum Tree", () => {
     beforeEach(() => {
         const pathToCsv = "test/entries/entry-16-valid.csv"
         tree = new IncrementalMerkleSumTree(pathToCsv)
-    })
-
-    it("Should not initialize a tree with wrong parameters", () => {
-        const fun1 = () => new IncrementalMerkleSumTree(undefined as any)
-        const fun2 = () => new IncrementalMerkleSumTree(1 as any)
-
-        expect(fun1).toThrow("Parameter 'path' is not defined")
-        expect(fun2).toThrow("Parameter 'path' is none of these types: string")
     })
 
     it("Should not initialize a tree if the csv contains invalid balance type", () => {
@@ -58,7 +51,27 @@ describe("Incremental Merkle Sum Tree", () => {
         const tree15 = new IncrementalMerkleSumTree(pathToCsvWith15Entries)
         
         expect(tree17.depth).toEqual(5)
-        expect(tree15.depth).toEqual(4)
+        expect(tree15.depth).toEqual(4)        
+    })
+
+    it("Should generate a tree filled up with zero entries node if the number of entries provided in the csv file is not a power of two", () => {
+
+        const pathToCsvWith17Entries = "test/entries/entry-17-valid.csv"
+        const tree17 = new IncrementalMerkleSumTree(pathToCsvWith17Entries)
+
+        const zeroEntry : Entry = {
+            username: "0",
+            balance: BigInt(0)
+        }
+
+        const hashPreimage: bigint[] = [Utils.parseUsername(zeroEntry.username), zeroEntry.balance];
+
+        const zeroLeaf: Node = {hash: poseidon(hashPreimage), sum: zeroEntry.balance};
+
+        // should have a zero leaf from index 17 to 31
+        for (let i = 17; i < 32; i += 1) {
+            expect(tree17.leaves[i]).toEqual(zeroLeaf)
+        }
     })
 
     // let numberOfEntries = [32, 512, 262144]
@@ -107,7 +120,7 @@ describe("Incremental Merkle Sum Tree", () => {
         for (let i = 0; i < entries.length; i += 1) {
             const proof : MerkleProof = tree.createProof(i)
             expect(proof.siblingsHashes).toHaveLength(tree.depth)
-            expect(Utils.parseBigIntToUsername(proof.username)).toEqual(tree.entries[i].username)
+            expect(Utils.stringifyUsername(proof.username)).toEqual(tree.entries[i].username)
             expect(proof.balance).toEqual(tree.leaves[i].sum)
             expect(proof.rootHash).toEqual(tree.root.hash)
             expect(tree.verifyProof(proof)).toBeTruthy()

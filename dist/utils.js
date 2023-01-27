@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var createEntry_1 = require("./createEntry");
 var Utils = /** @class */ (function () {
     function Utils() {
     }
@@ -24,10 +25,7 @@ var Utils = /** @class */ (function () {
             if (isNaN(entry[1])) {
                 throw new Error('Balance must be a number');
             }
-            return {
-                username: entry[0],
-                balance: BigInt(entry[1].replace('\r', '')),
-            };
+            return (0, createEntry_1.createEntry)(entry[0], BigInt(entry[1]));
         });
         return entries;
     };
@@ -36,7 +34,7 @@ var Utils = /** @class */ (function () {
      * @param username the string of the username to be converted
      * @return BigInt representation of the username
      */
-    Utils.parseUsernameToBigInt = function (username) {
+    Utils.parseUsername = function (username) {
         var encoder = new TextEncoder();
         var utf8bytes = encoder.encode(username);
         var bigIntNumber = BigInt('0x' + utf8bytes.reduce(function (str, byte) { return str + byte.toString(16).padStart(2, '0'); }, ''));
@@ -47,7 +45,7 @@ var Utils = /** @class */ (function () {
      * @param bigIntUsername the bigInt to be converted
      * @return string representation of the username
      */
-    Utils.parseBigIntToUsername = function (bigIntUsername) {
+    Utils.stringifyUsername = function (bigIntUsername) {
         var hexString = bigIntUsername.toString(16);
         var hexArray = hexString.match(/.{2}/g) || [];
         var byteArray = hexArray.map(function (byte) { return parseInt(byte, 16); });

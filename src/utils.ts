@@ -1,3 +1,4 @@
+import { createEntry } from './createEntry';
 import { Entry } from './types';
 
 export default class Utils {
@@ -28,10 +29,8 @@ export default class Utils {
         throw new Error('Balance must be a number');
       }
 
-      return {
-        username: entry[0],
-        balance: BigInt(entry[1].replace('\r', '')),
-      };
+      return createEntry(entry[0], BigInt(entry[1]));
+
     });
 
     return entries;
@@ -42,7 +41,7 @@ export default class Utils {
    * @param username the string of the username to be converted
    * @return BigInt representation of the username
    */
-  static parseUsernameToBigInt(username: string): bigint {
+  static parseUsername(username: string): bigint {
     const encoder = new TextEncoder();
     const utf8bytes = encoder.encode(username);
 
@@ -56,7 +55,7 @@ export default class Utils {
    * @param bigIntUsername the bigInt to be converted
    * @return string representation of the username
    */
-  static parseBigIntToUsername(bigIntUsername: bigint): string {
+  static stringifyUsername(bigIntUsername: bigint): string {
     const hexString = bigIntUsername.toString(16);
     const hexArray = hexString.match(/.{2}/g) || [];
     const byteArray = hexArray.map((byte) => parseInt(byte, 16));

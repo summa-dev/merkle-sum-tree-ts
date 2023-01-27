@@ -2,7 +2,6 @@ import { createMiddleNode } from './createNode';
 import { HashFunction, MerkleProof, Node } from './types';
 
 export default function verifyProof(proof: MerkleProof, hash: HashFunction): boolean {
-
   let sum = proof.balance;
 
   let node: Node = { hash: hash([proof.username, proof.balance]), sum };

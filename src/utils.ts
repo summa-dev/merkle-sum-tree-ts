@@ -30,7 +30,6 @@ export default class Utils {
       }
 
       return createEntry(entry[0], BigInt(entry[1]));
-
     });
 
     return entries;

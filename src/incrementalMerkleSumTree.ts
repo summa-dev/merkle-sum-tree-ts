@@ -18,7 +18,7 @@ import _verifyProof from './verifyProof';
 
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
-  private static readonly _hash : HashFunction = poseidon;
+  private static readonly _hash: HashFunction = poseidon;
   private _root: Node;
   private readonly _nodes: Node[][];
   private readonly _depth: number;
@@ -29,7 +29,6 @@ export default class IncrementalMerkleSumTree {
    * @param path path to the csv file storing the entries.
    */
   constructor(path: string) {
-
     this._nodes = [];
     this._entries = Utils.parseCsv(path);
 

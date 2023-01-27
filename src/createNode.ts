@@ -7,7 +7,7 @@ export function createLeafNodeFromEntry(entry: Entry, hash: HashFunction): Node 
   }
   const hashPreimage: bigint[] = [Utils.parseUsername(entry.username), entry.balance];
 
-  const leaf: Node = { hash: hash(hashPreimage), sum: entry.balance};
+  const leaf: Node = { hash: hash(hashPreimage), sum: entry.balance };
 
   return leaf;
 }

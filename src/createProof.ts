@@ -8,7 +8,6 @@ export default function createProof(
   nodes: Node[][],
   root: Node,
 ): MerkleProof {
-
   if (index < 0 || index >= nodes[0].length) {
     throw new Error('The leaf does not exist in this tree');
   }

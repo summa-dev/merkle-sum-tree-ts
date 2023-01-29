@@ -9,5 +9,5 @@ function createEntry(username, balance) {
     return { username: username, balance: balance };
 }
 exports.createEntry = createEntry;
-// export a constant 
+// export a constant
 exports.ZERO_ENTRY = createEntry('0', BigInt(0));

@@ -22,7 +22,7 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
 - Import your database of users and their balances to a csv file, for example [entry-16-valid.csv](.test/entries/entry-16-valid.csv).
 
-## APIs tree
+## APIs
 
 \# **new IncrementalMerkleSumTree**(pathToCsv: _string_): _IncrementalMerkleSumTree_
 

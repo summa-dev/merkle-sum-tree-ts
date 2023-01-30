@@ -9,5 +9,4 @@ export function createEntry(username: string | bigint, balance: bigint): Entry {
   return { username, balance };
 }
 
-// export a constant
 export const ZERO_ENTRY = createEntry('0', BigInt(0));

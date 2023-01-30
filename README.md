@@ -36,6 +36,8 @@ const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the ent
 
 \# **indexOf**(username: _string_, balance: _bigint_): _number_
 
+Returns the index of an entry in the tree. If the entry is not in the tree, it returns -1.
+
 ```typescript
 const index = tree.indexOf("gAdsIaKy", BigInt(7543)) // 0
 ```

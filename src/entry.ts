@@ -28,16 +28,16 @@ export default class Entry {
     return leaf;
   }
 
-  // add getters here
-  public getBalance(): bigint {
+  public get balance(): bigint {
     return this._balance;
   }
 
-  public getUsername(): bigint {
+  public get usernameToBigInt(): bigint {
     return this._usernameToBigInt;
   }
 
-  public getStringifiedUsername(): string {
+  public get username(): string {
     return Utils.stringifyUsername(this._usernameToBigInt);
   }
+
 }

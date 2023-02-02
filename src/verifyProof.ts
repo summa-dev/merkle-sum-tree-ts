@@ -3,7 +3,7 @@ import { HashFunction, MerkleProof, Node } from './types';
 
 export default function verifyProof(proof: MerkleProof, hash: HashFunction): boolean {
 
-  let sum = proof.entry.getBalance();
+  let sum = proof.entry.balance;
 
   let node : Node = proof.entry.getLeafHash();
 

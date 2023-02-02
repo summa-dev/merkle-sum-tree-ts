@@ -44,10 +44,10 @@ const entries = tree.entries
     //     ...
     // ]
 
-const parseUsername = entries[0].username // "gAdsIaKy"
+const username = entries[0].username // "gAdsIaKy"
 ```
 
-\# **leaves**: _Node_
+\# **leaves**: _[]Node_
 
 ```typescript
 const leaves = tree.leaves 

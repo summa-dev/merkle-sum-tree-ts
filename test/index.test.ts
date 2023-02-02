@@ -97,8 +97,8 @@ describe('Incremental Merkle Sum Tree', () => {
     for (let i = 0; i < entries.length; i += 1) {
       const proof: MerkleProof = tree.createProof(i);
       expect(proof.siblingsHashes).toHaveLength(tree.depth);
-      expect(Utils.stringifyUsername(proof.username)).toEqual(tree.entries[i].getStringifiedUsername());
-      expect(proof.balance).toEqual(tree.leaves[i].sum);
+      expect(proof.entry).toEqual(entries[i]);
+      expect(proof.entry.balance).toEqual(tree.leaves[i].sum);
       expect(proof.rootHash).toEqual(tree.root.hash);
       expect(tree.verifyProof(proof)).toBeTruthy();
     }
@@ -113,23 +113,17 @@ describe('Incremental Merkle Sum Tree', () => {
     expect(fun).toThrow('The leaf does not exist in this tree');
   });
 
-  it("Shouldn't verify a proof with a wrong leaf sum", () => {
+  it("Shouldn't verify a proof with a wrong entry", () => {
     const proof: MerkleProof = tree.createProof(0);
 
-    // add invalid leaf sum
-    proof.balance = BigInt(0);
+    const invalidEntry = new Entry(BigInt(22323), BigInt(0));
+
+    // add invalid entry to the proof
+    proof.entry = invalidEntry
 
     expect(tree.verifyProof(proof)).toBeFalsy();
   });
 
-  it("Shouldn't verify a proof with a wrong leaf username", () => {
-    const proof: MerkleProof = tree.createProof(0);
-
-    // add invalid leaf hash
-    proof.username = BigInt(7);
-
-    expect(tree.verifyProof(proof)).toBeFalsy();
-  });
 
   it("Shouldn't verify a proof against a wrong root hash", () => {
     const proof: MerkleProof = tree.createProof(0);

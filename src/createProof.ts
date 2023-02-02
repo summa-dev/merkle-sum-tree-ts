@@ -35,8 +35,7 @@ export default function createProof(
 
   return {
     rootHash: root.hash,
-    username: entries[leafIndex].usernameToBigInt,
-    balance: entries[leafIndex].balance,
+    entry: entries[leafIndex],
     pathIndices,
     siblingsHashes,
     siblingsSums,

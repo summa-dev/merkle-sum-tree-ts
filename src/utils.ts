@@ -1,5 +1,3 @@
-import { createEntry } from './createEntry';
-import { Entry } from './types';
 
 export default class Utils {
   /**

@@ -1,4 +1,4 @@
-import { IncrementalMerkleSumTree, MerkleProof, Utils, Entry } from '../src';
+import { IncrementalMerkleSumTree, MerkleProof, Entry } from '../src';
 
 describe('Incremental Merkle Sum Tree', () => {
   let tree: IncrementalMerkleSumTree;
@@ -89,9 +89,9 @@ describe('Incremental Merkle Sum Tree', () => {
   });
 
   it('Should create valid proofs for each inserted entry and verify it', () => {
-    // extract the entries from the csv file
-    const pathToCsv = 'test/entries/entry-16-valid.csv';
-    const entries = Utils.parseCsvToEntries(pathToCsv);
+
+    // get all entries from the tree
+    const entries = tree.entries
 
     // loop over each entry and generate a proof for it
     for (let i = 0; i < entries.length; i += 1) {

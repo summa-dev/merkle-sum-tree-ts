@@ -37,7 +37,7 @@ const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the ent
 \# **entries**: _[]Entry_
 
 ```typescript
-const entries = tree.entries 
+const entries = tree.entries
 // [
 //       Entry {
 //         _usernameToBigInt: 7440338505707899769n,
@@ -51,8 +51,6 @@ const entries = tree.entries
 //       },
 //       ...
 // ]
-
-const username = entries[0].username // "gAdsIaKy"
 ```
 
 \# **leaves**: _[]Node_
@@ -102,7 +100,7 @@ Verifies a proof and returns true or false.
 It verifies that a leaf is included in the tree and that the sum computed from the leaf to the root is equal to the total sum of the tree.
 
 ```typescript
-console.log(tree.verifyProof(proof)) // true
+tree.verifyProof(proof) // true
 ```
 
 ## Code Quality and Formatting

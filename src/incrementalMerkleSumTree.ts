@@ -49,8 +49,8 @@ export default class IncrementalMerkleSumTree {
   }
 
   /**
-   * Returns the root hash of the tree.
-   * @returns Root hash.
+   * Returns the root node of the tree.
+   * @returns Root Node.
    */
   public get root(): Node {
     return this._root;

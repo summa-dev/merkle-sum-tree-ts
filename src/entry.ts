@@ -20,7 +20,7 @@ export default class Entry {
     Object.freeze(this);
   }
 
-  public getLeafHash(): Node {
+  public computeLeaf(): Node {
     const hashPreimage: bigint[] = [this._usernameToBigInt, this._balance];
 
     const leaf: Node = { hash: poseidon(hashPreimage), sum: this._balance };

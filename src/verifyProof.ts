@@ -5,7 +5,7 @@ export default function verifyProof(proof: MerkleProof, hash: HashFunction): boo
 
   let sum = proof.entry.balance;
 
-  let node : Node = proof.entry.getLeafHash();
+  let node : Node = proof.entry.computeLeaf();
 
   for (let i = 0; i < proof.siblingsHashes.length; i += 1) {
     const siblingNode = { hash: proof.siblingsHashes[i], sum: proof.siblingsSums[i] };

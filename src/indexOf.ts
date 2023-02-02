@@ -7,7 +7,7 @@ export default function indexOf(username: string, balance: bigint, nodes: Node[]
 
   const entry = new Entry(usernameToBigInt, balance);
 
-  const leaf = entry.getLeafHash();
+  const leaf = entry.computeLeaf();
 
   return nodes[0].map((x) => x.hash).indexOf(leaf.hash);
 }

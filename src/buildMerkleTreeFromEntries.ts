@@ -20,7 +20,7 @@ export default function buildMerkleTreeFromEntries(
     // if level is 0, the nodes are the leaves, we need to create them from the entries
     if (i === 0) {
       for (const entry of entries) {
-        nodes[i].push(entry.getLeafHash() as Node);
+        nodes[i].push(entry.computeLeaf() as Node);
       }
     }
 

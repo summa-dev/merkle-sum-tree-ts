@@ -54,7 +54,7 @@ describe('Incremental Merkle Sum Tree', () => {
 
     // should have a zero leaf from index 17 to 31
     for (let i = 17; i < 32; i += 1) {
-      expect(tree17.leaves[i]).toEqual(Entry.ZERO_ENTRY.getLeafHash());
+      expect(tree17.leaves[i]).toEqual(Entry.ZERO_ENTRY.computeLeaf());
     }
   });
 

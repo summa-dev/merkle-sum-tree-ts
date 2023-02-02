@@ -2,7 +2,7 @@ import { poseidon } from 'circomlibjs';
 import _createProof from './createProof';
 import _buildMerkleTreeFromEntries from './build';
 import _indexOf from './indexOf';
-import { HashFunction, MerkleProof, Node, Entry } from './types';
+import { MerkleProof, Node, Entry } from './types';
 import Utils from './utils';
 import _verifyProof from './verifyProof';
 
@@ -18,7 +18,6 @@ import _verifyProof from './verifyProof';
 
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
-  private static readonly _hash: HashFunction = poseidon;
   private _root: Node;
   private readonly _nodes: Node[][];
   private readonly _depth: number;
@@ -40,7 +39,7 @@ export default class IncrementalMerkleSumTree {
     }
 
     // Build the tree from the entries.
-    this._root = _buildMerkleTreeFromEntries(this._entries, this._depth, this._nodes, IncrementalMerkleSumTree._hash);
+    this._root = _buildMerkleTreeFromEntries(this._entries, this._depth, this._nodes, poseidon);
 
     // Freeze the entries. It prevents unintentional changes.
     Object.freeze(this._entries);
@@ -89,7 +88,7 @@ export default class IncrementalMerkleSumTree {
    * @returns Index of the leaf.
    */
   public indexOf(username: string, balance: bigint): number {
-    return _indexOf(username, balance, this._nodes, IncrementalMerkleSumTree._hash);
+    return _indexOf(username, balance, this._nodes, poseidon);
   }
 
   /**
@@ -108,6 +107,6 @@ export default class IncrementalMerkleSumTree {
    * @returns True or false.
    */
   public verifyProof(proof: MerkleProof): boolean {
-    return _verifyProof(proof, IncrementalMerkleSumTree._hash);
+    return _verifyProof(proof, poseidon);
   }
 }

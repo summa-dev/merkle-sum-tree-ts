@@ -3,9 +3,9 @@ import { Node } from './types';
 import Utils from './utils';
 
 export default class Entry {
- private readonly _usernameToBigInt: bigint;
- private readonly _balance: bigint;
- private readonly _username: string;
+  private readonly _usernameToBigInt: bigint;
+  private readonly _balance: bigint;
+  private readonly _username: string;
 
   // Export a constant
   public static ZERO_ENTRY = new Entry(BigInt(0), BigInt(0));
@@ -41,5 +41,4 @@ export default class Entry {
   public get username(): string {
     return this._username;
   }
-
 }

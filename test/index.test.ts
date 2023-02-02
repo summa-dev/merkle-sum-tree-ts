@@ -90,9 +90,8 @@ describe('Incremental Merkle Sum Tree', () => {
   });
 
   it('Should create valid proofs for each inserted entry and verify it', () => {
-
     // get all entries from the tree
-    const entries = tree.entries
+    const entries = tree.entries;
 
     // loop over each entry and generate a proof for it
     for (let i = 0; i < entries.length; i += 1) {
@@ -120,11 +119,10 @@ describe('Incremental Merkle Sum Tree', () => {
     const invalidEntry = new Entry(BigInt(22323), BigInt(0));
 
     // add invalid entry to the proof
-    proof.entry = invalidEntry
+    proof.entry = invalidEntry;
 
     expect(tree.verifyProof(proof)).toBeFalsy();
   });
-
 
   it("Shouldn't verify a proof against a wrong root hash", () => {
     const proof: MerkleProof = tree.createProof(0);

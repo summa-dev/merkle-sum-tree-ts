@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var createNode_1 = require("./createNode");
-var createEntry_1 = require("./createEntry");
+var createMiddleNode_1 = require("./createMiddleNode");
+var Entry_1 = require("./Entry");
 function buildMerkleTreeFromEntries(entries, depth, nodes, hash) {
     // if entries is not a power of 2, fill it with zero entries
     while (entries.length < Math.pow(2, depth)) {
-        entries.push(createEntry_1.ZERO_ENTRY);
+        entries.push(Entry_1.default.ZERO_ENTRY);
     }
     // range over each level of the tree
     for (var i = 0; i < depth; i++) {
@@ -14,17 +14,17 @@ function buildMerkleTreeFromEntries(entries, depth, nodes, hash) {
         if (i === 0) {
             for (var _i = 0, entries_1 = entries; _i < entries_1.length; _i++) {
                 var entry = entries_1[_i];
-                nodes[i].push((0, createNode_1.createLeafNodeFromEntry)(entry, hash));
+                nodes[i].push(entry.computeLeaf());
             }
         }
         // else, the nodes are the middle nodes, we need to create them from the previous level
         else {
             for (var j = 0; j < nodes[i - 1].length; j += 2) {
-                nodes[i].push((0, createNode_1.createMiddleNode)(nodes[i - 1][j], nodes[i - 1][j + 1], hash));
+                nodes[i].push((0, createMiddleNode_1.createMiddleNode)(nodes[i - 1][j], nodes[i - 1][j + 1], hash));
             }
         }
     }
     // return the root of the tree
-    return (0, createNode_1.createMiddleNode)(nodes[depth - 1][0], nodes[depth - 1][1], hash);
+    return (0, createMiddleNode_1.createMiddleNode)(nodes[depth - 1][0], nodes[depth - 1][1], hash);
 }
 exports.default = buildMerkleTreeFromEntries;

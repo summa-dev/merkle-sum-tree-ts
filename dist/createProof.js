@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var utils_1 = require("./utils");
 function createProof(index, entries, depth, nodes, root) {
     if (index < 0 || index >= nodes[0].length) {
         throw new Error('The leaf does not exist in this tree');
@@ -24,8 +23,7 @@ function createProof(index, entries, depth, nodes, root) {
     }
     return {
         rootHash: root.hash,
-        username: utils_1.default.parseUsername(entries[leafIndex].username),
-        balance: entries[leafIndex].balance,
+        entry: entries[leafIndex],
         pathIndices: pathIndices,
         siblingsHashes: siblingsHashes,
         siblingsSums: siblingsSums,

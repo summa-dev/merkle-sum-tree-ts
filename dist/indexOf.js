@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var createNode_1 = require("./createNode");
-var createEntry_1 = require("./createEntry");
+var utils_1 = require("./utils");
+var entry_1 = require("./entry");
 function indexOf(username, balance, nodes, hash) {
-    var entry = (0, createEntry_1.createEntry)(username, balance);
-    var leaf = (0, createNode_1.createLeafNodeFromEntry)(entry, hash);
+    var usernameToBigInt = utils_1.default.parseUsername(username);
+    var entry = new entry_1.default(usernameToBigInt, balance);
+    var leaf = entry.computeLeaf();
     return nodes[0].map(function (x) { return x.hash; }).indexOf(leaf.hash);
 }
 exports.default = indexOf;

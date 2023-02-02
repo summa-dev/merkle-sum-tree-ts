@@ -1,11 +1,11 @@
-import { Entry } from './types';
+import Entry from './entry';
 export default class Utils {
     /**
      * Takes the path to a csv file as input and return its representation as array of Entries
      * @param path string of the path to the csv file
      * @return array of the entries
      */
-    static parseCsv(path: string): Entry[];
+    static parseCsvToEntries(path: string): Entry[];
     /**
      * Transform a username into its utf8 bytes representation, convert it to BigInt and return it
      * @param username the string of the username to be converted

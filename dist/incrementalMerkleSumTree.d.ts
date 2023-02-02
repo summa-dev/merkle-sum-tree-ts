@@ -1,4 +1,5 @@
-import { MerkleProof, Node, Entry } from './types';
+import { MerkleProof, Node } from './types';
+import Entry from './entry';
 /**
  * A Merkle Sum Tree is a binary Merkle Tree with the following properties:
  * - Each entry of a Merkle Sum Tree is a pair of a value and a sum.
@@ -10,7 +11,6 @@ import { MerkleProof, Node, Entry } from './types';
  */
 export default class IncrementalMerkleSumTree {
     static readonly maxDepth = 32;
-    private static readonly _hash;
     private _root;
     private readonly _nodes;
     private readonly _depth;
@@ -21,8 +21,8 @@ export default class IncrementalMerkleSumTree {
      */
     constructor(path: string);
     /**
-     * Returns the root hash of the tree.
-     * @returns Root hash.
+     * Returns the root node of the tree.
+     * @returns Root Node.
      */
     get root(): Node;
     /**

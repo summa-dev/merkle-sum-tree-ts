@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var createEntry_1 = require("./createEntry");
+var entry_1 = require("./entry");
 var Utils = /** @class */ (function () {
     function Utils() {
     }
@@ -9,7 +9,8 @@ var Utils = /** @class */ (function () {
      * @param path string of the path to the csv file
      * @return array of the entries
      */
-    Utils.parseCsv = function (path) {
+    Utils.parseCsvToEntries = function (path) {
+        var _this = this;
         var fs = require('fs');
         // Read the CSV file
         var file = fs.readFileSync(path, 'utf8');
@@ -25,7 +26,7 @@ var Utils = /** @class */ (function () {
             if (isNaN(entry[1])) {
                 throw new Error('Balance must be a number');
             }
-            return (0, createEntry_1.createEntry)(entry[0], BigInt(entry[1]));
+            return new entry_1.default(_this.parseUsername(entry[0]), BigInt(entry[1]));
         });
         return entries;
     };

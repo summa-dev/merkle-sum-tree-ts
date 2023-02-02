@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var circomlibjs_1 = require("circomlibjs");
 var createProof_1 = require("./createProof");
-var build_1 = require("./build");
+var buildMerkleTreeFromEntries_1 = require("./buildMerkleTreeFromEntries");
 var indexOf_1 = require("./indexOf");
 var utils_1 = require("./utils");
 var verifyProof_1 = require("./verifyProof");
@@ -22,24 +22,23 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      */
     function IncrementalMerkleSumTree(path) {
         this._nodes = [];
-        this._entries = utils_1.default.parseCsv(path);
+        this._entries = utils_1.default.parseCsvToEntries(path);
         // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
         this._depth = Math.ceil(Math.log2(this._entries.length));
         if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
             throw new Error('The tree depth must be between 1 and 32');
         }
         // Build the tree from the entries.
-        this._root = (0, build_1.default)(this._entries, this._depth, this._nodes, IncrementalMerkleSumTree._hash);
-        // Freeze the entries. It prevents unintentional changes.
+        this._root = (0, buildMerkleTreeFromEntries_1.default)(this._entries, this._depth, this._nodes, circomlibjs_1.poseidon);
+        // Freeze the entries and the tree. It prevents unintentional changes.
         Object.freeze(this._entries);
-        // Freeze the tree. It prevents unintentional changes.
         Object.freeze(this._root);
         Object.freeze(this._nodes);
     }
     Object.defineProperty(IncrementalMerkleSumTree.prototype, "root", {
         /**
-         * Returns the root hash of the tree.
-         * @returns Root hash.
+         * Returns the root node of the tree.
+         * @returns Root Node.
          */
         get: function () {
             return this._root;
@@ -87,7 +86,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      * @returns Index of the leaf.
      */
     IncrementalMerkleSumTree.prototype.indexOf = function (username, balance) {
-        return (0, indexOf_1.default)(username, balance, this._nodes, IncrementalMerkleSumTree._hash);
+        return (0, indexOf_1.default)(username, balance, this._nodes, circomlibjs_1.poseidon);
     };
     /**
      * Creates a proof of membership. The MerkleProof contains the path from the leaf to the root.
@@ -95,7 +94,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      * @returns MerkleProof object.
      */
     IncrementalMerkleSumTree.prototype.createProof = function (index) {
-        return (0, createProof_1.default)(index, this.entries, this.depth, this._nodes, this.root);
+        return (0, createProof_1.default)(index, this._entries, this._depth, this._nodes, this._root);
     };
     /**
      * Verifies a proof and return true or false.
@@ -104,10 +103,9 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      * @returns True or false.
      */
     IncrementalMerkleSumTree.prototype.verifyProof = function (proof) {
-        return (0, verifyProof_1.default)(proof, IncrementalMerkleSumTree._hash);
+        return (0, verifyProof_1.default)(proof, circomlibjs_1.poseidon);
     };
     IncrementalMerkleSumTree.maxDepth = 32;
-    IncrementalMerkleSumTree._hash = circomlibjs_1.poseidon;
     return IncrementalMerkleSumTree;
 }());
 exports.default = IncrementalMerkleSumTree;

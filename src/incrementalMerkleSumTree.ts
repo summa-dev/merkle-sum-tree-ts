@@ -1,8 +1,9 @@
 import { poseidon } from 'circomlibjs';
 import _createProof from './createProof';
-import _buildMerkleTreeFromEntries from './build';
+import _buildMerkleTreeFromEntries from './buildMerkleTreeFromEntries';
 import _indexOf from './indexOf';
-import { HashFunction, MerkleProof, Node, Entry } from './types';
+import { MerkleProof, Node } from './types';
+import Entry from './entry';
 import Utils from './utils';
 import _verifyProof from './verifyProof';
 
@@ -18,7 +19,6 @@ import _verifyProof from './verifyProof';
 
 export default class IncrementalMerkleSumTree {
   static readonly maxDepth = 32;
-  private static readonly _hash: HashFunction = poseidon;
   private _root: Node;
   private readonly _nodes: Node[][];
   private readonly _depth: number;
@@ -30,7 +30,7 @@ export default class IncrementalMerkleSumTree {
    */
   constructor(path: string) {
     this._nodes = [];
-    this._entries = Utils.parseCsv(path);
+    this._entries = Utils.parseCsvToEntries(path);
 
     // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
     this._depth = Math.ceil(Math.log2(this._entries.length));
@@ -40,19 +40,17 @@ export default class IncrementalMerkleSumTree {
     }
 
     // Build the tree from the entries.
-    this._root = _buildMerkleTreeFromEntries(this._entries, this._depth, this._nodes, IncrementalMerkleSumTree._hash);
+    this._root = _buildMerkleTreeFromEntries(this._entries, this._depth, this._nodes, poseidon);
 
-    // Freeze the entries. It prevents unintentional changes.
+    // Freeze the entries and the tree. It prevents unintentional changes.
     Object.freeze(this._entries);
-
-    // Freeze the tree. It prevents unintentional changes.
     Object.freeze(this._root);
     Object.freeze(this._nodes);
   }
 
   /**
-   * Returns the root hash of the tree.
-   * @returns Root hash.
+   * Returns the root node of the tree.
+   * @returns Root Node.
    */
   public get root(): Node {
     return this._root;
@@ -89,7 +87,7 @@ export default class IncrementalMerkleSumTree {
    * @returns Index of the leaf.
    */
   public indexOf(username: string, balance: bigint): number {
-    return _indexOf(username, balance, this._nodes, IncrementalMerkleSumTree._hash);
+    return _indexOf(username, balance, this._nodes, poseidon);
   }
 
   /**
@@ -98,7 +96,7 @@ export default class IncrementalMerkleSumTree {
    * @returns MerkleProof object.
    */
   public createProof(index: number): MerkleProof {
-    return _createProof(index, this.entries, this.depth, this._nodes, this.root);
+    return _createProof(index, this._entries, this._depth, this._nodes, this._root);
   }
 
   /**
@@ -108,6 +106,6 @@ export default class IncrementalMerkleSumTree {
    * @returns True or false.
    */
   public verifyProof(proof: MerkleProof): boolean {
-    return _verifyProof(proof, IncrementalMerkleSumTree._hash);
+    return _verifyProof(proof, poseidon);
   }
 }

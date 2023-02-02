@@ -22,7 +22,7 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
 - Import your database of users and their balances to a csv file, for example [entry-16-valid.csv](.test/entries/entry-16-valid.csv).
 
-## APIs
+## APIs - Merkle Sum Tree
 
 \# **new IncrementalMerkleSumTree**(pathToCsv: _string_): _IncrementalMerkleSumTree_
 
@@ -32,6 +32,52 @@ import { IncrementalMerkleSumTree } from "pyt-merkle-sum-tree"
 const pathToCsv = "test/entries/entry-16-valid.csv" 
 
 const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
+```
+
+\# **entries**: _[]Entry_
+
+```typescript
+const entries = tree.entries
+// [
+//       Entry {
+//         _usernameToBigInt: 7440338505707899769n,
+//         _balance: 7534n,
+//         _username: 'gAdsIaKy'
+//       },
+//       Entry {
+//         _usernameToBigInt: 6008493982388733799n,
+//         _balance: 2060n,
+//         _username: 'SbuqOZGg'
+//       },
+//       ...
+// ]
+```
+
+\# **leaves**: _[]Node_
+
+```typescript
+const leaves = tree.leaves 
+    // [
+    //   {
+    //     hash: 937608857767727606133996830760270048555279161038903523915984285975854603703n,
+    //     sum: 7534n
+    //   },
+    //   {
+    //     hash: 3405497655013061136502768874542176491465275092205995841574082657535821212714n,
+    //     sum: 2060n
+    //   },
+    //   ...
+    // ]
+```
+
+\# **root**: _Node_
+
+```typescript
+const root = tree.root 
+    // {
+    //   hash: 5256203632563331423195629050622063453704745190370457907459595269961493651429n,
+    //   sum: 84359n
+    // }
 ```
 
 \# **indexOf**(username: _string_, balance: _bigint_): _number_
@@ -56,34 +102,7 @@ Verifies a proof and returns true or false.
 It verifies that a leaf is included in the tree and that the sum computed from the leaf to the root is equal to the total sum of the tree.
 
 ```typescript
-console.log(tree.verifyProof(proof)) // true
-```
-
-## APIs utils
-
-\# **parseCsv**(pathToCsv: _string_): _Entry[]_
-
-```typescript
-import { Utils } from "pyt-merkle-sum-tree"
-
-const pathToCsv = "test/entries/entry-16-valid.csv" 
-
-const entries = Utils.parseCsv(pathToCsv)
-//  [{ username: 'gAdsIaKy', balance: 7534n }, { username: 'SbuqOZGg', balance: 2060n }, ...]
-```
-
-\# **parseUsername**(username: _string_): _bigint_
-
-```typescript
-const username = "alice" 
-
-const bigIntUsername = Utils.parseUsername(username) // 418430673765n
-```
-
-\# **stringifyUsername**(bigIntUsername: _bigint_): _string_
-
-```typescript
-const username = Utils.stringifyUsername(bigIntUsername) // alice
+tree.verifyProof(proof) // true
 ```
 
 ## Code Quality and Formatting

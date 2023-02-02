@@ -1,6 +1,6 @@
-import { Entry, Node, HashFunction } from './types';
-import { createLeafNodeFromEntry, createMiddleNode } from './createNode';
-import { ZERO_ENTRY } from './createEntry';
+import { Node, HashFunction } from './types';
+import { createMiddleNode } from './createMiddleNode';
+import Entry from './Entry';
 
 export default function buildMerkleTreeFromEntries(
   entries: Entry[],
@@ -10,7 +10,7 @@ export default function buildMerkleTreeFromEntries(
 ): Node {
   // if entries is not a power of 2, fill it with zero entries
   while (entries.length < 2 ** depth) {
-    entries.push(ZERO_ENTRY);
+    entries.push(Entry.ZERO_ENTRY);
   }
 
   // range over each level of the tree
@@ -20,7 +20,7 @@ export default function buildMerkleTreeFromEntries(
     // if level is 0, the nodes are the leaves, we need to create them from the entries
     if (i === 0) {
       for (const entry of entries) {
-        nodes[i].push(createLeafNodeFromEntry(entry, hash));
+        nodes[i].push(entry.computeLeaf() as Node);
       }
     }
 

@@ -1,5 +1,5 @@
-import { MerkleProof, Node, Entry } from './types';
-import Utils from './utils';
+import { MerkleProof, Node } from './types';
+import Entry from './entry';
 
 export default function createProof(
   index: number,
@@ -35,8 +35,7 @@ export default function createProof(
 
   return {
     rootHash: root.hash,
-    username: Utils.parseUsername(entries[leafIndex].username),
-    balance: entries[leafIndex].balance,
+    entry: entries[leafIndex],
     pathIndices,
     siblingsHashes,
     siblingsSums,

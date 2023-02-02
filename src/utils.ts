@@ -1,5 +1,4 @@
-import { createEntry } from './createEntry';
-import { Entry } from './types';
+import Entry from './entry';
 
 export default class Utils {
   /**
@@ -7,7 +6,7 @@ export default class Utils {
    * @param path string of the path to the csv file
    * @return array of the entries
    */
-  static parseCsv(path: string): Entry[] {
+  static parseCsvToEntries(path: string): Entry[] {
     const fs = require('fs');
 
     // Read the CSV file
@@ -29,7 +28,7 @@ export default class Utils {
         throw new Error('Balance must be a number');
       }
 
-      return createEntry(entry[0], BigInt(entry[1]));
+      return new Entry(this.parseUsername(entry[0]), BigInt(entry[1]));
     });
 
     return entries;

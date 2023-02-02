@@ -6,6 +6,9 @@ export default class Entry {
     usernameToBigInt: bigint;
     balance: bigint;
 
+    // Export a constant
+    public static ZERO_ENTRY = new Entry(BigInt(0), BigInt(0));
+
   constructor(usernameToBigInt : bigint, balance : bigint) {
 
     if (balance < BigInt(0)) {

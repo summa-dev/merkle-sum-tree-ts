@@ -34,7 +34,45 @@ const pathToCsv = "test/entries/entry-16-valid.csv"
 const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
 ```
 
+\# **entries**: _[]Entry_
 
+```typescript
+const entries = tree.entries 
+    // [
+    //   Entry { _usernameToBigInt: 7440338505707899769n, _balance: 7534n },
+    //   Entry { _usernameToBigInt: 6008493982388733799n, _balance: 2060n },
+    //     ...
+    // ]
+
+const parseUsername = entries[0].username // "gAdsIaKy"
+```
+
+\# **leaves**: _Node_
+
+```typescript
+const leaves = tree.leaves 
+    // [
+    //   {
+    //     hash: 937608857767727606133996830760270048555279161038903523915984285975854603703n,
+    //     sum: 7534n
+    //   },
+    //   {
+    //     hash: 3405497655013061136502768874542176491465275092205995841574082657535821212714n,
+    //     sum: 2060n
+    //   },
+    //   ...
+    // ]
+```
+
+\# **root**: _Node_
+
+```typescript
+const root = tree.root 
+    // {
+    //   hash: 5256203632563331423195629050622063453704745190370457907459595269961493651429n,
+    //   sum: 84359n
+    // }
+```
 
 \# **indexOf**(username: _string_, balance: _bigint_): _number_
 

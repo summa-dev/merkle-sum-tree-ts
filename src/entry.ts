@@ -3,8 +3,8 @@ import { Node } from './types';
 import Utils from './utils';
 
 export default class Entry {
-  usernameToBigInt: bigint;
-  balance: bigint;
+ private readonly _usernameToBigInt: bigint;
+ private readonly _balance: bigint;
 
   // Export a constant
   public static ZERO_ENTRY = new Entry(BigInt(0), BigInt(0));
@@ -14,31 +14,30 @@ export default class Entry {
       throw new Error('entry balance cant be negative');
     }
 
-    this.usernameToBigInt = usernameToBigInt;
-    this.balance = balance;
-
+    this._usernameToBigInt = usernameToBigInt;
+    this._balance = balance;
     // Freeze the object to prevent any changes
     Object.freeze(this);
   }
 
   public getLeafHash(): Node {
-    const hashPreimage: bigint[] = [this.usernameToBigInt, this.balance];
+    const hashPreimage: bigint[] = [this._usernameToBigInt, this._balance];
 
-    const leaf: Node = { hash: poseidon(hashPreimage), sum: this.balance };
+    const leaf: Node = { hash: poseidon(hashPreimage), sum: this._balance };
 
     return leaf;
   }
 
   // add getters here
   public getBalance(): bigint {
-    return this.balance;
+    return this._balance;
   }
 
   public getUsername(): bigint {
-    return this.usernameToBigInt;
+    return this._usernameToBigInt;
   }
 
   public getStringifiedUsername(): string {
-    return Utils.stringifyUsername(this.usernameToBigInt);
+    return Utils.stringifyUsername(this._usernameToBigInt);
   }
 }

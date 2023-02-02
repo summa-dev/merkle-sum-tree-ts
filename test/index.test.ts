@@ -98,7 +98,7 @@ describe('Incremental Merkle Sum Tree', () => {
       const proof: MerkleProof = tree.createProof(i);
       expect(proof.siblingsHashes).toHaveLength(tree.depth);
       expect(proof.entry).toEqual(entries[i]);
-      expect(proof.entry.balance).toEqual(tree.leaves[i].sum);
+      expect(proof.entry.getBalance()).toEqual(tree.leaves[i].sum);
       expect(proof.rootHash).toEqual(tree.root.hash);
       expect(tree.verifyProof(proof)).toBeTruthy();
     }

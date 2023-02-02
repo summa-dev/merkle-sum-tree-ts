@@ -38,11 +38,19 @@ const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the ent
 
 ```typescript
 const entries = tree.entries 
-    // [
-    //   Entry { _usernameToBigInt: 7440338505707899769n, _balance: 7534n },
-    //   Entry { _usernameToBigInt: 6008493982388733799n, _balance: 2060n },
-    //     ...
-    // ]
+// [
+//       Entry {
+//         _usernameToBigInt: 7440338505707899769n,
+//         _balance: 7534n,
+//         _username: 'gAdsIaKy'
+//       },
+//       Entry {
+//         _usernameToBigInt: 6008493982388733799n,
+//         _balance: 2060n,
+//         _username: 'SbuqOZGg'
+//       },
+//       ...
+// ]
 
 const username = entries[0].username // "gAdsIaKy"
 ```

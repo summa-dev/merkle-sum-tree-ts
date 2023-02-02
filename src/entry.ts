@@ -5,6 +5,7 @@ import Utils from './utils';
 export default class Entry {
  private readonly _usernameToBigInt: bigint;
  private readonly _balance: bigint;
+ private readonly _username: string;
 
   // Export a constant
   public static ZERO_ENTRY = new Entry(BigInt(0), BigInt(0));
@@ -16,6 +17,7 @@ export default class Entry {
 
     this._usernameToBigInt = usernameToBigInt;
     this._balance = balance;
+    this._username = Utils.stringifyUsername(usernameToBigInt);
     // Freeze the object to prevent any changes
     Object.freeze(this);
   }
@@ -37,7 +39,7 @@ export default class Entry {
   }
 
   public get username(): string {
-    return Utils.stringifyUsername(this._usernameToBigInt);
+    return this._username;
   }
 
 }

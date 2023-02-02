@@ -1,4 +1,4 @@
-import { createMiddleNode } from './createNode';
+import { createMiddleNode } from './createMiddleNode';
 import { HashFunction, MerkleProof, Node } from './types';
 
 export default function verifyProof(proof: MerkleProof, hash: HashFunction): boolean {

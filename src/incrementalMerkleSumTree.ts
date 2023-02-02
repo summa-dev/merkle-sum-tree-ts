@@ -1,8 +1,9 @@
 import { poseidon } from 'circomlibjs';
 import _createProof from './createProof';
-import _buildMerkleTreeFromEntries from './build';
+import _buildMerkleTreeFromEntries from './buildMerkleTreeFromEntries';
 import _indexOf from './indexOf';
-import { MerkleProof, Node, Entry } from './types';
+import { MerkleProof, Node } from './types';
+import Entry from './entry';
 import Utils from './utils';
 import _verifyProof from './verifyProof';
 
@@ -29,7 +30,7 @@ export default class IncrementalMerkleSumTree {
    */
   constructor(path: string) {
     this._nodes = [];
-    this._entries = Utils.parseCsv(path);
+    this._entries = Utils.parseCsvToEntries(path);
 
     // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
     this._depth = Math.ceil(Math.log2(this._entries.length));

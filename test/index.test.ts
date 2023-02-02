@@ -1,5 +1,4 @@
-import { IncrementalMerkleSumTree, MerkleProof, Utils, Entry, Node } from '../src';
-import { poseidon } from 'circomlibjs';
+import { IncrementalMerkleSumTree, MerkleProof, Utils, Entry } from '../src';
 
 describe('Incremental Merkle Sum Tree', () => {
   let tree: IncrementalMerkleSumTree;
@@ -26,7 +25,7 @@ describe('Incremental Merkle Sum Tree', () => {
     const pathToInvalidCsv = 'test/entries/entry-16-neg-balance.csv';
     const fun = () => new IncrementalMerkleSumTree(pathToInvalidCsv);
 
-    expect(fun).toThrow('entrySum cant be negative');
+    expect(fun).toThrow('entry balance cant be negative');
   });
 
   it('Should generate different root hashes when changing the entry order', () => {
@@ -52,18 +51,9 @@ describe('Incremental Merkle Sum Tree', () => {
     const pathToCsvWith17Entries = 'test/entries/entry-17-valid.csv';
     const tree17 = new IncrementalMerkleSumTree(pathToCsvWith17Entries);
 
-    const zeroEntry: Entry = {
-      username: '0',
-      balance: BigInt(0),
-    };
-
-    const hashPreimage: bigint[] = [Utils.parseUsername(zeroEntry.username), zeroEntry.balance];
-
-    const zeroLeaf: Node = { hash: poseidon(hashPreimage), sum: zeroEntry.balance };
-
     // should have a zero leaf from index 17 to 31
     for (let i = 17; i < 32; i += 1) {
-      expect(tree17.leaves[i]).toEqual(zeroLeaf);
+      expect(tree17.leaves[i]).toEqual(Entry.ZERO_ENTRY.getLeafHash());
     }
   });
 
@@ -101,13 +91,13 @@ describe('Incremental Merkle Sum Tree', () => {
   it('Should create valid proofs for each inserted entry and verify it', () => {
     // extract the entries from the csv file
     const pathToCsv = 'test/entries/entry-16-valid.csv';
-    const entries = Utils.parseCsv(pathToCsv);
+    const entries = Utils.parseCsvToEntries(pathToCsv);
 
     // loop over each entry and generate a proof for it
     for (let i = 0; i < entries.length; i += 1) {
       const proof: MerkleProof = tree.createProof(i);
       expect(proof.siblingsHashes).toHaveLength(tree.depth);
-      expect(Utils.stringifyUsername(proof.username)).toEqual(tree.entries[i].username);
+      expect(Utils.stringifyUsername(proof.username)).toEqual(tree.entries[i].getStringifiedUsername());
       expect(proof.balance).toEqual(tree.leaves[i].sum);
       expect(proof.rootHash).toEqual(tree.root.hash);
       expect(tree.verifyProof(proof)).toBeTruthy();

@@ -1,19 +1,18 @@
-import { poseidon } from 'circomlibjs'
-import { Node } from './types'
-import Utils from './utils'
+import { poseidon } from 'circomlibjs';
+import { Node } from './types';
+import Utils from './utils';
 
 export default class Entry {
-    usernameToBigInt: bigint;
-    balance: bigint;
+  usernameToBigInt: bigint;
+  balance: bigint;
 
-    // Export a constant
-    public static ZERO_ENTRY = new Entry(BigInt(0), BigInt(0));
+  // Export a constant
+  public static ZERO_ENTRY = new Entry(BigInt(0), BigInt(0));
 
-  constructor(usernameToBigInt : bigint, balance : bigint) {
-
+  constructor(usernameToBigInt: bigint, balance: bigint) {
     if (balance < BigInt(0)) {
-        throw new Error('entry balance cant be negative');
-      }
+      throw new Error('entry balance cant be negative');
+    }
 
     this.usernameToBigInt = usernameToBigInt;
     this.balance = balance;
@@ -22,27 +21,24 @@ export default class Entry {
     Object.freeze(this);
   }
 
-  public getLeafHash() : Node {
+  public getLeafHash(): Node {
+    const hashPreimage: bigint[] = [this.usernameToBigInt, this.balance];
 
-        const hashPreimage: bigint[] = [this.usernameToBigInt, this.balance];
-      
-        const leaf: Node = { hash: poseidon(hashPreimage), sum: this.balance };
-      
-        return leaf;
-    
-    }
+    const leaf: Node = { hash: poseidon(hashPreimage), sum: this.balance };
 
-    // add getters here
-    public getBalance() : bigint {
-        return this.balance;
-    }
+    return leaf;
+  }
 
-    public getUsername() : bigint {
-        return this.usernameToBigInt;
-    }
+  // add getters here
+  public getBalance(): bigint {
+    return this.balance;
+  }
 
-    public getStringifiedUsername() : string {
-        return Utils.stringifyUsername(this.usernameToBigInt)
-    }
+  public getUsername(): bigint {
+    return this.usernameToBigInt;
+  }
 
+  public getStringifiedUsername(): string {
+    return Utils.stringifyUsername(this.usernameToBigInt);
+  }
 }

@@ -1,11 +1,13 @@
 import { Node, HashFunction } from './types';
-import { createLeafNodeFromEntry } from './createNode';
-import { createEntry } from './createEntry';
+import Utils from './utils';
+import Entry from './entry';
 
 export default function indexOf(username: string, balance: bigint, nodes: Node[][], hash: HashFunction): number {
-  const entry = createEntry(username, balance);
+  const usernameToBigInt = Utils.parseUsername(username);
 
-  const leaf = createLeafNodeFromEntry(entry, hash);
+  const entry = new Entry(usernameToBigInt, balance);
+
+  const leaf = entry.getLeafHash();
 
   return nodes[0].map((x) => x.hash).indexOf(leaf.hash);
 }

@@ -22,7 +22,7 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
 - Import your database of users and their balances to a csv file, for example [entry-16-valid.csv](.test/entries/entry-16-valid.csv).
 
-## APIs
+## APIs - Merkle Sum Tree
 
 \# **new IncrementalMerkleSumTree**(pathToCsv: _string_): _IncrementalMerkleSumTree_
 
@@ -33,6 +33,8 @@ const pathToCsv = "test/entries/entry-16-valid.csv"
 
 const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
 ```
+
+
 
 \# **indexOf**(username: _string_, balance: _bigint_): _number_
 
@@ -55,33 +57,6 @@ It verifies that a leaf is included in the tree and that the sum computed from t
 
 ```typescript
 console.log(tree.verifyProof(proof)) // true
-```
-
-## APIs utils
-
-\# **parseCsv**(pathToCsv: _string_): _Entry[]_
-
-```typescript
-import { Utils } from "pyt-merkle-sum-tree"
-
-const pathToCsv = "test/entries/entry-16-valid.csv" 
-
-const entries = Utils.parseCsv(pathToCsv)
-//  [{ username: 'gAdsIaKy', balance: 7534n }, { username: 'SbuqOZGg', balance: 2060n }, ...]
-```
-
-\# **parseUsername**(username: _string_): _bigint_
-
-```typescript
-const username = "alice" 
-
-const bigIntUsername = Utils.parseUsername(username) // 418430673765n
-```
-
-\# **stringifyUsername**(bigIntUsername: _bigint_): _string_
-
-```typescript
-const username = Utils.stringifyUsername(bigIntUsername) // alice
 ```
 
 ## Code Quality and Formatting

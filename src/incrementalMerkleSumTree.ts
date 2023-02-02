@@ -42,10 +42,8 @@ export default class IncrementalMerkleSumTree {
     // Build the tree from the entries.
     this._root = _buildMerkleTreeFromEntries(this._entries, this._depth, this._nodes, poseidon);
 
-    // Freeze the entries. It prevents unintentional changes.
+    // Freeze the entries and the tree. It prevents unintentional changes.
     Object.freeze(this._entries);
-
-    // Freeze the tree. It prevents unintentional changes.
     Object.freeze(this._root);
     Object.freeze(this._nodes);
   }
@@ -98,7 +96,7 @@ export default class IncrementalMerkleSumTree {
    * @returns MerkleProof object.
    */
   public createProof(index: number): MerkleProof {
-    return _createProof(index, this.entries, this.depth, this._nodes, this.root);
+    return _createProof(index, this._entries, this._depth, this._nodes, this._root);
   }
 
   /**

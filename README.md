@@ -16,7 +16,7 @@ The MerkleSumTree class is a TypeScript implementation of a Merkle Sum tree and 
 provides all the functions to create a tree starting from a csv file that contains a list of entries in the format `username -> balance`.
 
 <div align="center">
-<img src="./imgs/mst.png" width="600" align="center" />
+<img src="./imgs/mst1.png" width="600" align="center" />
 </div>
 <br>
 

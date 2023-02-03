@@ -1,5 +1,7 @@
 # pyt-merkle-sum-tree
 
+TypeScript library to create Merkle Sum Trees starting from `username -> balance` entries. The root of the tree contains the sum of all the entries, representing the total liabilities of a CEX.
+
 **This package is a fork of [ZK-KIT](https://github.com/privacy-scaling-explorations/zk-kit)**
 
 ## What is a Merkle Sum Tree?

@@ -6,12 +6,14 @@ TypeScript library to create Merkle Sum Trees starting from `username -> balance
 
 ## What is a Merkle Sum Tree?
 
-A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 
-- Each entry of a Merkle Sum Tree is a pair of a value and a sum. 
-- Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
+A Merkle Sum Tree is a binary Merkle Tree with the following properties:
+- Each entry of a Merkle Sum Tree is a pair of a username and a balance.
+- Each Leaf Node contains a hash and a sum. The hash is equal to H(username, balance). The sum is equal to the balance itself.
 - Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
-- The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
+- The Root Node represents the committed state of the Tree and contains the sum of all the entries' balances.
+The MerkleSumTree class is a TypeScript implementation of a Merkle Sum tree and it
+provides all the functions to create a tree starting from a csv file that contains a list of entries in the format `username -> balance`.
 
 <div align="center">
 <img src="./imgs/mst.png" width="600" align="center" />
@@ -23,20 +25,22 @@ A Merkle Sum Tree is a binary Merkle Tree with the following properties:
 - ```npm install pyt-merkle-sum-tree``` 
 
 - Import your database of users and their balances to a csv file, for example [entry-16-valid.csv](.test/entries/entry-16-valid.csv).
-
+ 
 ## APIs - Merkle Sum Tree
 
-\# **new IncrementalMerkleSumTree**(pathToCsv: _string_): _IncrementalMerkleSumTree_
+\# **new MerkleSumTree**(pathToCsv: _string_): _MerkleSumTree_
 
 ```typescript
-import { IncrementalMerkleSumTree } from "pyt-merkle-sum-tree"
+import { MerkleSumTree } from "pyt-merkle-sum-tree"
 
 const pathToCsv = "test/entries/entry-16-valid.csv" 
 
-const tree = new IncrementalMerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
+const tree = new MerkleSumTree(pathToCsv) // Init a tree from the entries in the csv file
 ```
 
 \# **entries**: _[]Entry_
+
+The entries contains the username parsed as a BigInt. This transformation is performed [here](https://github.com/pan-y-tomate/pyt-merkle-sum-tree/blob/main/src/utils.ts#L42). We need the username to be express as BigInt in order to operate with zkSNARKs.
 
 ```typescript
 const entries = tree.entries

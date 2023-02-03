@@ -8,24 +8,24 @@ var utils_1 = require("./utils");
 var verifyProof_1 = require("./verifyProof");
 /**
  * A Merkle Sum Tree is a binary Merkle Tree with the following properties:
- * - Each entry of a Merkle Sum Tree is a pair of a value and a sum.
- * - Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
+ * - Each entry of a Merkle Sum Tree is a pair of a username and a balance.
+ * - Each Leaf Node contains a hash and a sum. The hash is equal to H(username, balance). The sum is equal to the balance itself.
  * - Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
- * - The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
- * The IncrementalMerkleSumTree class is a TypeScript implementation of Incremental Merkle Sum tree and it
- * provides all the functions to create efficient trees and to generate and verify proofs of membership.
+ * - The Root Node represents the committed state of the Tree and contains the sum of all the entries' balances.
+ * The MerkleSumTree class is a TypeScript implementation of a Merkle Sum tree and it
+ * provides all the functions to create a tree starting from a csv file that contains a list of entries in the format  `username -> balance`.
  */
-var IncrementalMerkleSumTree = /** @class */ (function () {
+var MerkleSumTree = /** @class */ (function () {
     /**
      * Initializes the tree with the csv file containing the entries of the tree.
      * @param path path to the csv file storing the entries.
      */
-    function IncrementalMerkleSumTree(path) {
+    function MerkleSumTree(path) {
         this._nodes = [];
         this._entries = utils_1.default.parseCsvToEntries(path);
         // get the depth of the tree from the log base 2 of the number of entries rounded to the next integer
         this._depth = Math.ceil(Math.log2(this._entries.length));
-        if (this._depth < 1 || this._depth > IncrementalMerkleSumTree.maxDepth) {
+        if (this._depth < 1 || this._depth > MerkleSumTree.maxDepth) {
             throw new Error('The tree depth must be between 1 and 32');
         }
         // Build the tree from the entries.
@@ -35,7 +35,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
         Object.freeze(this._root);
         Object.freeze(this._nodes);
     }
-    Object.defineProperty(IncrementalMerkleSumTree.prototype, "root", {
+    Object.defineProperty(MerkleSumTree.prototype, "root", {
         /**
          * Returns the root node of the tree.
          * @returns Root Node.
@@ -46,7 +46,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(IncrementalMerkleSumTree.prototype, "depth", {
+    Object.defineProperty(MerkleSumTree.prototype, "depth", {
         /**
          * Returns the depth of the tree.
          * @returns Tree depth.
@@ -57,7 +57,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(IncrementalMerkleSumTree.prototype, "leaves", {
+    Object.defineProperty(MerkleSumTree.prototype, "leaves", {
         /**
          * Returns the leaves of the tree.
          * @returns List of leaves.
@@ -68,7 +68,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Object.defineProperty(IncrementalMerkleSumTree.prototype, "entries", {
+    Object.defineProperty(MerkleSumTree.prototype, "entries", {
         /**
          * Returns the entries of the tree.
          * @returns List of entries.
@@ -85,7 +85,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      * @param balance balance of the queried entry.
      * @returns Index of the leaf.
      */
-    IncrementalMerkleSumTree.prototype.indexOf = function (username, balance) {
+    MerkleSumTree.prototype.indexOf = function (username, balance) {
         return (0, indexOf_1.default)(username, balance, this._nodes, circomlibjs_1.poseidon);
     };
     /**
@@ -93,7 +93,7 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      * @param index Index of the proof's leaf.
      * @returns MerkleProof object.
      */
-    IncrementalMerkleSumTree.prototype.createProof = function (index) {
+    MerkleSumTree.prototype.createProof = function (index) {
         return (0, createProof_1.default)(index, this._entries, this._depth, this._nodes, this._root);
     };
     /**
@@ -102,10 +102,10 @@ var IncrementalMerkleSumTree = /** @class */ (function () {
      * @param proof Proof to be verified.
      * @returns True or false.
      */
-    IncrementalMerkleSumTree.prototype.verifyProof = function (proof) {
+    MerkleSumTree.prototype.verifyProof = function (proof) {
         return (0, verifyProof_1.default)(proof, circomlibjs_1.poseidon);
     };
-    IncrementalMerkleSumTree.maxDepth = 32;
-    return IncrementalMerkleSumTree;
+    MerkleSumTree.maxDepth = 32;
+    return MerkleSumTree;
 }());
-exports.default = IncrementalMerkleSumTree;
+exports.default = MerkleSumTree;

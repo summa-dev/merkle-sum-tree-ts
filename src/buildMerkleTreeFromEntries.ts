@@ -1,6 +1,6 @@
 import { Node, HashFunction } from './types';
 import { createMiddleNode } from './createMiddleNode';
-import Entry from './Entry';
+import Entry from './entry';
 
 export default function buildMerkleTreeFromEntries(
   entries: Entry[],

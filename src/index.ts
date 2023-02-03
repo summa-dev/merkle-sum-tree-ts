@@ -1,5 +1,5 @@
-import IncrementalMerkleSumTree from './incrementalMerkleSumTree';
+import MerkleSumTree from './merkleSumTree';
 import Entry from './entry';
 
-export { IncrementalMerkleSumTree, Entry };
+export { MerkleSumTree, Entry };
 export * from './types';

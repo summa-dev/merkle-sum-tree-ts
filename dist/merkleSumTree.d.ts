@@ -2,14 +2,14 @@ import { MerkleProof, Node } from './types';
 import Entry from './entry';
 /**
  * A Merkle Sum Tree is a binary Merkle Tree with the following properties:
- * - Each entry of a Merkle Sum Tree is a pair of a value and a sum.
- * - Each Leaf Node contains a hash and a sum. The hash is equal to H(value, sum). The sum is equal to the sum itself.
+ * - Each entry of a Merkle Sum Tree is a pair of a username and a balance.
+ * - Each Leaf Node contains a hash and a sum. The hash is equal to H(username, balance). The sum is equal to the balance itself.
  * - Each Middle Node contains a hash and a sum. The hash is equal to H(LeftChild.hash, LeftChild.sum, RightChild.hash, RightChild.sum). The sum is equal to the sum of the sums of its children.
- * - The Root Node represents the committed state of the Tree and contains the sum of all the entries' sums.
- * The IncrementalMerkleSumTree class is a TypeScript implementation of Incremental Merkle Sum tree and it
- * provides all the functions to create efficient trees and to generate and verify proofs of membership.
+ * - The Root Node represents the committed state of the Tree and contains the sum of all the entries' balances.
+ * The MerkleSumTree class is a TypeScript implementation of a Merkle Sum tree and it
+ * provides all the functions to create a tree starting from a csv file that contains a list of entries in the format  `username -> balance`.
  */
-export default class IncrementalMerkleSumTree {
+export default class MerkleSumTree {
     static readonly maxDepth = 32;
     private _root;
     private readonly _nodes;

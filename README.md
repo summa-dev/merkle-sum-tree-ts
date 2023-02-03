@@ -91,7 +91,7 @@ const root = tree.root
 Returns the index of an entry in the tree. If the entry is not in the tree, it returns -1.
 
 ```typescript
-const index = tree.indexOf("gAdsIaKy", BigInt(7543)) // 0
+const index = tree.indexOf("gAdsIaKy", BigInt(7534)) // 0
 ```
 
 \# **createProof**(index: _number_): _MerkleProof_

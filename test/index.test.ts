@@ -1,7 +1,7 @@
 import { MerkleSumTree, MerkleProof } from '../src';
 import Entry from '../src/entry';
 
-describe('Incremental Merkle Sum Tree', () => {
+describe('Merkle Sum Tree', () => {
   let tree: MerkleSumTree;
 
   beforeEach(() => {
